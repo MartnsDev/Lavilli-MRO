@@ -1,0 +1,17 @@
+node_modules/
+.next/
+.env*
+!.env.example
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+backups/
+.supabase/
+.aws/
+.codex/
+.agents/
+*.log
+*.pem
+*.key
+.DS_Store
