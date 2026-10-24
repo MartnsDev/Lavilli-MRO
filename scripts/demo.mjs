@@ -25,7 +25,21 @@ const status = JSON.parse(
 );
 if (!["localhost", "127.0.0.1"].includes(new URL(status.API_URL).hostname))
   throw Error("Somente Supabase local");
-const pin = String(randomInt(1000, 10000));
+// Keep the owner's configured demo PIN across restarts; never commit its value.
+await mkdir(".local-secrets", { recursive: true, mode: 0o700 });
+const pinFile = ".local-secrets/demo-pin.txt";
+let pin;
+try {
+  pin = (await readFile(pinFile, "utf8")).trim();
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+  pin = String(randomInt(1000, 10000));
+  await writeFile(pinFile, pin + "\n", { mode: 0o600, flag: "wx" });
+}
+if (!/^\d{4}$/.test(pin))
+  throw Error(
+    "Configure quatro dígitos no arquivo privado de PIN da demonstração.",
+  );
 const env = {
   ...process.env,
   APP_MODE: "demo",
