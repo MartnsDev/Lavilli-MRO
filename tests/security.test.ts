@@ -233,19 +233,16 @@ describe("CSRF origin and local development aliases", () => {
   });
 });
 
-describe("fixed hangar mechanics", () => {
-  it("prevents adding, renaming or disabling the two login identities through operational forms", () => {
-    for (const action of ["create", "update", "archive"])
-      expect(() =>
-        parseCommand({
-          action,
-          entity: "mechanics",
-          id,
-          version: 1,
-          data: { name: "Outro", active: false },
-          reason: "Tentativa de alteração",
-        }),
-      ).toThrow();
+describe("future mechanics", () => {
+  it("allows adding declared names while SQL requires independent administrative authorization", () => {
+    expect(
+      parseCommand({
+        action: "create",
+        entity: "mechanics",
+        data: { name: "Responsável futuro", active: true },
+        reason: "Cadastro autorizado",
+      }).entity,
+    ).toBe("mechanics");
   });
 });
 
@@ -262,4 +259,41 @@ describe("resource and label lookups", () => {
       expect(label(key)).toBe(key);
     }
   });
+});
+
+describe("bounded request decoding", () => {
+  it("rejects forged Content-Length and bodies exceeding the actual stream limit", async () => {
+    const { jsonBody } = await import("../src/lib/server/request");
+    const r = new Request("http://localhost/api/test", {
+      method: "POST",
+      headers: { "content-type": "application/json", "content-length": "1" },
+      body: JSON.stringify({ data: "x".repeat(2000) }),
+    });
+    await expect(jsonBody(r, 1024)).rejects.toThrow("PAYLOAD_TOO_LARGE");
+  });
+  it("rejects unsupported body types and invalid JSON", async () => {
+    const { jsonBody } = await import("../src/lib/server/request");
+    await expect(
+      jsonBody(
+        new Request("http://localhost/api/test", {
+          method: "POST",
+          body: "{}",
+        }),
+      ),
+    ).rejects.toThrow("INVALID_OPERATION");
+    await expect(
+      jsonBody(
+        new Request("http://localhost/api/test", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: "{",
+        }),
+      ),
+    ).rejects.toThrow();
+  });
+});
+
+it("does not crash or accept oversized and multibyte session signatures", () => {
+  for (const value of ["x." + "é".repeat(43), "a".repeat(2000), "<script>.x"])
+    expect(unsign(value, "test-secret")).toBeNull();
 });

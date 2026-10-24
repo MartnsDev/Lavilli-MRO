@@ -1,4 +1,10 @@
-# Lavilli Jet | Gestão do Hangar
+# Lavilli Control
+
+Implementação em revisão; **não publicado em produção**. Relatórios atuais: [segurança](SECURITY_AUDIT.md), [checklist](SECURITY_CHECKLIST.md), [release](docs/RELEASE_READINESS.md), [visual](VISUAL_AUDIT.md), [responsividade](RESPONSIVE_TEST_REPORT.md), [deploy](docs/DEPLOY_GUIDE.md) e [apresentação](docs/DEMO_LAVILLI_JET.md).
+
+Demo local: após `npm run test:full`, executar `npm run demo:prepare` e depois `npm run demo:local`. Dados fictícios, e-mail desativado e backend obrigatoriamente local. Credenciais temporárias em arquivo privado, nunca no README. Auto deploy Git Vercel desativado em vercel.json; publicação exige autorização explícita.
+
+## Aplicação
 
 Aplicação operacional de hangar em português, construída neste repositório. Next.js App Router, React, TypeScript estrito, Tailwind, componentes no padrão shadcn/Radix, PostgreSQL/Supabase e Storage privado. Não emite certificação, assinatura técnica oficial ou autorização para retorno ao serviço.
 
@@ -10,7 +16,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. O acesso pede apenas **César ou Maranhão** e a **senha geral já configurada**. Ao entrar, o dashboard abre diretamente, sem autorização de dispositivo, códigos ou cadastro.
+Abra http://localhost:3000. Conforme a auditoria de segurança posterior, autorize cada aparelho uma vez com código independente emitido pelo operador (`npm run security:grant`). Depois, o acesso diário pede o mecânico e a senha geral. Operações administrativas exigem elevação independente de cinco minutos. A migration 009 precisa estar aplicada no backend antes de usar o código novo; ela ainda não foi promovida ao banco remoto.
 
 Em uma instalação nova, configure as variáveis de infraestrutura e use `npm run configure:pin` para salvar o hash da senha escolhida. Consulte [deploy](docs/deployment.md). O arquivo `.env.local` permanece privado.
 
@@ -44,16 +50,16 @@ npm run test:db:docker
 npm run test:full
 ```
 
-A suíte completa usa uma build separada em `.next-verification`, porta 3100 e senha aleatória de teste. Não usa as credenciais do Supabase remoto e não altera a senha real. Exige Chrome instalado ou `PLAYWRIGHT_CHANNEL=chromium` com `npx playwright install chromium`. O relatório fica em `playwright-report/full/index.html`. Veja [a cobertura e os limites](docs/professional-verification.md). O workflow do GitHub executa essas verificações em pushes e pull requests.
+A suíte completa usa uma build separada em `.next-verification`, porta 3100 e senha aleatória de teste. Não usa as credenciais do Supabase remoto e não altera a senha real. Exige Chrome instalado ou `PLAYWRIGHT_CHANNEL=chromium` com `npx playwright install chromium`. O relatório fica em `playwright-report/full/index.html`. Veja [a cobertura atual](docs/RELEASE_READINESS.md) e [os resultados registrados](docs/verification-results.json). O workflow do GitHub executa essas verificações em pushes e pull requests.
 
 ## Implementado
 
-- Acesso direto com César ou Maranhão e uma senha geral compartilhada; sessões opacas assinadas, HttpOnly, expiração e saída.
+- Autorização inicial independente de aparelho; acesso diário com mecânico e senha compartilhada. Sessões opacas, HttpOnly, revogação, inatividade e máximo de oito horas.
 - Senha geral com Argon2id; cada alteração operacional requer responsável informado e reconfirmação vinculada ao conteúdo, válida por dois minutos. Limites persistentes de tentativas.
 - Cadastros, localizações hierárquicas, catálogo e peças serializadas; lotes, recebimentos, reservas, consumo, transferência, baixa e inventário com conciliação.
 - Ferramentas, kits, conferência de saída/retorno, ocorrências e registros de calibração; bloqueios de disponibilidade no banco.
 - Aeronaves, histórico de matrícula, tarefas independentes, vínculo posterior a OS e encerramento administrativo; remessas, custódia e retornos parciais.
-- Biblioteca de referências e versões privadas de arquivos, QR/etiquetas, importação com prévia e mapeamento, relatórios CSV/PDF, painel real e auditoria append-only.
+- Biblioteca privada com versões em quarentena e proxy autenticado, QR/etiquetas, importação com original privado, prévia e mapeamento, relatórios CSV/PDF com elevação, painel real e auditoria append-only.
 - Geração de alertas, outbox deduplicada e worker Resend com lease e backoff; execução periódica requer configuração externa.
 
 ## Status e limites

@@ -5,6 +5,18 @@ import {
   type RealtimeClientOptions,
 } from "@supabase/supabase-js";
 export function infrastructureConfigured() {
+  if (["demo", "test"].includes(process.env.APP_MODE || "")) {
+    try {
+      if (
+        !["localhost", "127.0.0.1"].includes(
+          new URL(process.env.SUPABASE_URL || "invalid").hostname,
+        )
+      )
+        return false;
+    } catch {
+      return false;
+    }
+  }
   return Boolean(
     process.env.SUPABASE_URL &&
     process.env.SUPABASE_SERVICE_ROLE_KEY &&

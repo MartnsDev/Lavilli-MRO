@@ -12,6 +12,11 @@ export async function list(
   }: { page?: number; q?: string; status?: string } = {},
 ) {
   await session();
+  page = Number.isFinite(page)
+    ? Math.max(1, Math.min(10000, Math.floor(page)))
+    : 1;
+  q = typeof q === "string" ? q.slice(0, 100) : "";
+  status = typeof status === "string" ? status.slice(0, 40) : "";
   const meta = resources[entity];
   if (!meta) throw new Error("NOT_FOUND");
   let query = db()

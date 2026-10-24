@@ -2416,3 +2416,220 @@ label small {
     margin-right: 0 !important;
   }
 }
+
+/* Shared accessibility and responsive refinements. */
+.environment-banner {
+  padding: 10px 24px;
+  background: #fff3dc;
+  color: #5d3a09;
+  border-bottom: 1px solid #d2b17a;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+:root[data-theme="dark"] .environment-banner {
+  background: #352b1c;
+  color: #f4d49d;
+  border-color: #675335;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+:root[data-theme="dark"] :focus-visible {
+  outline-color: #e2b476;
+}
+.button,
+.button.small,
+.dialog-close,
+.nav-link {
+  min-height: 44px;
+}
+.dialog-close {
+  min-width: 44px;
+}
+.workspace,
+.main-content,
+.page-heading > div,
+.stack,
+.panel {
+  min-width: 0;
+}
+.page-heading h1,
+.page-heading p,
+.environment-banner {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .sidebar:not(.mobile-open) {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .sidebar.mobile-open {
+    visibility: visible;
+    width: min(280px, calc(100vw - 32px));
+  }
+  .global-search {
+    min-width: 0;
+  }
+  .global-search input {
+    min-width: 0;
+    width: 100%;
+    font-size: 16px;
+  }
+  .environment-banner {
+    padding: 10px 16px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.table-wrap {
+  position: relative;
+  max-width: 100%;
+}
+.table-wrap table {
+  min-width: 640px;
+}
+.table-wrap th,
+.table-wrap td {
+  min-width: 100px;
+}
+.table-wrap td:last-child,
+.table-wrap th:last-child {
+  min-width: 44px;
+}
+
+.badge:is(
+  [data-state="critical"],
+  [data-state="damaged"],
+  [data-state="missing"],
+  [data-state="rejected"]
+) {
+  background: #fee8e7;
+  color: #8f2020;
+}
+.badge:is(
+  [data-state="pending"],
+  [data-state="quarantine"],
+  [data-state="warning"],
+  [data-state="high"]
+) {
+  background: #fff0d0;
+  color: #714b09;
+}
+.badge:is(
+  [data-state="available"],
+  [data-state="serviceable"],
+  [data-state="complete"],
+  [data-state="resolved"]
+) {
+  background: #e1f4e9;
+  color: #1d633e;
+}
+:root[data-theme="dark"]
+  .badge:is(
+    [data-state="critical"],
+    [data-state="damaged"],
+    [data-state="missing"],
+    [data-state="rejected"]
+  ) {
+  background: #492b31;
+  color: #ffb8b8;
+}
+:root[data-theme="dark"]
+  .badge:is(
+    [data-state="pending"],
+    [data-state="quarantine"],
+    [data-state="warning"],
+    [data-state="high"]
+  ) {
+  background: #41351f;
+  color: #f4d49d;
+}
+:root[data-theme="dark"]
+  .badge:is(
+    [data-state="available"],
+    [data-state="serviceable"],
+    [data-state="complete"],
+    [data-state="resolved"]
+  ) {
+  background: #203d33;
+  color: #ade6c4;
+}
+
+.table-wrap td:last-child a {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .desktop-sidebar {
+    display: none;
+  }
+}
+@media (min-width: 761px) {
+  .mobile-drawer,
+  .mobile-scrim {
+    display: none;
+  }
+}
+
+.drawer-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e1d6c7;
+  border-radius: 6px;
+  background: #faf9f6;
+  color: #051c2c;
+  cursor: pointer;
+}
+
+.document-versions {
+  padding: 0;
+  list-style: none;
+}
+.document-versions li {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.document-versions .badge {
+  margin: 8px 0 0;
+  white-space: normal;
+}
+.document-versions a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--blue);
+}

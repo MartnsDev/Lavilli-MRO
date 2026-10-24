@@ -7,7 +7,7 @@ test("access layout fits desktop and mobile, official logo renders, theme persis
   await request.get("/api/auth/status");
   await page.goto("/login");
   await expect(
-    page.getByRole("heading", { name: "Bem-vindo à Lavilli" }),
+    page.getByRole("heading", { name: "Autorizar este aparelho" }),
   ).toBeVisible();
   await expect(
     page.getByRole("img", { name: "Lavilli Jet", exact: true }),
@@ -47,23 +47,21 @@ test("access layout fits desktop and mobile, official logo renders, theme persis
     fullPage: true,
   });
 });
-test("login only asks for mechanic and shared password", async ({ page }) => {
+test("unauthorized visitor sees enrollment, not mechanic identities or a PIN-only login", async ({
+  page,
+}) => {
   await page.goto("/login");
-  const names = page.getByLabel("Quem está acessando?");
-  await expect(names.locator("option")).toHaveText([
-    "Selecione seu nome",
-    "César",
-    "Maranhão",
-  ]);
+  await expect(page.locator("form.access-form")).toHaveAttribute(
+    "method",
+    "post",
+  );
   await expect(
-    page.getByLabel("Senha do hangar", { exact: true }),
+    page.getByLabel("Código administrativo temporário"),
   ).toHaveAttribute("type", "password");
+  await expect(page.getByLabel("Senha do hangar", { exact: true })).toHaveCount(
+    0,
+  );
   await expect(
-    page.getByRole("button", { name: "Entrar no hangar" }),
+    page.getByRole("button", { name: "Autorizar acesso", exact: true }),
   ).toBeEnabled();
-  await expect(
-    page.getByText(
-      /Código de recuperação|Autorize este dispositivo|Nome deste dispositivo/,
-    ),
-  ).toHaveCount(0);
 });

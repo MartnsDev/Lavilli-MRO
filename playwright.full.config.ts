@@ -12,21 +12,47 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3100",
     actionTimeout: 15000,
-    channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
   projects: [
-    { name: "functional-api", testMatch: "**/functional.spec.ts" },
+    {
+      name: "visual",
+      testMatch: ["**/visual.spec.ts", "**/keyboard.spec.ts"],
+      use: {
+        channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
+        viewport: { width: 1366, height: 768 },
+      },
+    },
+    {
+      name: "firefox",
+      testMatch: "**/dashboard.spec.ts",
+      use: {
+        browserName: "firefox",
+        channel: undefined,
+        viewport: { width: 1366, height: 900 },
+      },
+    },
+    {
+      name: "functional-api",
+      testMatch: ["**/functional.spec.ts", "**/security.spec.ts"],
+    },
     {
       name: "desktop",
       testMatch: "**/dashboard.spec.ts",
-      use: { viewport: { width: 1440, height: 1000 } },
+      use: {
+        channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
+        viewport: { width: 1440, height: 1000 },
+      },
     },
     {
       name: "mobile",
       testMatch: "**/dashboard.spec.ts",
-      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      use: {
+        ...devices["Pixel 7"],
+        channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
+        viewport: { width: 390, height: 844 },
+      },
     },
   ],
 });

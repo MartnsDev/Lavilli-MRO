@@ -1,3 +1,5 @@
+> Documento histórico. Requisitos e evidências atuais: [auditoria](../SECURITY_AUDIT.md), [release](RELEASE_READINESS.md) e [deploy](DEPLOY_GUIDE.md). O fluxo de acesso foi atualizado pela auditoria posterior.
+
 # Verificação funcional profissional
 
 A suíte automatizada usa um Supabase local isolado, com PostgreSQL 17, PostgREST e Storage reais. A aplicação roda como build de produção na porta 3100, com senha aleatória e segredos temporários. A senha e os dados reais do hangar não são usados nos testes de escrita.

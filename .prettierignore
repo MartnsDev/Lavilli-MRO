@@ -7,3 +7,12 @@ playwright-report
 test-results
 
 .next-verification
+
+.next-demo/
+
+.demo-local/
+.local-secrets/
+.aws
+.codex
+.agents
+.vercel

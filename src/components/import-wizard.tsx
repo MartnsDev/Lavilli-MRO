@@ -5,6 +5,7 @@ import { ImportPreviewTable } from "./import-preview-table";
 import { OperationForm } from "./operation-form";
 import { useHydrated } from "@/lib/use-hydrated";
 export function ImportWizard() {
+  const [sourceId, setSourceId] = useState("");
   const ready = useHydrated();
   const input = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState("part_catalog"),
@@ -100,13 +101,19 @@ export function ImportWizard() {
               setRows([]);
               try {
                 const f = new FormData();
-                f.set("file", file);
+                const bytes = await file.arrayBuffer();
+                f.set(
+                  "file",
+                  new Blob([bytes], { type: file.type }),
+                  file.name,
+                );
                 const r = await fetch("/api/imports/preview", {
                   method: "POST",
                   body: f,
                 });
                 const b = await r.json();
                 if (!r.ok) throw Error(b.error);
+                setSourceId(b.source_id);
                 setHeaders(b.headers);
                 setRows(b.rows);
                 setName(file.name);
@@ -170,6 +177,7 @@ export function ImportWizard() {
           {!parsed.some((r) => r.error) && (
             <OperationForm
               title="Confirmar importação"
+              refreshOnSuccess={false}
               fields={[
                 {
                   key: "mode",
@@ -180,7 +188,12 @@ export function ImportWizard() {
               ]}
               command={{
                 action: "import_rows",
-                data: { category, name, rows: parsed.map((r) => r.data) },
+                data: {
+                  source_id: sourceId,
+                  category,
+                  name,
+                  rows: parsed.map((r) => r.data),
+                },
               }}
               onSuccess={() => {
                 setRows([]);

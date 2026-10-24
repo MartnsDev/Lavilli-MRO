@@ -499,7 +499,7 @@ test("kit checklist is atomic and incomplete return opens a missing-item discrep
     location_id: f.location.id,
   });
   expect((await row("tools", tools[1].id)).status).toBe("missing");
-  expect((await row("tools", tools[0].id)).status).toBe("available");
+  expect((await row("tools", tools[0].id)).status).toBe("quarantine");
   const k = await request.get("/api/kits/" + kit.id);
   expect(k.status(), await k.text()).toBe(200);
 });
@@ -822,15 +822,23 @@ test("private document upload, version history, signed download, invalid file an
     .eq("document_id", d.id)
     .order("revision");
   expect(versions!.map((v) => v.revision)).toEqual([1, 2]);
+  const pending = await request.get("/api/documents/" + versions![1].id);
+  expect(pending.status()).toBe(403);
+  const scanned = await admin().rpc("record_document_scan", {
+    p_version: versions![1].id,
+    p_sha: versions![1].sha256,
+    p_clean: true,
+  });
+  expect(scanned.error).toBeNull();
   const download = await request.get("/api/documents/" + versions![1].id, {
     maxRedirects: 0,
   });
-  expect(download.status()).toBe(307);
-  const signed = download.headers().location;
-  expect(signed).toContain("token=");
-  const file = await request.get(signed);
-  expect(file.status()).toBe(200);
-  expect((await PDFDocument.load(await file.body())).getPageCount()).toBe(1);
+  expect(download.status(), await download.text()).toBe(200);
+  expect(download.headers()["location"]).toBeUndefined();
+  expect(download.headers()["cache-control"]).toContain("no-store");
+  expect((await PDFDocument.load(await download.body())).getPageCount()).toBe(
+    1,
+  );
   const anon = await request.get(
     process.env.SUPABASE_URL +
       "/storage/v1/object/public/operational-documents/" +

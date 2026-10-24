@@ -1,3 +1,4 @@
+import { jsonBody } from "@/lib/server/request";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
         command: z.unknown(),
       })
       .strict()
-      .parse(await request.json());
+      .parse(await jsonBody(request));
     await checkPin(b.pin);
     await clearLimit("confirm", s.id);
     const command = parseCommand(b.command);

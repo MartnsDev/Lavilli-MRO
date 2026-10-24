@@ -13,6 +13,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
   return (
     <div className="record-actions">
       {[
+        "mechanics",
         "locations",
         "organizations",
         "part_catalog",
@@ -152,7 +153,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
               ]}
               command={{ action: "tool_return", data: { tool_id: row.id } }}
             />
-          ) : (
+          ) : row.status === "available" ? (
             <OperationForm
               title="Retirar ferramenta"
               fields={[
@@ -174,7 +175,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
               ]}
               command={{ action: "tool_checkout", data: { tool_id: row.id } }}
             />
-          )}
+          ) : null}
           <OperationForm
             title="Registrar condição"
             variant="outline"

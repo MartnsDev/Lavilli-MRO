@@ -7,6 +7,9 @@ export default defineConfig([
   globalIgnores([
     ".next/**",
     ".next-verification/**",
+    ".next-demo/**",
+    ".demo-local/**",
+    ".local-secrets/**",
     "node_modules/**",
     "test-results/**",
     "playwright-report/**",

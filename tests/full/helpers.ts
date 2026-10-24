@@ -1,7 +1,7 @@
 import { expect, type APIRequestContext } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import WebSocket from "ws";
-import { randomUUID } from "node:crypto";
+import { randomUUID, randomBytes, createHash } from "node:crypto";
 const actors = new WeakMap<APIRequestContext, string>();
 export function isolated() {
   if (
@@ -24,20 +24,54 @@ export function admin() {
     },
   );
 }
-export async function login(request: APIRequestContext, name = "César") {
+export async function enroll(request: APIRequestContext) {
   isolated();
+  const state = await (await request.get("/api/auth/status")).json();
+  if (state.deviceAuthorized) return;
+  const code = randomBytes(32).toString("base64url");
+  const { error } = await admin().rpc("issue_device_grant", {
+    p_hash: createHash("sha256").update(code).digest("hex"),
+    p_purpose: "enroll",
+  });
+  expect(error).toBeNull();
+  const r = await request.post("/api/auth/enroll", {
+    headers: { origin: "http://localhost:3100" },
+    data: { code },
+  });
+  expect(r.status(), await r.text()).toBe(200);
+}
+export async function elevate(request: APIRequestContext) {
+  const code = randomBytes(32).toString("base64url");
+  const { error } = await admin().rpc("issue_device_grant", {
+    p_hash: createHash("sha256").update(code).digest("hex"),
+    p_purpose: "admin",
+  });
+  expect(error).toBeNull();
+  const r = await request.post("/api/security", {
+    headers: { origin: "http://localhost:3100" },
+    data: { action: "elevate", pin: process.env.TEST_PIN, code },
+  });
+  expect(r.status(), await r.text()).toBe(200);
+}
+export async function login(
+  request: APIRequestContext,
+  name = "César",
+  elevated = true,
+) {
+  await enroll(request);
   const state = await (await request.get("/api/auth/status")).json();
   const mechanic = state.mechanics.find(
     (m: { name: string }) => m.name === name,
   );
   expect(mechanic).toBeTruthy();
   const r = await request.post("/api/auth/login", {
-    headers: { origin: "http://localhost:3100" },
     timeout: 30000,
+    headers: { origin: "http://localhost:3100" },
     data: { mechanic_id: mechanic.id, pin: process.env.TEST_PIN },
   });
   expect(r.status(), await r.text()).toBe(200);
   actors.set(request, mechanic.id);
+  if (elevated) await elevate(request);
   return mechanic.id as string;
 }
 export async function confirmed(
@@ -99,6 +133,28 @@ export async function action(
   status = 200,
   entity?: string,
 ) {
+  if (kind === "import_rows" && !data.source_id) {
+    const rows = data.rows as Record<string, unknown>[];
+    const keys = Object.keys(rows[0]);
+    const csv = [
+      keys.join(","),
+      ...rows.map((r) =>
+        keys.map((k) => JSON.stringify(String(r[k] ?? ""))).join(","),
+      ),
+    ].join("\n");
+    const preview = await request.post("/api/imports/preview", {
+      headers: { origin: "http://localhost:3100" },
+      multipart: {
+        file: {
+          name: "source.csv",
+          mimeType: "text/csv",
+          buffer: Buffer.from(csv),
+        },
+      },
+    });
+    expect(preview.status(), await preview.text()).toBe(200);
+    data = { ...data, source_id: (await preview.json()).source_id };
+  }
   return operate(
     request,
     {

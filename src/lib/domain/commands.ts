@@ -197,6 +197,7 @@ const definitions: Record<string, z.ZodType> = {
 };
 definitions.import_rows = z
   .object({
+    source_id: z.uuid(),
     category: z.enum([
       "locations",
       "organizations",
@@ -228,8 +229,7 @@ export type Command = z.infer<typeof base>;
 export function parseCommand(value: unknown): Command {
   const c = base.parse(value);
   if (["create", "update", "archive"].includes(c.action)) {
-    if (!c.entity || !resources[c.entity] || c.entity === "mechanics")
-      throw new Error("INVALID_OPERATION");
+    if (!c.entity || !resources[c.entity]) throw new Error("INVALID_OPERATION");
     if (c.action !== "create" && (!c.id || !c.version))
       throw new Error("INVALID_OPERATION");
     if (c.action !== "archive") c.data = resourceSchema(c.entity).parse(c.data);

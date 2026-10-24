@@ -24,7 +24,12 @@
     "configure:pin": "node scripts/configure-pin.mjs",
     "pin:normalize": "node scripts/normalize-pin-hash.mjs",
     "test:full": "node scripts/test-full.mjs",
-    "test:db:docker": "node scripts/test-db-docker.mjs"
+    "test:db:docker": "node scripts/test-db-docker.mjs",
+    "security:grant": "node --env-file=.env.local scripts/security-grant.mjs",
+    "security:scan": "node --env-file=.env.local scripts/scan-document.mjs",
+    "demo:local": "node scripts/demo.mjs",
+    "demo:prepare": "node scripts/demo-stack.mjs",
+    "demo:verify": "node scripts/verify-demo.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

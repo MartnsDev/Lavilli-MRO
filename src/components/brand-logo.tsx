@@ -18,6 +18,7 @@ export function BrandLogo({
             ? "/brand/logo-blue.png"
             : "/brand/logo-official.png"
         }
+        loading="eager"
         width={300}
         height={variant === "blue" ? 144 : 165}
         sizes="(max-width: 760px) 128px, 160px"

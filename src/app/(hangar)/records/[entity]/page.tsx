@@ -1,3 +1,4 @@
+import { SecurityControls } from "@/components/security-controls";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Plus, ArrowUpRight, Filter, PackageOpen } from "lucide-react";
@@ -15,7 +16,12 @@ export default async function Records({
   const { entity } = await params,
     meta = resources[entity];
   if (!meta) notFound();
-  const search = await searchParams,
+  const raw = await searchParams;
+  const search = {
+      q: typeof raw.q === "string" ? raw.q : "",
+      status: typeof raw.status === "string" ? raw.status : "",
+      page: typeof raw.page === "string" ? raw.page : "1",
+    },
     page = Math.max(1, Math.min(10000, Math.floor(Number(search.page)) || 1));
   const { rows, count } = await list(entity, {
     page,
@@ -73,7 +79,7 @@ export default async function Records({
           <h1>{meta.title}</h1>
           <p>{meta.description}</p>
         </div>
-        {meta.fields.length > 0 && entity !== "mechanics" && (
+        {meta.fields.length > 0 && (
           <OperationForm
             title={"Cadastrar · " + meta.title}
             fields={meta.fields}
@@ -83,6 +89,12 @@ export default async function Records({
           </OperationForm>
         )}
       </div>
+      {[
+        "mechanics",
+        "app_settings",
+        "notification_recipients",
+        "notification_rules",
+      ].includes(entity) && <SecurityControls />}
       {entity === "locations" && (
         <div className="subnav">
           <Link href="/locations">Ver árvore hierárquica →</Link>
@@ -129,7 +141,14 @@ export default async function Records({
             </p>
           </div>
         ) : (
-          <div className="table-wrap">
+          <div
+            className="table-wrap"
+            role="region"
+            aria-label={
+              "Tabela de " + meta.title + "; rolagem horizontal disponível"
+            }
+            tabIndex={0}
+          >
             <table>
               <thead>
                 <tr>
@@ -164,6 +183,7 @@ export default async function Records({
                           </Link>
                         ) : (
                           <span
+                            data-state={String(row[c.key] ?? "")}
                             className={
                               c.key === "status" || c.key === "condition"
                                 ? "badge"

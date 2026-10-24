@@ -1,6 +1,7 @@
+import { formBody } from "@/lib/server/request";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { session, sameOrigin } from "@/lib/server/auth";
+import { session, sameOrigin, limit } from "@/lib/server/auth";
 import { db, rpc } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { parseCommand } from "@/lib/domain/commands";
@@ -12,9 +13,10 @@ export async function POST(request: Request) {
   try {
     sameOrigin(request);
     const s = await session();
+    await limit("upload", s.device_id);
     if (Number(request.headers.get("content-length")) > 4500000)
       throw new Error("INVALID_OPERATION");
-    const form = await request.formData();
+    const form = await formBody(request, 4500000);
     const file = form.get("file");
     if (!(file instanceof File) || file.size > 4194304 || file.size === 0)
       throw new Error("INVALID_OPERATION");
@@ -63,6 +65,7 @@ export async function POST(request: Request) {
       .gt("expires_at", new Date().toISOString())
       .maybeSingle();
     if (ce || !conf) throw new Error("FORBIDDEN");
+    await rpc("reserve_upload", { p_session: s.id, p_size: bytes.length });
     objectPath = `${command.data.document_id}/${digest(p.operation_id)}/${token()}`;
     const { error: uploadError } = await db()
       .storage.from("operational-documents")

@@ -31,5 +31,5 @@
     ".next-verification/types/**/*.ts",
     ".next-verification/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next-demo", ".demo-local"]
 }

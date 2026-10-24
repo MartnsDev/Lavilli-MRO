@@ -6,7 +6,9 @@ export default async function Search({
 }: {
   searchParams: Promise<{ q?: string; page?: string }>;
 }) {
-  const { q = "", page = "1" } = await searchParams;
+  const params = await searchParams;
+  const q = typeof params.q === "string" ? params.q : "",
+    page = typeof params.page === "string" ? params.page : "1";
   const term = q.trim().slice(0, 100),
     p = Math.max(1, Math.min(1000, Number(page) || 1));
   const entities = [

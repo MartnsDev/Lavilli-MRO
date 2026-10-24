@@ -13,7 +13,8 @@ export function sign(value: string, secret: string) {
   );
 }
 export function unsign(value: string | undefined, secret: string) {
-  if (!value) return null;
+  if (!value || !/^[A-Za-z0-9_-]{1,128}\.[A-Za-z0-9_-]{43}$/.test(value))
+    return null;
   const index = value.lastIndexOf(".");
   if (index < 1) return null;
   const raw = value.slice(0, index),
@@ -43,7 +44,7 @@ export function safeCSV(value: unknown) {
   const s = String(value ?? "");
   return (
     '"' +
-    (/^[\s]*[=+@\-\t\r]/.test(s) ? "'" + s : s).replaceAll('"', '""') +
+    (/^[\s\p{Cc}\p{Cf}]*[=+@\-]/u.test(s) ? "'" + s : s).replaceAll('"', '""') +
     '"'
   );
 }

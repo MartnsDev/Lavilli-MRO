@@ -6,8 +6,8 @@ jobs:
   application:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "22"
           cache: npm
@@ -31,7 +31,7 @@ jobs:
           --health-cmd pg_isready --health-interval 5s
           --health-timeout 5s --health-retries 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - run: sudo apt-get update && sudo apt-get install -y postgresql-client-16
       - run: PATH=/usr/lib/postgresql/16/bin:$PATH bash scripts/test-db.sh
         env:
@@ -46,13 +46,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
           cache: npm
       - run: npm ci --legacy-peer-deps
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox
       - name: Iniciar Supabase isolado
         run: npx --yes supabase@2.122.0 start --exclude studio,imgproxy,realtime,edge-runtime,logflare,vector,supavisor,inbucket
       - name: Testar migrações, concorrência e restauração no PostgreSQL 17
@@ -61,13 +61,14 @@ jobs:
         run: npm run test:full
         env:
           PLAYWRIGHT_CHANNEL: chromium
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: relatorios-e-evidencias
           path: |
             playwright-report/full
             test-results/full
+            test-results/visual/after
           retention-days: 7
       - name: Encerrar ambiente de teste
         if: always()

@@ -3,8 +3,8 @@ create schema tests;
 create table tests.fixtures(name text primary key,id uuid not null);
 create function tests.id(n text) returns uuid language sql as $$select id from tests.fixtures where name=n$$;
 create function tests.assert(ok boolean,msg text) returns void language plpgsql as $$begin if ok is distinct from true then raise exception 'FAIL: %',msg;end if;raise notice 'PASS: %',msg;end$$;
-insert into public.authorized_devices(token_hash,label,expires_at) values ('test-device','Dispositivo TESTE',now()+interval '1 day') returning id as device \gset
-insert into public.access_sessions(mechanic_id,token_hash,expires_at) values ((select id from public.mechanics where name='César'),'test-session',now()+interval '1 day') returning id as session \gset
+insert into public.authorized_devices(token_hash,label,expires_at,authorization_version) values ('test-device','Dispositivo TESTE',now()+interval '1 day',1) returning id as device \gset
+insert into public.access_sessions(device_id,credential_version,elevated_until,mechanic_id,token_hash,expires_at) values (:'device','test-credential',now()+interval '1 hour',(select id from public.mechanics where name='César'),'test-session',now()+interval '1 day') returning id as session \gset
 insert into tests.fixtures values('session',:'session'),('device',:'device');
 create function tests.call(command jsonb,operation uuid default gen_random_uuid()) returns jsonb language plpgsql as $$
 declare c uuid;h text;begin

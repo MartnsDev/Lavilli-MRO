@@ -31,8 +31,11 @@ const env = {
   DEVICE_BOOTSTRAP_HASH: "",
   NEXT_BUILD_DIR: ".next-verification",
   TEST_PIN: pin,
+  TEST_JWT_SECRET: status.JWT_SECRET,
+  TEST_SUPABASE_ANON_KEY: status.ANON_KEY,
   TEST_BASE_URL: "http://localhost:3100",
   FULL_VERIFICATION: "local-only",
+  APP_MODE: "test",
   PLAYWRIGHT_CHANNEL: process.env.PLAYWRIGHT_CHANNEL || "chrome",
 };
 async function run(cmd, args) {
@@ -67,7 +70,14 @@ if (process.env.VERIFICATION_REUSE_BUILD === "1") {
 } else await run("npm", ["run", "build"]);
 const server = spawn(
   "node",
-  ["node_modules/next/dist/bin/next", "start", "--port", "3100"],
+  [
+    "node_modules/next/dist/bin/next",
+    "start",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "3100",
+  ],
   { env, stdio: ["ignore", "pipe", "pipe"] },
 );
 let logs = "";

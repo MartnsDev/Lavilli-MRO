@@ -164,6 +164,7 @@ export function OperationForm({
   children,
   variant = "default",
   onSuccess,
+  refreshOnSuccess = true,
   execute,
 }: {
   title: string;
@@ -177,6 +178,7 @@ export function OperationForm({
   children?: React.ReactNode;
   variant?: "default" | "outline" | "destructive";
   onSuccess?: () => void;
+  refreshOnSuccess?: boolean;
   execute?: (payload: {
     command: Command;
     operation_id: string;
@@ -238,7 +240,7 @@ export function OperationForm({
       setOpen(false);
       setPending(undefined);
       onSuccess?.();
-      router.refresh();
+      if (refreshOnSuccess) router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falha na operação");
     } finally {

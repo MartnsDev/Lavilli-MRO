@@ -39,7 +39,7 @@ export default async function Detail({
     entity === "documents"
       ? await db()
           .from("document_versions")
-          .select("id,revision,created_at,mime_type,size_bytes")
+          .select("id,revision,created_at,mime_type,size_bytes,scan_status")
           .eq("document_id", id)
           .order("revision", { ascending: false })
       : { data: null, error: null };
@@ -130,7 +130,11 @@ export default async function Detail({
             {events?.map((event) => (
               <li key={event.id}>
                 <span className="timeline-dot" />
-                <strong>{event.mechanics?.name ?? "Sistema"}</strong>
+                <strong>
+                  {event.responsavel_declarado ??
+                    event.mechanics?.name ??
+                    "Sistema"}
+                </strong>
                 <time>{dateBR(event.created_at)}</time>
                 <p>{event.reason || event.action}</p>
                 <details>
@@ -155,16 +159,36 @@ export default async function Detail({
         <section className="card">
           <h2>Arquivos e versões privadas</h2>
           <DocumentUpload documentId={id} />
-          <ul>
+          <p className="fine-print">
+            Novos arquivos aguardam verificação de segurança. O download fica
+            disponível somente após a liberação.
+          </p>
+          <ul className="document-versions" aria-live="polite">
             {versions?.map((v) => (
               <li key={v.id}>
-                <a
-                  href={`/api/documents/${v.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Versão {v.revision} · {v.mime_type} · {dateBR(v.created_at)}
-                </a>
+                {v.scan_status === "clean" ? (
+                  <a
+                    href={`/api/documents/${v.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Versão {v.revision} · {v.mime_type} · {dateBR(v.created_at)}
+                  </a>
+                ) : (
+                  <span>
+                    Versão {v.revision} · {v.mime_type} · {dateBR(v.created_at)}{" "}
+                    <span
+                      className="badge"
+                      data-state={
+                        v.scan_status === "rejected" ? "rejected" : "pending"
+                      }
+                    >
+                      {v.scan_status === "rejected"
+                        ? "Bloqueado pela verificação"
+                        : "Aguardando verificação de segurança"}
+                    </span>
+                  </span>
+                )}
               </li>
             ))}
           </ul>

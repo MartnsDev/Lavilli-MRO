@@ -7,6 +7,8 @@ const skip = new Set([
   ".branches",
   ".next",
   ".next-verification",
+  ".next-demo",
+  ".demo-local",
   ".git",
   ".agents",
   ".aws",

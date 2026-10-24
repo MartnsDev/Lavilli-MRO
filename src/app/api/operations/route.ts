@@ -1,3 +1,4 @@
+import { jsonBody } from "@/lib/server/request";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { session, sameOrigin } from "@/lib/server/auth";
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
         command: z.unknown(),
       })
       .strict()
-      .parse(await request.json());
+      .parse(await jsonBody(request));
     const command = parseCommand(b.command);
     const result = await rpc("run_operation", {
       p_session: s.id,

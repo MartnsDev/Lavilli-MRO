@@ -1,3 +1,4 @@
+import { audit } from "@/lib/server/audit";
 import { redirect } from "next/navigation";
 import { configured, infrastructureConfigured } from "@/lib/server/db";
 import { session } from "@/lib/server/auth";
@@ -13,7 +14,12 @@ export default async function Protected({
   try {
     await session();
   } catch {
+    await audit("page_access_denied");
     redirect("/login");
   }
-  return <Shell>{children}</Shell>;
+  return (
+    <Shell demo={["demo", "test"].includes(process.env.APP_MODE || "")}>
+      {children}
+    </Shell>
+  );
 }

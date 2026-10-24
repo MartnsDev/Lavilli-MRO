@@ -8,6 +8,7 @@ const fake = vi.hoisted(() => ({
 }));
 vi.mock("../src/lib/server/mail", () => ({ sendMail: fake.send }));
 vi.mock("../src/lib/server/db", () => ({
+  infrastructureConfigured: () => false,
   rpc: fake.rpc,
   db: () => ({
     from: (table: string) => {
@@ -90,7 +91,7 @@ describe("scheduled alert worker", () => {
     vi.stubEnv("EMAIL_MODE", "disabled");
     const r = await call();
     expect(await r.json()).toMatchObject({ alerts: 1, email: "disabled" });
-    expect(fake.rpc).toHaveBeenCalledOnce();
+    expect(fake.rpc).toHaveBeenCalledTimes(2);
     expect(fake.send).not.toHaveBeenCalled();
   });
   it("records delivery success and an audit event using the deduplication key", async () => {
@@ -104,8 +105,12 @@ describe("scheduled alert worker", () => {
         lease_until: null,
       }),
     );
-    expect(fake.audit).toHaveBeenCalledWith(
-      expect.objectContaining({ entity: "email_deliveries", action: "sent" }),
+    expect(fake.rpc).toHaveBeenCalledWith(
+      "security_event",
+      expect.objectContaining({
+        p_entity: "email_deliveries",
+        p_outcome: "success",
+      }),
     );
   });
   it("records a failed attempt with backoff so the queue can retry", async () => {
@@ -128,4 +133,8 @@ describe("scheduled alert worker", () => {
       expect.objectContaining({ status: "failed" }),
     );
   });
+});
+
+it("denies multibyte forged scheduler credentials without a server error", async () => {
+  expect((await call("Bearer " + "é".repeat(secret.length))).status).toBe(403);
 });

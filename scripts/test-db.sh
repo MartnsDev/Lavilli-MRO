@@ -15,6 +15,7 @@ psql -X -q -v ON_ERROR_STOP=1 -c "do \$\$begin if not exists(select from pg_role
 psql -X -q -v ON_ERROR_STOP=1 -c 'create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);'
 for migration in supabase/migrations/*.sql; do psql -X -q -v ON_ERROR_STOP=1 -f "$migration"; done
 psql -X -q -v ON_ERROR_STOP=1 -f supabase/tests/domain.sql >/dev/null
+psql -X -q -v ON_ERROR_STOP=1 -f supabase/tests/security.sql >/dev/null
 # Two independent sessions race on the same tool and stock lot.
 worker() { psql -X -q -v ON_ERROR_STOP=1 -c "$1" >/dev/null 2>&1; }
 set +e
@@ -33,7 +34,7 @@ worker "select tests.call(jsonb_build_object('action','stock','data',jsonb_build
 worker "select tests.call(jsonb_build_object('action','stock','data',jsonb_build_object('lot_id',tests.id('race_lot'),'kind','receive','quantity',1),'reason','Idempotência concorrente'),'00000000-0000-4000-8000-000000000099');" & b=$!
 wait "$a"; wait "$b"
 psql -X -q -v ON_ERROR_STOP=1 -c "select tests.assert((select quantity=3 from public.stock_lots where id=tests.id('race_lot')),'concurrent retry applies once');"
-pg_dump --format=custom --no-owner --schema=public --file="$backup_file"
+pg_dump --format=custom --no-owner --schema=public --schema=private_security --file="$backup_file"
 createdb "$restore_database"
 PGDATABASE="$restore_database" psql -X -q -v ON_ERROR_STOP=1 -c "drop schema public;"
 PGDATABASE="$restore_database" pg_restore --dbname="$restore_database" --no-owner --exit-on-error "$backup_file"

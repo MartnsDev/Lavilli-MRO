@@ -1,10 +1,17 @@
 import "server-only";
+import { audit } from "./audit";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-export function failure(error: unknown) {
+export async function failure(error: unknown) {
   const code = error instanceof Error ? error.message : "INTERNAL";
   const map: Record<string, [number, string]> = {
-    UNAUTHORIZED: [401, "Entre novamente para continuar."],
+    UNAUTHORIZED: [401, "Não foi possível validar o acesso. Entre novamente."],
+    REAUTH_REQUIRED: [
+      403,
+      "Confirme o acesso administrativo antes de continuar.",
+    ],
+    DOCUMENT_PENDING: [403, "Arquivo aguardando verificação de segurança."],
+    PAYLOAD_TOO_LARGE: [413, "O envio excedeu o tamanho permitido."],
     FORBIDDEN: [403, "Operação não autorizada."],
     CSRF: [403, "Origem da requisição inválida."],
     INVALID_PIN: [403, "Senha ou confirmação inválida."],
@@ -76,5 +83,22 @@ export function failure(error: unknown) {
         at: new Date().toISOString(),
       }),
     );
-  return NextResponse.json({ error: message }, { status });
+  if (status !== 429)
+    await audit(
+      status === 401 || status === 403 ? "access_denied" : "request_failed",
+      null,
+      "security",
+      null,
+      status >= 500 ? "failed" : "denied",
+    );
+  return NextResponse.json(
+    { error: message },
+    {
+      status,
+      headers: {
+        "Cache-Control": "private, no-store",
+        ...(status === 429 ? { "Retry-After": "900" } : {}),
+      },
+    },
+  );
 }

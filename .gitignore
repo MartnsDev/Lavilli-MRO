@@ -20,3 +20,13 @@ backups/
 /.local-secrets/
 
 /.next-verification/
+
+.next-demo/
+
+.demo-local/
+
+# Ignore both directories and sandbox marker files for private tooling.
+/.aws
+/.codex
+/.agents
+/.vercel

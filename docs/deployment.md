@@ -1,3 +1,5 @@
+> Documento histórico. Requisitos e evidências atuais: [auditoria](../SECURITY_AUDIT.md), [release](RELEASE_READINESS.md) e [deploy](DEPLOY_GUIDE.md). O fluxo de acesso foi atualizado pela auditoria posterior.
+
 # Instalação e acesso
 
 Configure Supabase, APP_URL, SESSION_SECRET e PIN_HASH no ambiente do servidor. Em desenvolvimento, use `.env.local` (ignorado pelo Git). `npm run configure:pin` grava o hash Argon2id da senha geral por entrada oculta; `npm run configure:pin -- --rotate` permite substituí-la.

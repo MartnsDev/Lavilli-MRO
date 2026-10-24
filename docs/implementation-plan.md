@@ -1,4 +1,4 @@
-> Atualização do acesso: o fluxo atual usa somente César ou Maranhão e a senha geral pré-configurada, com entrada direta no dashboard. Referências abaixo a bootstrap, OTP ou autorização de dispositivos são históricas e foram substituídas por `202610240007_shared_login.sql`. Consulte o manual e deployment atuais.
+> Status atualizado em 24/10/2026. Evidências atuais: [release](RELEASE_READINESS.md), [segurança](../SECURITY_AUDIT.md) e [resultados](verification-results.json). Itens ainda abertos abaixo não foram declarados concluídos.
 
 # Plano e status verificável
 
@@ -10,19 +10,19 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - [x] Layout responsivo, busca, breadcrumbs, tema persistente, estados vazios e navegação.
 - [x] Ambiente exemplificado, lint, formatador, Vitest, Playwright e documentação.
 - [x] Revisão visual do novo acesso em Chrome automatizado, desktop 1280×900 e mobile 390×844; quatro testes de interface e capturas.
-- [ ] Revisão de todas as telas operacionais autenticadas e tablet.
+- [x] Matriz das 34 coleções e rotas principais em 12 larguras, dois temas e regressões de teclado; aparelhos físicos ainda pendentes.
 
 ## Fase 2 — banco e segurança
 
 - [x] 42 tabelas, FKs, constraints, índices, migrations aditivas e RLS/grants fechados.
 - [x] PIN Argon2id, sessão opaca assinada, cookie seguro, CSRF por Origin e tentativas persistentes.
-- [x] Autorização de dispositivo por bootstrap de uso único ou OTP; expiração/revogação.
+- [x] Autorização independente de dispositivo por código aleatório de uso único; expiração/revogação.
 - [x] Confirmação de mutations vinculada a conteúdo/operação/sessão/responsável; expiração e antirreplay.
 - [x] Auditoria por triggers; segredos em tabelas separadas, sem payloads de credenciais.
 - [x] Tipos derivados do PostgreSQL em `src/lib/database.types.ts`.
-- [x] Projeto Supabase real vinculado, seis migrations aplicadas após inspeção e dry-run, 42 tabelas com RLS e acesso anônimo bloqueado.
+- [x] Projeto Supabase real vinculado, oito migrations existentes preservadas; migration 009 revisada por dry-run, ainda não aplicada, 42 tabelas com RLS e acesso anônimo bloqueado.
 - [x] SDK com leitura administrativa real e metadados do bucket privado verificados.
-- [ ] Homologar upload/versionamento real de arquivos, OTP e sessão em HTTPS.
+- [ ] Homologar scanner, sessão e dispositivos em HTTPS real. Upload/versionamento e proxy foram testados com API/Storage locais.
 
 ## Fase 3 — peças e estoque
 
@@ -53,12 +53,13 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 
 ## Fase 6 — documentos, importação e relatórios
 
-- [x] Bucket privado, upload confirmado, hash, MIME/assinatura/extensão, 4 MB, versões e URL assinada de 60s.
+- [x] Bucket privado, upload confirmado, hash, MIME/assinatura/extensão, 4 MB, versões em quarentena e proxy autenticado sem URL assinada exposta.
 - [x] Vínculos de documentos às fichas e referências HTTPS.
 - [x] CSV/XLSX até 100 linhas, prévia, mapeamento, validação, criação/ignorar duplicados e erros por linha.
 - [x] Exportação CSV com neutralização de fórmulas e PDF paginado, filtros de data/situação.
 - [ ] Diff de atualização por importação, prévia de conflitos atuais e nomes de referências convertidos automaticamente em UUIDs.
-- [ ] Arquivo original de importação privado opcional, relatórios assíncronos e filtros cruzados avançados.
+- [x] Original privado obrigatório ligado ao histórico da importação.
+- [ ] Relatórios assíncronos e filtros cruzados avançados.
 
 ## Fase 7 — painel e alertas
 
@@ -75,7 +76,7 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - [x] Testes unitários de segurança/importação, APIs anônimas, transações/concorrência PostgreSQL.
 - [x] Runbooks, scripts de backup de banco + objetos separados e restauração em destino isolado.
 - [ ] Testar backup/restore de Storage com arquivos reais e validar restauração integral em Supabase.
-- [ ] Navegador para testes visuais e fluxos autenticados ponta a ponta.
+- [x] Navegador Chrome/Firefox, mobile emulado e fluxos autenticados ponta a ponta, conforme resultados atuais.
 - [ ] Deploy Vercel, domínio e segredos reais (não configurados).
 - [x] Manifest e ícones PNG 192/512 e SVG, sem cache operacional offline.
 - [ ] Verificar instalação PWA nos navegadores de destino.
@@ -87,13 +88,13 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - `npm run typecheck`, `npm run lint`, `npm test` e `npm run build` executados; versões e resultados finais em `docs/validation.md`.
 - `npm run test:db` aplica migrations em banco descartável, testa rollback, permissões, três corridas reais e dump/restore.
 - `npm run test:e2e` verifica HTTP real, sem mocks, contra o servidor local; o projeto `api` não precisa de navegador.
-- `npm run test:ui` está preparado e não foi executado: nenhum navegador conectado/disponível.
+- Chrome, Firefox e mobile foram executados; `npm run test:full` e os relatórios atuais registram o alcance.
 
 Nenhuma etapa parcial está declarada como produção homologada. Novas migrations devem ser revisadas e aplicadas conscientemente; não há reset automático de produção.
 
 ## Revisão do design e correção de entrada
 
 - [x] Layout do acesso integrado à marca, Montserrat oficial, botões dourados e logo sem bloco branco isolado.
-- [x] Estado de configuração explícito, primeiro PIN pelo navegador local protegido por recuperação, autorização de dispositivo separada e botão de e-mail somente quando disponível.
+- [x] Configuração de PIN pelo operador no terminal; autorização de aparelho por código independente; sem inicialização pública por PIN ou e-mail não homologado.
 - [x] Hash local portável, sem expansão de `$` pelo Next; teste do carregador real.
 - [x] Testes unitários de login/negação/sessão e configuração em arquivos temporários. O PIN real do proprietário permanece sob controle do próprio proprietário.

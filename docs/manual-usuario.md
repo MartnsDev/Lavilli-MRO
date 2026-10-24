@@ -2,7 +2,7 @@
 
 ## Acesso
 
-Selecione **César** ou **Maranhão**, informe a senha geral do hangar e clique em **Entrar no hangar**. O dashboard abre diretamente. A mesma senha funciona para os dois. Não há autorização de aparelho, código de recuperação ou cadastro. Use **Sair** quando terminar.
+A administração autoriza cada aparelho uma vez com código temporário independente. Depois, selecione **César** ou **Maranhão**, informe a senha geral e clique em **Entrar no hangar**. A mesma senha funciona para ambos. Use **Sair** quando terminar. A interface solicita saída após 30 minutos sem interação; o servidor também limita atividade e duração máxima. Configurações sensíveis e exportações exigem confirmação administrativa independente por cinco minutos.
 
 ## Alterações
 
@@ -28,7 +28,7 @@ Peças serializadas podem ser transferidas, instaladas ou removidas com registro
 
 ## Ferramentas
 
-Retirada exige destino, com matrícula/tarefa/OS opcionais. Ferramentas em kit são retiradas pelo kit com conferência. Na devolução, confirme guarda e estado. No kit, desmarque itens não encontrados: eles ficam desaparecidos e geram ocorrência. Reconhecer alerta não resolve a ocorrência nem libera automaticamente a ferramenta.
+Retirada exige destino, com matrícula/tarefa/OS opcionais. Ferramentas em kit são retiradas pelo kit com conferência. Na devolução, confirme guarda e estado. O retorno deixa a ferramenta em quarentena; confira e libere explicitamente antes de outra retirada. No kit, desmarque itens não encontrados: eles ficam desaparecidos e geram ocorrência. Reconhecer alerta não resolve a ocorrência nem libera automaticamente a ferramenta.
 
 Ferramentas calibráveis sem vencimento informado ou com vencimento passado não podem ser retiradas. Registro de calibração retorna ferramenta à quarentena ou danificada; disponibilidade exige confirmação explícita após conferência.
 
@@ -40,13 +40,13 @@ Em Materiais externos, crie remessa, adicione materiais e confirme despacho. Ite
 
 ## Documentos, pesquisa e relatórios
 
-Cadastre documento, referência HTTPS e categoria. Na ficha, envie versões PDF/PNG/JPEG de até 4 MB. A versão anterior permanece. Vínculos de documentos usa o UUID da ficha de destino.
+Cadastre documento, referência HTTPS e categoria. Na ficha, envie versões PDF/PNG/JPEG de até 4 MB. A versão anterior permanece. Novas versões ficam pendentes até scanner com assinaturas atualizadas; enquanto pendentes, não podem ser baixadas. Arquivos liberados passam pelo proxy com sessão válida, sem URL pública. Vínculos de documentos usa o UUID da ficha de destino.
 
-A busca global encontra campos textuais diretos; listas têm busca/paginação. Alguns filtros cruzados e número de OS ainda não são pesquisáveis. Relatórios exportam CSV/PDF com dados persistidos, por data/situação e páginas de 1.000 registros.
+A busca global encontra campos textuais diretos; listas têm busca/paginação. Alguns filtros cruzados e número de OS ainda não são pesquisáveis. Após elevação administrativa, relatórios exportam CSV/PDF com dados persistidos, por data/situação e páginas de 1.000 registros.
 
-Importações aceitam CSV/XLSX de até 100 linhas. Baixe modelo, mapeie colunas, corrija erros e confirme. Referências usam UUIDs. A versão atual cria ou ignora duplicados; não atualiza registros existentes silenciosamente. Consulte erros no histórico de importações.
+Importações aceitam CSV/XLSX de até 100 linhas. Baixe modelo, mapeie colunas, corrija erros e confirme. Referências usam UUIDs. A versão atual cria ou ignora duplicados; não atualiza registros existentes silenciosamente. O arquivo original é preservado privadamente e associado ao histórico. Confirmações JSON limitadas a 64 KiB: divida lotes maiores se receber aviso de tamanho. Consulte erros no histórico de importações.
 
-O tema claro/escuro fica salvo no dispositivo. As páginas atualizam a cada minuto enquanto visíveis. Sem conexão, aguarde o retorno da rede antes de alterar dados.
+O tema claro/escuro fica salvo no dispositivo. As páginas atualizam a cada minuto enquanto visíveis e a sessão não está inativa. Sem conexão, aguarde o retorno da rede antes de alterar dados.
 
 ## Leitura de etiquetas
 

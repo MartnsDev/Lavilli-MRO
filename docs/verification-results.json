@@ -1,0 +1,1280 @@
+{
+  "date": "2026-10-24",
+  "productionMutations": false,
+  "fullBrowserRound": {
+    "buildId": "FkaVKdwzQpqfmzvKiCMvd",
+    "passed": 176,
+    "failed": 0,
+    "cases": [
+      {
+        "project": "visual",
+        "case": "tests/full/keyboard.spec.ts:3:1 › mobile drawer, modal keyboard focus and 200 percent reflow",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "visual",
+        "case": "tests/full/visual.spec.ts:8:1 › all routes in both themes across twelve widths, keyboard and modal geometry",
+        "duration": "2.8m",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create locations through visible form and open audited record",
+        "duration": "4.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create organizations through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create aircraft through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_catalog through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_instances through visible form and open audited record",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create stock_lots through visible form and open audited record",
+        "duration": "3.8s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create physical_counts through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tools through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kits through visible form and open audited record",
+        "duration": "3.6s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kit_items through visible form and open audited record",
+        "duration": "4.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_inspections through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_discrepancies through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create maintenance_tasks through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create work_orders through visible form and open audited record",
+        "duration": "3.5s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_shipments through visible form and open audited record",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_tracking_events through visible form and open audited record",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create documents through visible form and open audited record",
+        "duration": "3.5s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_rules through visible form and open audited record",
+        "duration": "3.6s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_recipients through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create app_settings through visible form and open audited record",
+        "duration": "4.1s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create activity_comments through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create document_links through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:197:1 › all sidebar links and secondary modules render without runtime errors on desktop and mobile",
+        "duration": "12.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:223:1 › dashboard counters match database and quick links open the corresponding module",
+        "duration": "2.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:237:1 › tool withdrawal and return operate through confirmation dialogs",
+        "duration": "4.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:265:1 › stock receipt updates quantity and verification allows consumption",
+        "duration": "4.8s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:290:1 › edit, review/cancel and archive preserve intended values",
+        "duration": "4.3s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:317:1 › global search and QR manual fallback find a record without camera permissions",
+        "duration": "2.5s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:333:1 › search, empty result, pagination, theme persistence and logout work",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+        "duration": "4.8s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:381:1 › CSV import can be previewed, mapped and confirmed through the UI",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:405:1 › record pagination keeps the search and shows the remaining records",
+        "duration": "6.1s",
+        "status": "passed"
+      },
+      {
+        "project": "firefox",
+        "case": "tests/full/dashboard.spec.ts:424:1 › report form downloads a PDF with blank optional filters",
+        "duration": "2.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:20:1 › shared login works for both mechanics, wrong PIN fails, logout invalidates session",
+        "duration": "1.8s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: locations",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: organizations",
+        "duration": "936ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: aircraft",
+        "duration": "968ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: part_catalog",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: part_instances",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: stock_lots",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: physical_counts",
+        "duration": "908ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: stock_reservations",
+        "duration": "861ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: stock_movements",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: physical_count_items",
+        "duration": "979ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tools",
+        "duration": "961ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_kits",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_kit_items",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_checkouts",
+        "duration": "894ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_inspections",
+        "duration": "935ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_discrepancies",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: tool_calibrations",
+        "duration": "952ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: maintenance_tasks",
+        "duration": "964ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: work_orders",
+        "duration": "945ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: external_shipments",
+        "duration": "998ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: external_shipment_items",
+        "duration": "925ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: external_tracking_events",
+        "duration": "1.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: documents",
+        "duration": "914ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: alerts",
+        "duration": "982ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: audit_events",
+        "duration": "1.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: mechanics",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: notification_rules",
+        "duration": "877ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: notification_recipients",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: email_deliveries",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: app_settings",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: import_jobs",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: activity_comments",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: document_links",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:52:3 › authenticated list and reference options: import_job_rows",
+        "duration": "942ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:65:1 › CRUD, optimistic concurrency, archive, hierarchy and audit preserve the actor",
+        "duration": "2.5s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:154:1 › stock receipt, verification, reservation, release, consumption, transfer and discard reconcile balances",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:242:1 › inventory count rejects stale stock, reconciles once and requires resolution before closure",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:278:1 › serialized part transfers, installs, removes, verifies and rejects stale versions",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:358:1 › tools enforce single checkout, due date, return location, discrepancies and calibration",
+        "duration": "3.7s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:458:1 › kit checklist is atomic and incomplete return opens a missing-item discrepancy",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:506:1 › tasks, OS, comments and aircraft registration preserve operational history",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:580:1 › external shipment dispatch, tracking, partial returns and administrative closure preserve custody",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:650:1 › operation confirmation binds contents, session and idempotency key; retry applies once",
+        "duration": "2.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:675:1 › CSV/XLSX preview, templates and import execution record duplicates and row errors",
+        "duration": "1.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: stock_lots",
+        "duration": "966ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: stock_movements",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: physical_count_items",
+        "duration": "967ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: tools",
+        "duration": "933ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: tool_checkouts",
+        "duration": "997ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: tool_calibrations",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: aircraft",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: maintenance_tasks",
+        "duration": "924ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: work_orders",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: external_shipments",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: audit_events",
+        "duration": "1.3s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:748:3 › CSV and PDF export: alerts",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:765:1 › private document upload, version history, signed download, invalid file and link validation",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:868:1 › labels encode authenticated URLs for tools, kits, locations and serialized parts and escape HTML",
+        "duration": "2.6s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:903:1 › scheduled alerts deduplicate and can be acknowledged/resolved; email remains disabled",
+        "duration": "2.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:933:1 › simultaneous API withdrawals serialize and concurrent retry cannot duplicate stock",
+        "duration": "2.3s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:971:1 › session expiry, expired confirmation and cross-session replay are rejected",
+        "duration": "2.3s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:999:1 › authenticated endpoints reject invalid entity, file, filters, foreign origin and unknown records",
+        "duration": "1.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:1041:1 › unknown alert and inventory cannot report a successful mutation",
+        "duration": "1.2s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/functional.spec.ts:1052:1 › invalid inherited action names return a validation error without server failure",
+        "duration": "1.1s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:7:1 › correct shared PIN alone cannot create a session or reveal mechanic identities",
+        "duration": "52ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:25:1 › invalid, expired and replayed independent enrollment grants cannot authorize devices",
+        "duration": "1.4s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:49:1 › every private API refuses anonymous reads and writes with no-store responses",
+        "duration": "180ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:79:1 › session token alone, revoked device and copied cookies fail the central data boundary",
+        "duration": "1.0s",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:121:1 › ordinary session cannot export or change security; the short PIN cannot elevate itself",
+        "duration": "927ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:137:1 › distributed limiter persists and serializes concurrent attempts in database",
+        "duration": "26ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:152:1 › invalid Origin, cross-site fetch and oversized chunked JSON are rejected",
+        "duration": "836ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:178:1 › CSP uses a fresh nonce and blocks inline/eval scripts in production; cache is private",
+        "duration": "43ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:193:1 › anon and authenticated Data API roles cannot access application tables or RPCs",
+        "duration": "87ms",
+        "status": "passed"
+      },
+      {
+        "project": "functional-api",
+        "case": "tests/full/security.spec.ts:246:1 › deceptive file headers, traversal names and public Storage cannot bypass the private proxy",
+        "duration": "931ms",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create locations through visible form and open audited record",
+        "duration": "3.5s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create organizations through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create aircraft through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_catalog through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_instances through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create stock_lots through visible form and open audited record",
+        "duration": "3.6s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create physical_counts through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tools through visible form and open audited record",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kits through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kit_items through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_inspections through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_discrepancies through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create maintenance_tasks through visible form and open audited record",
+        "duration": "3.4s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create work_orders through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_shipments through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_tracking_events through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create documents through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_rules through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_recipients through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create app_settings through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create activity_comments through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create document_links through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:197:1 › all sidebar links and secondary modules render without runtime errors on desktop and mobile",
+        "duration": "10.4s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:223:1 › dashboard counters match database and quick links open the corresponding module",
+        "duration": "1.8s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:237:1 › tool withdrawal and return operate through confirmation dialogs",
+        "duration": "4.8s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:265:1 › stock receipt updates quantity and verification allows consumption",
+        "duration": "4.4s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:290:1 › edit, review/cancel and archive preserve intended values",
+        "duration": "3.9s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:317:1 › global search and QR manual fallback find a record without camera permissions",
+        "duration": "2.3s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:333:1 › search, empty result, pagination, theme persistence and logout work",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+        "duration": "3.9s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:381:1 › CSV import can be previewed, mapped and confirmed through the UI",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:405:1 › record pagination keeps the search and shows the remaining records",
+        "duration": "5.8s",
+        "status": "passed"
+      },
+      {
+        "project": "desktop",
+        "case": "tests/full/dashboard.spec.ts:424:1 › report form downloads a PDF with blank optional filters",
+        "duration": "2.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create locations through visible form and open audited record",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create organizations through visible form and open audited record",
+        "duration": "2.6s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create aircraft through visible form and open audited record",
+        "duration": "2.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_catalog through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create part_instances through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create stock_lots through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create physical_counts through visible form and open audited record",
+        "duration": "2.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tools through visible form and open audited record",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kits through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_kit_items through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_inspections through visible form and open audited record",
+        "duration": "2.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create tool_discrepancies through visible form and open audited record",
+        "duration": "3.0s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create maintenance_tasks through visible form and open audited record",
+        "duration": "3.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create work_orders through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_shipments through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create external_tracking_events through visible form and open audited record",
+        "duration": "2.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create documents through visible form and open audited record",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_rules through visible form and open audited record",
+        "duration": "2.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create notification_recipients through visible form and open audited record",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create app_settings through visible form and open audited record",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create activity_comments through visible form and open audited record",
+        "duration": "2.9s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:157:3 › create document_links through visible form and open audited record",
+        "duration": "2.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:197:1 › all sidebar links and secondary modules render without runtime errors on desktop and mobile",
+        "duration": "11.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:223:1 › dashboard counters match database and quick links open the corresponding module",
+        "duration": "1.8s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:237:1 › tool withdrawal and return operate through confirmation dialogs",
+        "duration": "3.7s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:265:1 › stock receipt updates quantity and verification allows consumption",
+        "duration": "3.5s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:290:1 › edit, review/cancel and archive preserve intended values",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:317:1 › global search and QR manual fallback find a record without camera permissions",
+        "duration": "2.2s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:333:1 › search, empty result, pagination, theme persistence and logout work",
+        "duration": "3.3s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+        "duration": "3.2s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:381:1 › CSV import can be previewed, mapped and confirmed through the UI",
+        "duration": "2.4s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:405:1 › record pagination keeps the search and shows the remaining records",
+        "duration": "5.1s",
+        "status": "passed"
+      },
+      {
+        "project": "mobile",
+        "case": "tests/full/dashboard.spec.ts:424:1 › report form downloads a PDF with blank optional filters",
+        "duration": "1.9s",
+        "status": "passed"
+      }
+    ]
+  },
+  "followUp": {
+    "status": "passed",
+    "passed": 6,
+    "failed": 0,
+    "rounds": [
+      {
+        "change": "Shell inactivity and all-route visual/keyboard regression",
+        "cases": [
+          {
+            "project": "visual",
+            "case": "tests/full/keyboard.spec.ts:3:1 › mobile drawer, modal keyboard focus and 200 percent reflow",
+            "duration": "3.5s",
+            "status": "passed"
+          },
+          {
+            "project": "visual",
+            "case": "tests/full/keyboard.spec.ts:66:1 › visible automatic refresh does not keep an unattended browser signed in",
+            "duration": "1.4s",
+            "status": "passed"
+          },
+          {
+            "project": "visual",
+            "case": "tests/full/visual.spec.ts:8:1 › all routes in both themes across twelve widths, keyboard and modal geometry",
+            "duration": "2.9m",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "change": "Document quarantine UI and clean proxy download (simulated trusted verdict in disposable DB only)",
+        "cases": [
+          {
+            "project": "firefox",
+            "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+            "duration": "14.8s",
+            "status": "passed"
+          },
+          {
+            "project": "desktop",
+            "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+            "duration": "5.0s",
+            "status": "passed"
+          },
+          {
+            "project": "mobile",
+            "case": "tests/full/dashboard.spec.ts:356:1 › document upload and version download work through the UI",
+            "duration": "4.6s",
+            "status": "passed"
+          }
+        ]
+      }
+    ],
+    "distinctCasesAcrossRounds": 177,
+    "note": "Two initial cases were repeated in visual follow-up; document cases repeat three original cases. Only the inactivity case is new."
+  },
+  "unitTests": {
+    "passed": 43,
+    "failed": 0
+  },
+  "sql": {
+    "postgresVersions": [16, 17],
+    "publicTables": 42,
+    "roles": ["anon", "authenticated"],
+    "deniedOperationsPerRole": [
+      "SELECT",
+      "INSERT",
+      "UPDATE",
+      "DELETE",
+      "UPSERT"
+    ],
+    "dumpRestore": "passed",
+    "concurrentRaces": 3
+  },
+  "productionReadOnly": {
+    "publicTablesRls": 42,
+    "anonymousLimitZeroQueriesDenied": 42,
+    "remoteMigrations": 8,
+    "dryRunPendingMigrations": ["202610240009_security_boundary.sql"]
+  },
+  "vercelReadOnly": {
+    "teamScopes": 1,
+    "projectPages": 2,
+    "matches": []
+  },
+  "contrast": [
+    {
+      "pair": "secondary/light",
+      "foreground": "#63718a",
+      "background": "#ffffff",
+      "ratio": 4.93,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "secondary/light/background",
+      "foreground": "#63718a",
+      "background": "#f3f5f8",
+      "ratio": 4.51,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "secondary/dark",
+      "foreground": "#a2b2c8",
+      "background": "#152133",
+      "ratio": 7.51,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "action/light",
+      "foreground": "#125572",
+      "background": "#ffffff",
+      "ratio": 8.18,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "action/dark",
+      "foreground": "#8fc8df",
+      "background": "#152133",
+      "ratio": 8.86,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "sidebar",
+      "foreground": "#b0bfd2",
+      "background": "#051c2c",
+      "ratio": 9.29,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "critical/light",
+      "foreground": "#8f2020",
+      "background": "#fee8e7",
+      "ratio": 7.48,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "warning/light",
+      "foreground": "#714b09",
+      "background": "#fff0d0",
+      "ratio": 6.87,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "success/light",
+      "foreground": "#1d633e",
+      "background": "#e1f4e9",
+      "ratio": 6.3,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "critical/dark",
+      "foreground": "#ffb8b8",
+      "background": "#492b31",
+      "ratio": 7.65,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "warning/dark",
+      "foreground": "#f4d49d",
+      "background": "#41351f",
+      "ratio": 8.41,
+      "AA_normal_text": true
+    },
+    {
+      "pair": "success/dark",
+      "foreground": "#ade6c4",
+      "background": "#203d33",
+      "ratio": 8.38,
+      "AA_normal_text": true
+    }
+  ],
+  "visual": {
+    "routes": 46,
+    "themes": 2,
+    "widths": [320, 360, 375, 390, 430, 768, 820, 1024, 1280, 1366, 1440, 1920],
+    "measurements": 1104,
+    "pageOverflows": 0,
+    "runtimeConsoleOrHttp5xxErrors": 0,
+    "networkAbortEventsRecorded": 1736,
+    "nativeDeviceZoomAndCamera": "manual validation pending",
+    "emulatedZoomCssViewport": [683, 384],
+    "documentsAdditionalMobileViewport": [320, 640]
+  },
+  "finalAppSourceSha256": "0f407e0d59efb2d654ea7d49520df4362dde158326a1e1de53abf7fea6799b64",
+  "finalBuildId": "U3fc5ZsmcbAQtXYk24uGM",
+  "demo": {
+    "demoLoginUI": "PASS",
+    "mechanics": ["César", "Maranhão"],
+    "credentialFormMethod": "POST",
+    "desktopMobile": "PASS",
+    "pendingDocumentUI": "PASS",
+    "pageErrors": 0,
+    "testFixturesInDemo": 0,
+    "internalAlerts": 4,
+    "pendingDocuments": 3
+  },
+  "encryptedBackup": {
+    "localIntegrity": "passed",
+    "objectsInLastRegression": 34,
+    "samePathAcrossBuckets": "passed",
+    "fullStorageRestore": "pending",
+    "offsite": "pending",
+    "rpoHoursTarget": 24,
+    "rtoHoursTarget": 4
+  },
+  "publicSmoke": {
+    "passed": 16,
+    "failed": 0
+  },
+  "secretExposure": {
+    "actual_secret_values_checked": 4,
+    "history": "checked",
+    "findings": []
+  }
+}

@@ -1,3 +1,4 @@
+import { SecurityControls } from "@/components/security-controls";
 import { session } from "@/lib/server/auth";
 import Link from "next/link";
 import { resources } from "@/lib/domain/resources";
@@ -14,6 +15,7 @@ export default async function Settings() {
           reconfirmação.
         </p>
       </div>
+      <SecurityControls />
       <div className="link-grid">
         {[
           "mechanics",

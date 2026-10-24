@@ -10,6 +10,11 @@ export default async function Login() {
   const state = await accessState();
   return (
     <main className="access-stage">
+      {["demo", "test"].includes(process.env.APP_MODE || "") && (
+        <div className="environment-banner">
+          Demonstração / teste · dados fictícios · ambiente isolado
+        </div>
+      )}
       <header className="access-masthead">
         <div className="access-masthead-inner">
           <BrandLogo className="access-wordmark" />

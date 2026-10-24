@@ -12,7 +12,7 @@ for (const path of [
     const response = await request.get(path);
     expect(response.status()).toBe(401);
     expect(await response.json()).toEqual({
-      error: "Entre novamente para continuar.",
+      error: "Não foi possível validar o acesso. Entre novamente.",
     });
   });
 }

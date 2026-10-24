@@ -31,29 +31,38 @@ export type Database = {
         Row: {
           id: string;
           device_id: string | null;
-          mechanic_id: string | null;
           token_hash: string;
           created_at: string;
           expires_at: string;
           revoked_at: string | null;
+          mechanic_id: string | null;
+          last_seen_at: string;
+          credential_version: string | null;
+          elevated_until: string | null;
         };
         Insert: {
           id?: string;
           device_id?: string | null;
-          mechanic_id?: string | null;
           token_hash: string;
           created_at?: string;
           expires_at: string;
           revoked_at?: string | null;
+          mechanic_id?: string | null;
+          last_seen_at?: string;
+          credential_version?: string | null;
+          elevated_until?: string | null;
         };
         Update: {
           id?: string;
           device_id?: string | null;
-          mechanic_id?: string | null;
           token_hash?: string;
           created_at?: string;
           expires_at?: string;
           revoked_at?: string | null;
+          mechanic_id?: string | null;
+          last_seen_at?: string;
+          credential_version?: string | null;
+          elevated_until?: string | null;
         };
         Relationships: [];
       };
@@ -222,6 +231,11 @@ export type Database = {
           operation_id: string | null;
           reason: string | null;
           created_at: string;
+          session_id: string | null;
+          device_id: string | null;
+          responsavel_declarado: string | null;
+          outcome: string;
+          request_id: string;
         };
         Insert: {
           id?: string;
@@ -234,6 +248,11 @@ export type Database = {
           operation_id?: string | null;
           reason?: string | null;
           created_at?: string;
+          session_id?: string | null;
+          device_id?: string | null;
+          responsavel_declarado?: string | null;
+          outcome?: string;
+          request_id?: string;
         };
         Update: {
           id?: string;
@@ -246,6 +265,11 @@ export type Database = {
           operation_id?: string | null;
           reason?: string | null;
           created_at?: string;
+          session_id?: string | null;
+          device_id?: string | null;
+          responsavel_declarado?: string | null;
+          outcome?: string;
+          request_id?: string;
         };
         Relationships: [];
       };
@@ -257,6 +281,8 @@ export type Database = {
           created_at: string;
           expires_at: string;
           revoked_at: string | null;
+          last_seen_at: string | null;
+          authorization_version: number;
         };
         Insert: {
           id?: string;
@@ -265,6 +291,8 @@ export type Database = {
           created_at?: string;
           expires_at: string;
           revoked_at?: string | null;
+          last_seen_at?: string | null;
+          authorization_version?: number;
         };
         Update: {
           id?: string;
@@ -273,6 +301,8 @@ export type Database = {
           created_at?: string;
           expires_at?: string;
           revoked_at?: string | null;
+          last_seen_at?: string | null;
+          authorization_version?: number;
         };
         Relationships: [];
       };
@@ -389,6 +419,8 @@ export type Database = {
           size_bytes: number;
           sha256: string;
           mechanic_id: string;
+          scan_status: string;
+          scanned_at: string | null;
         };
         Insert: {
           id?: string;
@@ -403,6 +435,8 @@ export type Database = {
           size_bytes: number;
           sha256: string;
           mechanic_id: string;
+          scan_status?: string;
+          scanned_at?: string | null;
         };
         Update: {
           id?: string;
@@ -417,6 +451,8 @@ export type Database = {
           size_bytes?: number;
           sha256?: string;
           mechanic_id?: string;
+          scan_status?: string;
+          scanned_at?: string | null;
         };
         Relationships: [];
       };

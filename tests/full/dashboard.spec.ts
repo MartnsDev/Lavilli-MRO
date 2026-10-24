@@ -251,6 +251,15 @@ test("tool withdrawal and return operate through confirmation dialogs", async ({
   await confirm(dialog);
   await expect(
     page.getByRole("button", { name: "Retirar ferramenta" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Registrar condição", exact: true })
+    .click();
+  dialog = page.getByRole("dialog");
+  await dialog.locator('select[name="status"]').selectOption("available");
+  await confirm(dialog);
+  await expect(
+    page.getByRole("button", { name: "Retirar ferramenta" }),
   ).toBeVisible();
 });
 test("stock receipt updates quantity and verification allows consumption", async ({
@@ -347,6 +356,8 @@ test("search, empty result, pagination, theme persistence and logout work", asyn
 test("document upload and version download work through the UI", async ({
   page,
 }) => {
+  if (test.info().project.name === "mobile")
+    await page.setViewportSize({ width: 320, height: 640 });
   const { PDFDocument } = await import("pdf-lib");
   const pdf = await PDFDocument.create();
   pdf.addPage();
@@ -365,8 +376,33 @@ test("document upload and version download work through the UI", async ({
       .click();
     await confirm(page.getByRole("dialog"));
     await expect(
-      page.getByRole("link", { name: new RegExp("Versão " + version) }),
+      page.getByText("Aguardando verificação de segurança", { exact: true }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: new RegExp("Versão " + version) }),
+    ).toHaveCount(0);
+    const { data: pending, error } = await admin()
+      .from("document_versions")
+      .select("id,sha256")
+      .eq("document_id", documentId)
+      .eq("revision", version)
+      .single();
+    expect(error).toBeNull();
+    // Simulated trusted scanner verdict ONLY in the disposable local integration environment.
+    const verdict = await admin().rpc("record_document_scan", {
+      p_version: pending!.id,
+      p_sha: pending!.sha256,
+      p_clean: true,
+    });
+    expect(verdict.error).toBeNull();
+    await page.reload();
+    const link = page.getByRole("link", {
+      name: new RegExp("Versão " + version),
+    });
+    await expect(link).toBeVisible();
+    expect(
+      (await page.request.get((await link.getAttribute("href"))!)).status(),
+    ).toBe(200);
   }
 });
 test("CSV import can be previewed, mapped and confirmed through the UI", async ({

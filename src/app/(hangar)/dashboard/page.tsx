@@ -197,7 +197,7 @@ export default async function Dashboard() {
                       {t.due_at ? dateBR(t.due_at) : "Sem prazo informado"}
                     </small>
                   </div>
-                  <span className="badge">
+                  <span className="badge" data-state={String(t.priority)}>
                     {t.priority === "critical"
                       ? "Crítica"
                       : t.priority === "high"
@@ -233,7 +233,7 @@ export default async function Dashboard() {
                 <li key={a.id}>
                   <AlertTriangle size={17} />
                   <Link href={`/records/alerts/${a.id}`}>{a.name}</Link>
-                  <span className="badge">
+                  <span className="badge" data-state={String(a.severity)}>
                     {a.severity === "critical" ? "Crítico" : "Atenção"}
                   </span>
                 </li>

@@ -11,10 +11,12 @@ export async function POST(request: Request) {
     if (
       !expected ||
       expected.length < 32 ||
-      received.length !== expected.length + 7 ||
+      Buffer.byteLength(received) !== Buffer.byteLength(expected) + 7 ||
       !timingSafeEqual(Buffer.from(received), Buffer.from("Bearer " + expected))
     )
       throw new Error("FORBIDDEN");
+    if (!(await rpc<boolean>("claim_job", {})))
+      return NextResponse.json({ status: "already_running" }, { status: 409 });
     const inserted = await rpc<number>("generate_alerts", {});
     if (process.env.EMAIL_MODE !== "resend")
       return NextResponse.json({ alerts: inserted, email: "disabled" });
@@ -74,19 +76,12 @@ export async function POST(request: Request) {
         .update(patch)
         .eq("id", item.id);
       if (error) throw error;
-      const { error: auditError } = await db()
-        .from("audit_events")
-        .insert({
-          entity: "email_deliveries",
-          entity_id: item.id,
-          action: patch.status,
-          after_data: {
-            status: patch.status,
-            attempt: item.attempts,
-            actor: "Sistema",
-          },
-        });
-      if (auditError) throw auditError;
+      await rpc("security_event", {
+        p_kind: "email_delivery",
+        p_entity: "email_deliveries",
+        p_entity_id: item.id,
+        p_outcome: patch.status === "sent" ? "success" : "failed",
+      });
     }
     return NextResponse.json({ alerts: inserted, sent });
   } catch (e) {
