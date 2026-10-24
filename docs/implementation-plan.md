@@ -1,3 +1,5 @@
+> Atualização do acesso: o fluxo atual usa somente César ou Maranhão e a senha geral pré-configurada, com entrada direta no dashboard. Referências abaixo a bootstrap, OTP ou autorização de dispositivos são históricas e foram substituídas por `202610240007_shared_login.sql`. Consulte o manual e deployment atuais.
+
 # Plano e status verificável
 
 Cada marca descreve código existente; testes integrados a serviços externos continuam pendentes. Os módulos são interligados por UUIDs, transações SQL e auditoria.

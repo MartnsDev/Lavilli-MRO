@@ -28,10 +28,12 @@ export default async function Login() {
           aria-label="Hangar Lavilli Jet em Jundiaí"
         >
           <Image
-            src="/brand/hangar-interior.jpg"
-            alt="Aeronaves no hangar Lavilli Jet, com vista para a pista de Jundiaí"
+            src="/brand/hangar-hd.jpg"
+            alt="Fachada e aeronaves no hangar Lavilli Jet em Jundiaí"
             fill
             preload
+            unoptimized
+            style={{ objectPosition: "left center" }}
             sizes="(max-width: 900px) 100vw, 57vw"
             className="access-story-photo"
           />

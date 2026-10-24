@@ -2367,3 +2367,18 @@ label small {
   input:not([type="checkbox"]):focus-visible {
   outline-color: #e2b476;
 }
+.access-field select {
+  min-height: 51px;
+  padding: 13px 14px;
+  border: 1px solid #dddcd5;
+  border-radius: 3px;
+  background: #fff;
+  color: #051c2c;
+  font-size: 12px;
+  margin: 0;
+}
+:root[data-theme="dark"] .access-field select {
+  background: #122d40;
+  border-color: #344654;
+  color: #fff;
+}

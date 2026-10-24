@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   try {
     sameOrigin(request);
     const s = await session();
-    await limit("confirm", s.device_id);
+    await limit("confirm", s.id);
     const b = z
       .object({
         pin: z.string().length(4),
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       .strict()
       .parse(await request.json());
     await checkPin(b.pin);
-    await clearLimit("confirm", s.device_id);
+    await clearLimit("confirm", s.id);
     const command = parseCommand(b.command);
     const { data: actor, error: aerr } = await db()
       .from("mechanics")

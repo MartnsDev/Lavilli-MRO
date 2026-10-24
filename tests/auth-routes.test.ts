@@ -1,7 +1,7 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import { randomBytes, randomInt } from "node:crypto";
 import { hash } from "@node-rs/argon2";
-import { digest, sign, unsign } from "../src/lib/domain/security";
+import { digest, unsign } from "../src/lib/domain/security";
 const fake = vi.hoisted(() => ({
   devicePresent: true,
   jar: new Map<string, { value: string }>(),
@@ -23,15 +23,18 @@ vi.mock("../src/lib/server/db", () => ({
   rpc: fake.rpc,
   db: () => ({
     from: (table: string) =>
-      table === "authorized_devices"
+      table === "mechanics"
         ? {
             select: () => ({
               eq: () => ({
-                is: () => ({
-                  gt: () => ({
+                eq: () => ({
+                  in: () => ({
                     maybeSingle: async () => ({
                       data: fake.devicePresent
-                        ? { id: "00000000-0000-4000-8000-000000000001" }
+                        ? {
+                            id: "00000000-0000-4000-8000-000000000001",
+                            name: "César",
+                          }
                         : null,
                       error: null,
                     }),
@@ -43,16 +46,7 @@ vi.mock("../src/lib/server/db", () => ({
         : { insert: fake.insert },
   }),
 }));
-vi.mock("../src/lib/server/local-pin", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../src/lib/server/local-pin")>();
-  return {
-    ...actual,
-    initializeLocalPin: vi.fn(async () => {
-      throw new Error("FORBIDDEN");
-    }),
-  };
-});
+
 let pin: string, secret: string;
 beforeEach(async () => {
   vi.resetModules();
@@ -66,9 +60,6 @@ beforeEach(async () => {
     await hash(pin, { algorithm: 2, memoryCost: 4096, timeCost: 1 }),
   );
   fake.jar.clear();
-  fake.jar.set("lavilli_device", {
-    value: sign(randomBytes(32).toString("base64url"), secret),
-  });
   fake.devicePresent = true;
   fake.set.mockClear();
   fake.insert.mockReset().mockResolvedValue({ error: null });
@@ -91,8 +82,11 @@ async function post(
   );
 }
 describe("server authentication routes", () => {
-  it("accepts the configured PIN only with a valid authorized device and creates an opaque secure session", async () => {
-    const response = await post("login", { pin });
+  it("accepts the shared PIN without device authorization and creates an opaque session", async () => {
+    const response = await post("login", {
+      pin,
+      mechanic_id: "00000000-0000-4000-8000-000000000001",
+    });
     expect(response.status).toBe(200);
     expect(fake.insert).toHaveBeenCalledOnce();
     expect(fake.set).toHaveBeenCalledOnce();
@@ -110,53 +104,57 @@ describe("server authentication routes", () => {
   });
   it("rejects an incorrect PIN without creating a session", async () => {
     const wrong = String((Number(pin) + 1) % 10000).padStart(4, "0");
-    expect((await post("login", { pin: wrong })).status).toBe(403);
+    expect(
+      (
+        await post("login", {
+          pin: wrong,
+          mechanic_id: "00000000-0000-4000-8000-000000000001",
+        })
+      ).status,
+    ).toBe(403);
     expect(fake.insert).not.toHaveBeenCalled();
     expect(fake.set).not.toHaveBeenCalled();
   });
-  it("directs a new or revoked device to authorization rather than misreporting the PIN", async () => {
+  it("rejects an unknown mechanic", async () => {
     fake.devicePresent = false;
-    const r = await post("login", { pin });
-    expect(r.status).toBe(401);
-    expect((await r.json()).code).toBe("DEVICE_REQUIRED");
+    const r = await post("login", {
+      pin,
+      mechanic_id: "00000000-0000-4000-8000-000000000001",
+    });
+    expect(r.status).toBe(400);
+
     expect(fake.insert).not.toHaveBeenCalled();
   });
   it("explains the unconfigured PIN and refuses access instead of silently failing", async () => {
     vi.stubEnv("PIN_HASH", "");
-    const r = await post("login", { pin });
+    const r = await post("login", {
+      pin,
+      mechanic_id: "00000000-0000-4000-8000-000000000001",
+    });
     expect(r.status).toBe(503);
-    expect((await r.json()).code).toBe("PIN_NOT_CONFIGURED");
     expect(fake.set).not.toHaveBeenCalled();
   });
   it("rejects a foreign origin before authentication", async () => {
     expect(
-      (await post("login", { pin }, "https://foreign.example.invalid")).status,
+      (
+        await post(
+          "login",
+          { pin, mechanic_id: "00000000-0000-4000-8000-000000000001" },
+          "https://foreign.example.invalid",
+        )
+      ).status,
     ).toBe(403);
     expect(fake.insert).not.toHaveBeenCalled();
   });
-  it("does not expose a public password-setting endpoint in production", async () => {
-    vi.stubEnv("PIN_HASH", "");
-    const r = await post("initialize", {
-      code: randomBytes(32).toString("base64url"),
-      pin,
-      pin_confirmation: pin,
-    });
-    expect(r.status).toBe(403);
-    expect((await r.json()).code).toBe("LOCAL_SETUP_ONLY");
-    expect(fake.rpc).not.toHaveBeenCalled();
-    expect(fake.insert).not.toHaveBeenCalled();
-  });
-  it("rejects mismatched initialization PINs before any credential write", async () => {
-    vi.stubEnv("PIN_HASH", "");
-    vi.stubEnv("NODE_ENV", "development");
-    vi.stubEnv("APP_URL", "http://localhost:3000");
-    vi.stubEnv("DEVICE_BOOTSTRAP_HASH", digest("test-only-unrelated-proof"));
-    const r = await post("initialize", {
-      code: randomBytes(32).toString("base64url"),
-      pin,
-      pin_confirmation: "invalid",
-    });
-    expect(r.status).toBe(400);
+  it("has no initialization or device authorization endpoints", async () => {
+    for (const action of [
+      "initialize",
+      "bootstrap",
+      "request-otp",
+      "verify-otp",
+    ]) {
+      expect((await post(action, {})).status).toBe(404);
+    }
     expect(fake.insert).not.toHaveBeenCalled();
   });
 });
@@ -164,7 +162,10 @@ describe("server authentication routes", () => {
 it("accepts the portable Argon2id representation stored in .env.local", async () => {
   const { encodePinHash } = await import("../src/lib/domain/pin-hash.mjs");
   vi.stubEnv("PIN_HASH", encodePinHash(process.env.PIN_HASH!));
-  const r = await post("login", { pin });
+  const r = await post("login", {
+    pin,
+    mechanic_id: "00000000-0000-4000-8000-000000000001",
+  });
   expect(r.status).toBe(200);
   expect(fake.set).toHaveBeenCalledOnce();
 });

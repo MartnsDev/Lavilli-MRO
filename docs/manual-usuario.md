@@ -2,9 +2,7 @@
 
 ## Acesso
 
-Se o sistema local ainda não tem senha, a tela **Defina a senha do hangar** solicita o código privado da instalação e permite escolher/confirmar quatro dígitos. Ela não mostra o formulário de login antes dessa configuração. Em seguida, autorize o dispositivo.
-
-No primeiro acesso de um dispositivo, a infraestrutura fornece um código de recuperação de uso único ou você recebe um OTP no e-mail autorizado da empresa. Dê um nome reconhecível ao dispositivo. Depois de autorizá-lo, entre com a senha geral. Use Sair quando terminar. Dispositivos perdidos devem ser revogados em Configurações.
+Selecione **César** ou **Maranhão**, informe a senha geral do hangar e clique em **Entrar no hangar**. O dashboard abre diretamente. A mesma senha funciona para os dois. Não há autorização de aparelho, código de recuperação ou cadastro. Use **Sair** quando terminar.
 
 ## Alterações
 

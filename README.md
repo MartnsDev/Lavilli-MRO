@@ -10,9 +10,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. No ambiente local, abra `/login`: se a senha ainda não existir, a tela **Defina a senha do hangar** permite criá-la com o código privado de primeiro acesso. Depois, autorize o dispositivo e entre com o PIN. A alternativa pelo terminal continua sendo `npm run configure:pin`. Nunca informe o PIN pelo chat.
+Abra http://localhost:3000. O acesso pede apenas **César ou Maranhão** e a **senha geral já configurada**. Ao entrar, o dashboard abre diretamente, sem autorização de dispositivo, códigos ou cadastro.
 
-Sem conexão/configuração de infraestrutura, o painel redireciona a `/setup`; com infraestrutura pronta e PIN ausente, ele direciona ao primeiro acesso em `/login`; não há banco fictício nem modo de demonstração. Para operar, configure Supabase e os segredos descritos em [deploy](docs/deployment.md). Não coloque a senha neste repositório ou no chat.
+Em uma instalação nova, configure as variáveis de infraestrutura e use `npm run configure:pin` para salvar o hash da senha escolhida. Consulte [deploy](docs/deployment.md). O arquivo `.env.local` permanece privado.
 
 ## Verificar
 
@@ -35,7 +35,7 @@ O teste de banco cria e remove apenas bancos com prefixo `lavilli_test_`. O test
 
 ## Implementado
 
-- Dispositivos autorizados por código de recuperação de alta entropia, de uso único, ou OTP enviado ao e-mail fixo da empresa; sessões opacas assinadas, HttpOnly, expiração e revogação.
+- Acesso direto com César ou Maranhão e uma senha geral compartilhada; sessões opacas assinadas, HttpOnly, expiração e saída.
 - Senha geral com Argon2id; cada alteração operacional requer responsável informado e reconfirmação vinculada ao conteúdo, válida por dois minutos. Limites persistentes de tentativas.
 - Cadastros, localizações hierárquicas, catálogo e peças serializadas; lotes, recebimentos, reservas, consumo, transferência, baixa e inventário com conciliação.
 - Ferramentas, kits, conferência de saída/retorno, ocorrências e registros de calibração; bloqueios de disponibilidade no banco.

@@ -30,7 +30,8 @@ export type Database = {
       access_sessions: {
         Row: {
           id: string;
-          device_id: string;
+          device_id: string | null;
+          mechanic_id: string | null;
           token_hash: string;
           created_at: string;
           expires_at: string;
@@ -38,7 +39,8 @@ export type Database = {
         };
         Insert: {
           id?: string;
-          device_id: string;
+          device_id?: string | null;
+          mechanic_id?: string | null;
           token_hash: string;
           created_at?: string;
           expires_at: string;
@@ -46,7 +48,8 @@ export type Database = {
         };
         Update: {
           id?: string;
-          device_id?: string;
+          device_id?: string | null;
+          mechanic_id?: string | null;
           token_hash?: string;
           created_at?: string;
           expires_at?: string;

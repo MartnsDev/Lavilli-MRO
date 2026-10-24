@@ -4,7 +4,7 @@ create table tests.fixtures(name text primary key,id uuid not null);
 create function tests.id(n text) returns uuid language sql as $$select id from tests.fixtures where name=n$$;
 create function tests.assert(ok boolean,msg text) returns void language plpgsql as $$begin if ok is distinct from true then raise exception 'FAIL: %',msg;end if;raise notice 'PASS: %',msg;end$$;
 insert into public.authorized_devices(token_hash,label,expires_at) values ('test-device','Dispositivo TESTE',now()+interval '1 day') returning id as device \gset
-insert into public.access_sessions(device_id,token_hash,expires_at) values (:'device','test-session',now()+interval '1 day') returning id as session \gset
+insert into public.access_sessions(mechanic_id,token_hash,expires_at) values ((select id from public.mechanics where name='César'),'test-session',now()+interval '1 day') returning id as session \gset
 insert into tests.fixtures values('session',:'session'),('device',:'device');
 create function tests.call(command jsonb,operation uuid default gen_random_uuid()) returns jsonb language plpgsql as $$
 declare c uuid;h text;begin
@@ -77,10 +77,10 @@ do $$declare conf uuid;begin
  insert into public.confirmations(session_id,mechanic_id,operation_hash,expires_at) values(tests.id('session'),(select id from public.mechanics where name='César'),'bound-hash',now()+interval '1 minute') returning id into conf;
  begin perform public.run_operation(tests.id('session'),conf,gen_random_uuid(),'tampered-hash','{}');raise exception 'unexpected';exception when others then if sqlerrm<>'FORBIDDEN' then raise;end if;end;
  perform tests.assert(true,'expired or tampered confirmation rejected');
- update public.authorized_devices set revoked_at=now() where id=tests.id('device');
+ update public.access_sessions set revoked_at=now() where id=tests.id('session');
  begin perform public.run_operation(tests.id('session'),conf,gen_random_uuid(),'bound-hash','{}');raise exception 'unexpected';exception when others then if sqlerrm<>'UNAUTHORIZED' then raise;end if;end;
- update public.authorized_devices set revoked_at=null where id=tests.id('device');
- perform tests.assert(true,'revoked device cannot use existing session');
+ update public.access_sessions set revoked_at=null where id=tests.id('session');
+ perform tests.assert(true,'revoked session cannot access business operations');
 end$$;
 do $$begin
  perform public.enroll_device('TEST-bootstrap',null,null,null,'TEST-new-device','Dispositivo TESTE bootstrap');

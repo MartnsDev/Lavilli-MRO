@@ -5,7 +5,7 @@ Next.js App Router com componentes de servidor para leituras. Componentes de cli
 ```mermaid
 flowchart LR
  Browser[Navegador autorizado] --> Next[Next.js: páginas e APIs]
- Next --> Auth[Cookie assinado + sessão e dispositivo no banco]
+ Next --> Auth[Cookie assinado + sessão e responsável no banco]
  Next --> Confirm[PIN + responsável + hash da operação]
  Confirm --> SQL[run_operation: transação PostgreSQL]
  SQL --> Data[Entidades operacionais]
@@ -18,7 +18,7 @@ flowchart LR
 
 `src/lib/domain` define comandos, recursos, validações e utilitários puros. `src/lib/server` isola credenciais, autenticação, acesso e e-mail com `server-only`. APIs verificam sessão antes de consultas e Origin antes de mutations. Páginas com dados também verificam sessão, além do layout; layouts Next não substituem autorização junto ao acesso aos dados.
 
-`run_operation` revalida sessão/dispositivo, bloqueia a chave de operação, valida confirmação e consome-a dentro da mesma transação. A resposta é persistida para retries. Operações de estoque bloqueiam lotes; ferramentas têm trava por linha e índice único de retirada aberta. Erros de concorrência são apresentados para revisão.
+`run_operation` revalida a sessão, bloqueia a chave de operação, valida confirmação e consome-a dentro da mesma transação. A resposta é persistida para retries. Operações de estoque bloqueiam lotes; ferramentas têm trava por linha e índice único de retirada aberta. Erros de concorrência são apresentados para revisão.
 
 Formulários de edição têm versão otimista. Operações incrementais (estoque, retiradas, devoluções) validam o estado atual na transação. Auditoria contém antes/depois e responsável informado. Credenciais e tentativas são tabelas separadas que não passam pelo trigger de auditoria operacional.
 

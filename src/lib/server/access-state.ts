@@ -1,29 +1,21 @@
 import "server-only";
-import { configured, infrastructureConfigured } from "./db";
-import { device } from "./auth";
-import { localPinSetupEnabled } from "./local-pin";
-import type { AccessState } from "@/lib/domain/access";
-
+import { configured, infrastructureConfigured, db } from "./db";
+import type { AccessState, LoginMechanic } from "@/lib/domain/access";
 export async function accessState(): Promise<AccessState> {
-  const ready = infrastructureConfigured();
-  let deviceAuthorized = false;
+  let mechanics: LoginMechanic[] = [];
   if (configured()) {
-    try {
-      await device();
-      deviceAuthorized = true;
-    } catch {}
+    const { data, error } = await db()
+      .from("mechanics")
+      .select("id,name")
+      .eq("active", true)
+      .in("name", ["César", "Maranhão"])
+      .order("name");
+    if (error) throw new Error("SETUP_REQUIRED");
+    mechanics = data ?? [];
   }
   return {
-    infrastructureReady: ready,
+    infrastructureReady: infrastructureConfigured(),
     passwordConfigured: Boolean(process.env.PIN_HASH),
-    deviceAuthorized,
-    emailEnabled: Boolean(
-      process.env.EMAIL_MODE === "resend" &&
-      process.env.AUTHORIZED_EMAIL &&
-      process.env.RESEND_API_KEY &&
-      process.env.EMAIL_FROM,
-    ),
-    localSetupEnabled: ready && localPinSetupEnabled(),
-    recoveryAvailable: Boolean(process.env.DEVICE_BOOTSTRAP_HASH),
+    mechanics,
   };
 }

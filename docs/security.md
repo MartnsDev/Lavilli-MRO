@@ -1,3 +1,5 @@
+> Atualização do acesso: o fluxo atual usa somente César ou Maranhão e a senha geral pré-configurada, com entrada direta no dashboard. Referências abaixo a bootstrap, OTP ou autorização de dispositivos são históricas e foram substituídas por `202610240007_shared_login.sql`. Consulte o manual e deployment atuais.
+
 # Segurança
 
 A senha geral é compartilhada e curta; jamais é o único perímetro público. Toda entrada requer cookie de dispositivo autorizado por token aleatório de 256 bits, assinado por HMAC e persistido apenas como hash no banco. O bootstrap exige código com ao menos 32 caracteres, guardado no ambiente como SHA-256 e consumido uma única vez. OTP de seis dígitos expira em dez minutos e é vinculado a um cookie de navegador. Seu destinatário vem do ambiente, nunca de parâmetros do visitante.

@@ -1,3 +1,5 @@
+> Atualização do acesso: o fluxo atual usa somente César ou Maranhão e a senha geral pré-configurada, com entrada direta no dashboard. Referências abaixo a bootstrap, OTP ou autorização de dispositivos são históricas e foram substituídas por `202610240007_shared_login.sql`. Consulte o manual e deployment atuais.
+
 # Decisões de implementação
 
 1. Projeto local Next.js + Supabase, compatível com Vercel. O pedido exige este repositório e não autoriza configurar domínio; nenhuma conta, serviço pago ou publicação foi criada.

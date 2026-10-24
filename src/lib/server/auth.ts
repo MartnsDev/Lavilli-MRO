@@ -60,23 +60,6 @@ export async function checkPin(pin: string) {
   }
   if (!valid) throw new Error("INVALID_PIN");
 }
-export async function device() {
-  if (!configured()) throw new Error("PIN_NOT_CONFIGURED");
-  const c = await cookies();
-  const cookie = c.get("lavilli_device")?.value;
-  if (!cookie) throw new Error("UNAUTHORIZED");
-  const raw = unsign(cookie, secret());
-  if (!raw) throw new Error("UNAUTHORIZED");
-  const { data, error } = await db()
-    .from("authorized_devices")
-    .select("id")
-    .eq("token_hash", digest(raw))
-    .is("revoked_at", null)
-    .gt("expires_at", new Date().toISOString())
-    .maybeSingle();
-  if (error || !data) throw new Error("UNAUTHORIZED");
-  return data.id as string;
-}
 export async function session() {
   if (!configured()) throw new Error("UNAUTHORIZED");
   const c = await cookies();
@@ -84,24 +67,22 @@ export async function session() {
   if (!cookie) throw new Error("UNAUTHORIZED");
   const raw = unsign(cookie, secret());
   if (!raw) throw new Error("UNAUTHORIZED");
-  const deviceId = await device();
   const { data, error } = await db()
     .from("access_sessions")
-    .select("id,device_id")
+    .select("id,mechanic_id")
     .eq("token_hash", digest(raw))
-    .eq("device_id", deviceId)
     .is("revoked_at", null)
     .gt("expires_at", new Date().toISOString())
     .maybeSingle();
   if (error || !data) throw new Error("UNAUTHORIZED");
-  return data as { id: string; device_id: string };
+  return data as { id: string; mechanic_id: string | null };
 }
-export async function startSession(deviceId: string) {
+export async function startSession(mechanicId: string) {
   const raw = token();
   const { error } = await db()
     .from("access_sessions")
     .insert({
-      device_id: deviceId,
+      mechanic_id: mechanicId,
       token_hash: digest(raw),
       expires_at: new Date(Date.now() + 8 * 3600_000).toISOString(),
     });
