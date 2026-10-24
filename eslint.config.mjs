@@ -6,6 +6,7 @@ export default defineConfig([
   ...nextTs,
   globalIgnores([
     ".next/**",
+    ".next-verification/**",
     "node_modules/**",
     "test-results/**",
     "playwright-report/**",

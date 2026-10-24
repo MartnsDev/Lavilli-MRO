@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Dialog,
@@ -11,7 +11,15 @@ import { Button } from "./ui/button";
 import { label, type Field } from "@/lib/domain/resources";
 import type { Command } from "@/lib/domain/commands";
 type Option = { id: string; label: string };
-function RefSelect({ field, value }: { field: Field; value: unknown }) {
+function RefSelect({
+  field,
+  value,
+  inputId,
+}: {
+  field: Field;
+  value: unknown;
+  inputId?: string;
+}) {
   const [options, setOptions] = useState<Option[]>([]),
     [error, setError] = useState(false);
   useEffect(() => {
@@ -32,6 +40,7 @@ function RefSelect({ field, value }: { field: Field; value: unknown }) {
   return (
     <>
       <select
+        id={inputId}
         name={field.key}
         required={field.required}
         defaultValue={String(value ?? "")}
@@ -56,15 +65,18 @@ function RefSelect({ field, value }: { field: Field; value: unknown }) {
 export function FieldInput({
   field,
   value,
+  inputId,
 }: {
   field: Field;
+  inputId?: string;
   value?: unknown;
 }) {
   if (field.type.startsWith("ref:"))
-    return <RefSelect field={field} value={value} />;
+    return <RefSelect field={field} value={value} inputId={inputId} />;
   if (field.type.startsWith("select:"))
     return (
       <select
+        id={inputId}
         name={field.key}
         required={field.required}
         defaultValue={String(value ?? field.type.slice(7).split(",")[0])}
@@ -83,6 +95,7 @@ export function FieldInput({
   if (field.type === "boolean")
     return (
       <input
+        id={inputId}
         type="checkbox"
         name={field.key}
         defaultChecked={value === undefined ? true : Boolean(value)}
@@ -91,6 +104,7 @@ export function FieldInput({
   if (field.type === "textarea")
     return (
       <textarea
+        id={inputId}
         name={field.key}
         required={field.required}
         defaultValue={String(value ?? "")}
@@ -100,6 +114,7 @@ export function FieldInput({
     );
   return (
     <input
+      id={inputId}
       name={field.key}
       type={["uuid", "text"].includes(field.type) ? "text" : field.type}
       required={field.required}
@@ -169,6 +184,9 @@ export function OperationForm({
   }) => Promise<void>;
 }) {
   const router = useRouter();
+  const formId = useId();
+  const [draft, setDraft] = useState<Record<string, unknown>>(initial);
+  const [draftReason, setDraftReason] = useState("");
   const [open, setOpen] = useState(false),
     [pending, setPending] = useState<{
       command: Command;
@@ -232,6 +250,8 @@ export function OperationForm({
       <Button
         variant={variant}
         onClick={() => {
+          setDraft(initial);
+          setDraftReason("");
           setOpen(true);
           setPending(undefined);
           setError("");
@@ -271,9 +291,14 @@ export function OperationForm({
                   ))}
                 </dl>
               </div>
-              <label>
-                Responsável informado
-                <select name="mechanic_id" required defaultValue="">
+              <div>
+                <label htmlFor={formId + "-actor"}>Responsável informado</label>
+                <select
+                  id={formId + "-actor"}
+                  name="mechanic_id"
+                  required
+                  defaultValue=""
+                >
                   <option value="">Escolha o responsável</option>
                   {actors.map((a) => (
                     <option key={a.id} value={a.id}>
@@ -281,7 +306,7 @@ export function OperationForm({
                     </option>
                   ))}
                 </select>
-              </label>
+              </div>
               <label>
                 Redigite a senha geral
                 <input
@@ -326,6 +351,8 @@ export function OperationForm({
                 setError("");
                 const f = new FormData(e.currentTarget);
                 const values = valuesFromForm(fields, f);
+                setDraft(values);
+                setDraftReason(String(f.get("reason")));
                 setPending({
                   operation_id: crypto.randomUUID(),
                   command: {
@@ -340,11 +367,17 @@ export function OperationForm({
               }}
             >
               {fields.map((field) => (
-                <label key={field.key}>
-                  {field.label}
-                  {field.required && <span aria-hidden="true"> *</span>}
-                  <FieldInput field={field} value={initial[field.key]} />
-                </label>
+                <div key={field.key}>
+                  <label htmlFor={formId + "-" + field.key}>
+                    {field.label}
+                    {field.required && <span aria-hidden="true"> *</span>}
+                  </label>
+                  <FieldInput
+                    field={field}
+                    value={draft[field.key]}
+                    inputId={formId + "-" + field.key}
+                  />
+                </div>
               ))}
               <label>
                 Motivo / resumo da alteração
@@ -355,6 +388,7 @@ export function OperationForm({
                   maxLength={2000}
                   rows={2}
                   placeholder="Descreva o motivo para o histórico."
+                  defaultValue={draftReason}
                 />
               </label>
               {error && (

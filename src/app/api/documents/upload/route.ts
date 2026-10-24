@@ -41,6 +41,18 @@ export async function POST(request: Request) {
     )
       throw new Error("INVALID_OPERATION");
     const hash = operationHash({ operation_id: p.operation_id, command });
+    // A retried upload must acknowledge the committed version, without uploading again.
+    const { data: previous, error: previousError } = await db()
+      .from("operation_results")
+      .select("session_id,operation_hash")
+      .eq("id", p.operation_id)
+      .maybeSingle();
+    if (previousError) throw previousError;
+    if (previous) {
+      if (previous.session_id !== s.id || previous.operation_hash !== hash)
+        throw new Error("FORBIDDEN");
+      return NextResponse.json({ ok: true });
+    }
     const { data: conf, error: ce } = await db()
       .from("confirmations")
       .select("id")

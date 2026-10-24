@@ -16,7 +16,7 @@ export default async function Records({
     meta = resources[entity];
   if (!meta) notFound();
   const search = await searchParams,
-    page = Math.max(1, Math.min(10000, Number(search.page) || 1));
+    page = Math.max(1, Math.min(10000, Math.floor(Number(search.page)) || 1));
   const { rows, count } = await list(entity, {
     page,
     q: search.q,
@@ -73,7 +73,7 @@ export default async function Records({
           <h1>{meta.title}</h1>
           <p>{meta.description}</p>
         </div>
-        {meta.fields.length > 0 && (
+        {meta.fields.length > 0 && entity !== "mechanics" && (
           <OperationForm
             title={"Cadastrar · " + meta.title}
             fields={meta.fields}
@@ -215,7 +215,7 @@ export default async function Records({
             {page > 1 && (
               <Link
                 className="button outline small"
-                href={`?page=${page - 1}&q=${encodeURIComponent(search.q ?? "")}`}
+                href={`?page=${page - 1}&q=${encodeURIComponent(search.q ?? "")}&status=${encodeURIComponent(search.status ?? "")}`}
               >
                 Anterior
               </Link>
@@ -223,7 +223,7 @@ export default async function Records({
             {page * 25 < count && (
               <Link
                 className="button outline small"
-                href={`?page=${page + 1}&q=${encodeURIComponent(search.q ?? "")}`}
+                href={`?page=${page + 1}&q=${encodeURIComponent(search.q ?? "")}&status=${encodeURIComponent(search.status ?? "")}`}
               >
                 Próxima
               </Link>

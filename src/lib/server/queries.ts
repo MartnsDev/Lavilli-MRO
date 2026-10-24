@@ -67,7 +67,7 @@ export async function options(entity: string) {
     .order("created_at", { ascending: false })
     .limit(200);
   if (entity === "mechanics") query = query.eq("active", true);
-  else query = query.is("archived_at", null);
+  else if (entity !== "audit_events") query = query.is("archived_at", null);
   const { data, error } = await query;
   if (error) throw error;
   return (data ?? []).map((r) => ({

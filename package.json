@@ -22,7 +22,9 @@
     "verify:env": "node --env-file=.env.local scripts/verify-env.mjs",
     "db:types": "node scripts/generate-types.mjs",
     "configure:pin": "node scripts/configure-pin.mjs",
-    "pin:normalize": "node scripts/normalize-pin-hash.mjs"
+    "pin:normalize": "node scripts/normalize-pin-hash.mjs",
+    "test:full": "node scripts/test-full.mjs",
+    "test:db:docker": "node scripts/test-db-docker.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

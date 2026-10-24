@@ -18,3 +18,5 @@ backups/
 /supabase/.temp/
 /supabase/.branches/
 /.local-secrets/
+
+/.next-verification/

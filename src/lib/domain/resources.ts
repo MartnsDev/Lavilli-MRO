@@ -923,6 +923,8 @@ for (const [key, columns] of Object.entries(readColumns))
     type,
     required: false,
   }));
+Object.setPrototypeOf(resources, null);
+
 export function resourceSchema(resource: string) {
   const meta = resources[resource];
   if (!meta || !meta.fields.length) throw new Error("INVALID_OPERATION");
@@ -1036,6 +1038,8 @@ export const statusLabels: Record<string, string> = {
   info: "Informação",
   warning: "Atenção",
 };
+Object.setPrototypeOf(statusLabels, null);
+
 export function label(value: unknown): string {
   if (value === null || value === undefined) return "—";
   if (typeof value === "boolean") return value ? "Sim" : "Não";

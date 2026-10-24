@@ -21,7 +21,6 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
         "maintenance_tasks",
         "work_orders",
         "documents",
-        "mechanics",
         "notification_rules",
         "notification_recipients",
         "app_settings",

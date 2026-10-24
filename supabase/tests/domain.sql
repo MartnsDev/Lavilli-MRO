@@ -102,3 +102,10 @@ do $$begin
 end$$;
 select tests.call(jsonb_build_object('action','stock','data',jsonb_build_object('lot_id',tests.id('lot'),'kind','consume','quantity',1,'task_id',tests.id('task'),'work_order_id',tests.id('order'),'aircraft_id',tests.id('aircraft')),'reason','Material vinculado ao serviço TESTE'));
 select tests.assert(exists(select 1 from public.stock_movements where task_id=tests.id('task') and work_order_id=tests.id('order') and aircraft_id=tests.id('aircraft')),'material event links task order and aircraft atomically');
+-- An absent mutation target must fail and roll back its audit and operation result.
+do $$declare before_count bigint;begin
+ select count(*) into before_count from public.audit_events;
+ begin perform tests.call(jsonb_build_object('action','alert_status','data',jsonb_build_object('id',gen_random_uuid(),'status','resolved'),'reason','Alerta inexistente TESTE'));raise exception 'unexpected';exception when others then if sqlerrm<>'NOT_FOUND' then raise;end if;end;
+ begin perform tests.call(jsonb_build_object('action','inventory_close','data',jsonb_build_object('id',gen_random_uuid()),'reason','Inventário inexistente TESTE'));raise exception 'unexpected';exception when others then if sqlerrm<>'NOT_FOUND' then raise;end if;end;
+ perform tests.assert((select count(*)=before_count from public.audit_events),'missing target rejects operation without orphan audit');
+end$$;

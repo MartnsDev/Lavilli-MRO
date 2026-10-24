@@ -42,10 +42,10 @@ export default function Setup() {
           <article>
             <ShieldCheck />
             <div>
-              <h2>3. Autorizar o primeiro dispositivo</h2>
+              <h2>3. Entrar no hangar</h2>
               <p>
-                Use um código de recuperação de uso único, gerado com alta
-                entropia. Depois, entre com a senha geral.
+                Selecione César ou Maranhão e entre com a senha geral já
+                configurada. O dashboard abre diretamente.
               </p>
             </div>
           </article>

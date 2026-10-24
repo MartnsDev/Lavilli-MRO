@@ -2,13 +2,13 @@
 
 Este é um sistema de apoio operacional interno. Não certifica aeronavegabilidade, não substitui formulários oficiais, manuais/procedimentos aprovados, assinatura de profissional habilitado ou autorização para retorno ao serviço. Não há declaração automática de conformidade ANAC/RBAC 43/RBAC 145. A organização e seu responsável técnico devem validar campos, processos, intervalos e retenção aplicáveis.
 
-O responsável escolhido é informado/autodeclarado. PIN compartilhado e dispositivo autorizado não permitem comprovar autoria individual. Auditoria registra esse limite; não é assinatura técnica autenticada. A conclusão de tarefa/OS é administrativa e não altera status técnico de voo da aeronave.
+O responsável escolhido é informado/autodeclarado. PIN compartilhado não permitem comprovar autoria individual. Auditoria registra esse limite; não é assinatura técnica autenticada. A conclusão de tarefa/OS é administrativa e não altera status técnico de voo da aeronave.
 
 ## Dependências de implantação
 
-O Supabase real já está configurado somente no ambiente local, com migrations e verificações de acesso. Ainda faltam definição local do PIN pelo proprietário, remetente/Resend/e-mail autorizado, agendador protegido e destino de deploy. Nenhum domínio, serviço pago ou envio de e-mail foi ativado. O aplicativo não opera dados enquanto a configuração está ausente. Testes com PostgreSQL puro não equivalem à validação do gateway Supabase, políticas Storage ou integração Resend.
+O ambiente local está conectado ao Supabase real e a senha geral foi configurada. O fluxo de acesso é somente nome (César ou Maranhão) e senha. Remetente/Resend, agendador e destino de deploy dependem da configuração do ambiente final.
 
-Não houve navegador disponível para revisão visual. Testes de interface desktop/mobile estão escritos, mas não executados. Testes HTTP de negação anônima e testes SQL são evidências distintas, não um fluxo autenticado ponta a ponta completo.
+A verificação funcional agora inclui Supabase local com API/Storage reais e Chrome automatizado em computador e celular. Migrações, concorrência e dump/restore foram exercitados em PostgreSQL 16 e 17. Consulte `professional-verification.md` para as evidências e o alcance. Câmera em aparelho físico, entrega externa de e-mail, restauração integral em outro projeto e desempenho sob carga de produção continuam exigindo homologação específica.
 
 ## Recursos parciais
 

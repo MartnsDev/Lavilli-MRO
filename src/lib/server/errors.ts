@@ -60,12 +60,14 @@ export function failure(error: unknown) {
     EMAIL_DISABLED: [503, "O envio de e-mail ainda não está configurado."],
   };
   const [status, message] =
-    error instanceof ZodError
-      ? [400, error.issues.map((i) => i.message).join("; ")]
-      : (map[code] ?? [
-          500,
-          "Não foi possível concluir a operação. Consulte o suporte.",
-        ]);
+    error instanceof SyntaxError
+      ? [400, "Requisição inválida. Confira os dados enviados."]
+      : error instanceof ZodError
+        ? [400, error.issues.map((i) => i.message).join("; ")]
+        : (map[code] ?? [
+            500,
+            "Não foi possível concluir a operação. Consulte o suporte.",
+          ]);
   if (status === 500)
     console.error(
       JSON.stringify({

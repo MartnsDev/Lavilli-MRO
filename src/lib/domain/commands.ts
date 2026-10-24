@@ -228,7 +228,8 @@ export type Command = z.infer<typeof base>;
 export function parseCommand(value: unknown): Command {
   const c = base.parse(value);
   if (["create", "update", "archive"].includes(c.action)) {
-    if (!c.entity || !resources[c.entity]) throw new Error("INVALID_OPERATION");
+    if (!c.entity || !resources[c.entity] || c.entity === "mechanics")
+      throw new Error("INVALID_OPERATION");
     if (c.action !== "create" && (!c.id || !c.version))
       throw new Error("INVALID_OPERATION");
     if (c.action !== "archive") c.data = resourceSchema(c.entity).parse(c.data);
@@ -240,7 +241,8 @@ export function parseCommand(value: unknown): Command {
       throw new Error("INVALID_OPERATION");
   } else {
     const schema = definitions[c.action];
-    if (!schema) throw new Error("INVALID_OPERATION");
+    if (!schema || !Object.hasOwn(definitions, c.action))
+      throw new Error("INVALID_OPERATION");
     c.data = schema.parse(c.data) as Record<string, unknown>;
     if (
       c.action === "task_status" &&

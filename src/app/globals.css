@@ -2382,3 +2382,37 @@ label small {
   border-color: #344654;
   color: #fff;
 }
+
+@media (max-width: 760px) {
+  .dialog-content {
+    top: max(16px, env(safe-area-inset-top));
+    transform: translateX(-50%);
+    max-height: calc(100dvh - 32px);
+    overscroll-behavior: contain;
+  }
+  .dialog-content input,
+  .dialog-content select,
+  .dialog-content textarea {
+    font-size: 16px;
+  }
+}
+
+.dialog-content {
+  left: 50vw;
+  width: min(540px, calc(100vw - 32px));
+}
+.dialog-content * {
+  min-width: 0;
+}
+.confirmation-summary dl > div {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.confirmation-summary dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+}

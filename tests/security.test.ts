@@ -232,3 +232,34 @@ describe("CSRF origin and local development aliases", () => {
     ).toBe(false);
   });
 });
+
+describe("fixed hangar mechanics", () => {
+  it("prevents adding, renaming or disabling the two login identities through operational forms", () => {
+    for (const action of ["create", "update", "archive"])
+      expect(() =>
+        parseCommand({
+          action,
+          entity: "mechanics",
+          id,
+          version: 1,
+          data: { name: "Outro", active: false },
+          reason: "Tentativa de alteração",
+        }),
+      ).toThrow();
+  });
+});
+
+describe("resource and label lookups", () => {
+  it("treats inherited object property names as ordinary data, not resources or translations", async () => {
+    const { resources, resourceSchema, label } =
+      await import("../src/lib/domain/resources");
+    for (const key of ["__proto__", "constructor", "toString"]) {
+      expect(resources[key]).toBeUndefined();
+      expect(() =>
+        parseCommand({ action: key, data: {}, reason: "Ação inválida" }),
+      ).toThrow("INVALID_OPERATION");
+      expect(() => resourceSchema(key)).toThrow("INVALID_OPERATION");
+      expect(label(key)).toBe(key);
+    }
+  });
+});

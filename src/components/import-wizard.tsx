@@ -1,9 +1,12 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { resources, resourceSchema } from "@/lib/domain/resources";
 import { ImportPreviewTable } from "./import-preview-table";
 import { OperationForm } from "./operation-form";
+import { useHydrated } from "@/lib/use-hydrated";
 export function ImportWizard() {
+  const ready = useHydrated();
+  const input = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState("part_catalog"),
     [headers, setHeaders] = useState<string[]>([]),
     [rows, setRows] = useState<string[][]>([]),
@@ -54,6 +57,7 @@ export function ImportWizard() {
           Categoria
           <select
             value={category}
+            disabled={!ready || busy}
             onChange={(e) => {
               setCategory(e.target.value);
               setRows([]);
@@ -85,8 +89,9 @@ export function ImportWizard() {
           Arquivo (.xlsx ou .csv)
           <input
             type="file"
+            ref={input}
             accept=".xlsx,.csv"
-            disabled={busy}
+            disabled={busy || !ready}
             onChange={async (e) => {
               const file = e.target.files?.[0];
               if (!file) return;
@@ -177,7 +182,10 @@ export function ImportWizard() {
                 action: "import_rows",
                 data: { category, name, rows: parsed.map((r) => r.data) },
               }}
-              onSuccess={() => setRows([])}
+              onSuccess={() => {
+                setRows([]);
+                if (input.current) input.current.value = "";
+              }}
             />
           )}
           <p className="fine-print">

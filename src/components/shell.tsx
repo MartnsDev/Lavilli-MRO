@@ -131,6 +131,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <ThemeToggle />
             <Button
               variant="ghost"
+              aria-label="Sair"
               onClick={async () => {
                 const r = await fetch("/api/auth/logout", { method: "POST" });
                 if (r.ok) router.push("/login");

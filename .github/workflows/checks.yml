@@ -1,5 +1,7 @@
 name: Checks
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   application:
     runs-on: ubuntu-latest
@@ -10,6 +12,7 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci --legacy-peer-deps
+      - run: npm audit --audit-level=high
       - run: npm run check:secrets
       - run: npm run format:check
       - run: npm run lint
@@ -29,11 +32,43 @@ jobs:
           --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y postgresql-client
-      - run: bash scripts/test-db.sh
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-client-16
+      - run: PATH=/usr/lib/postgresql/16/bin:$PATH bash scripts/test-db.sh
         env:
           RUN_DATABASE_TESTS: "1"
           PGHOST: localhost
           PGPORT: "5432"
           PGUSER: postgres
           PGPASSWORD: test-only-password
+
+  functional:
+    needs: application
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npx playwright install --with-deps chromium
+      - name: Iniciar Supabase isolado
+        run: npx --yes supabase@2.122.0 start --exclude studio,imgproxy,realtime,edge-runtime,logflare,vector,supavisor,inbucket
+      - name: Testar migrações, concorrência e restauração no PostgreSQL 17
+        run: npm run test:db:docker
+      - name: Testar API, Storage, computador e celular
+        run: npm run test:full
+        env:
+          PLAYWRIGHT_CHANNEL: chromium
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorios-e-evidencias
+          path: |
+            playwright-report/full
+            test-results/full
+          retention-days: 7
+      - name: Encerrar ambiente de teste
+        if: always()
+        run: npx --yes supabase@2.122.0 stop --no-backup

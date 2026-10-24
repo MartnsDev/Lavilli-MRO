@@ -33,6 +33,19 @@ RUN_DATABASE_TESTS=1 PGHOST=localhost PGPORT=55439 npm run test:db
 
 O teste de banco cria e remove apenas bancos com prefixo `lavilli_test_`. O teste de Storage real, de OTP e de e-mail exige um projeto Supabase de homologação e configuração Resend. Nenhum e-mail foi enviado nesta implementação.
 
+## Verificação funcional completa
+
+```bash
+# Docker precisa estar disponível. Este comando inicia apenas o Supabase LOCAL:
+npx --yes supabase@2.122.0 start --exclude studio,imgproxy,realtime,edge-runtime,logflare,vector,supavisor,inbucket
+# Migrações, regras, concorrência e dump/restore em banco descartável:
+npm run test:db:docker
+# API real + Storage privado + formulários no computador e celular:
+npm run test:full
+```
+
+A suíte completa usa uma build separada em `.next-verification`, porta 3100 e senha aleatória de teste. Não usa as credenciais do Supabase remoto e não altera a senha real. Exige Chrome instalado ou `PLAYWRIGHT_CHANNEL=chromium` com `npx playwright install chromium`. O relatório fica em `playwright-report/full/index.html`. Veja [a cobertura e os limites](docs/professional-verification.md). O workflow do GitHub executa essas verificações em pushes e pull requests.
+
 ## Implementado
 
 - Acesso direto com César ou Maranhão e uma senha geral compartilhada; sessões opacas assinadas, HttpOnly, expiração e saída.

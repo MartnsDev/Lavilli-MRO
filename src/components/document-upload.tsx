@@ -1,7 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { OperationForm } from "./operation-form";
+import { useHydrated } from "@/lib/use-hydrated";
 export function DocumentUpload({ documentId }: { documentId: string }) {
+  const ready = useHydrated();
+  const selection = useRef(0);
+  const input = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File>(),
     [hash, setHash] = useState(""),
     [error, setError] = useState("");
@@ -11,8 +15,11 @@ export function DocumentUpload({ documentId }: { documentId: string }) {
         Nova versão (PDF, PNG ou JPEG; até 4 MB)
         <input
           type="file"
+          ref={input}
+          disabled={!ready}
           accept="application/pdf,image/png,image/jpeg"
           onChange={async (e) => {
+            const current = ++selection.current;
             setHash("");
             setError("");
             const f = e.target.files?.[0];
@@ -22,13 +29,21 @@ export function DocumentUpload({ documentId }: { documentId: string }) {
               setError("O arquivo excede 4 MB.");
               return;
             }
-            const bytes = await f.arrayBuffer();
-            const digest = await crypto.subtle.digest("SHA-256", bytes);
-            setHash(
-              Array.from(new Uint8Array(digest))
-                .map((b) => b.toString(16).padStart(2, "0"))
-                .join(""),
-            );
+            try {
+              const bytes = await f.arrayBuffer();
+              const digest = await crypto.subtle.digest("SHA-256", bytes);
+              if (current === selection.current)
+                setHash(
+                  Array.from(new Uint8Array(digest))
+                    .map((b) => b.toString(16).padStart(2, "0"))
+                    .join(""),
+                );
+            } catch {
+              if (current === selection.current)
+                setError(
+                  "Não foi possível preparar o arquivo. Recarregue a página e tente novamente.",
+                );
+            }
           }}
         />
       </label>
@@ -61,6 +76,8 @@ export function DocumentUpload({ documentId }: { documentId: string }) {
             if (!r.ok) throw Error(b.error);
           }}
           onSuccess={() => {
+            selection.current++;
+            if (input.current) input.current.value = "";
             setFile(undefined);
             setHash("");
           }}
