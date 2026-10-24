@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: "Lavilli Jet | Gestão do Hangar",
   description: "Controle operacional interno de hangar",
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [{ url: "/brand/favicon.png", type: "image/png", sizes: "50x50" }],
+  },
   robots: { index: false, follow: false },
 };
 export default function RootLayout({

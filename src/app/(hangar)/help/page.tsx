@@ -1,3 +1,4 @@
+import { CompanyContact } from "@/components/company-contact";
 import Link from "next/link";
 export default function Help() {
   return (
@@ -7,6 +8,7 @@ export default function Help() {
         <h1>Ajuda e boas práticas</h1>
         <p>Controle físico, histórico claro e responsabilidade informada.</p>
       </div>
+      <CompanyContact />
       <div className="card prose">
         <h2>Comece pela organização física</h2>
         <p>

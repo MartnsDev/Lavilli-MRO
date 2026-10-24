@@ -5,11 +5,13 @@
   --ink: #17263b;
   --muted: #63718a;
   --line: #e2e7ef;
-  --blue: #2056a3;
-  --blue-soft: #edf3fc;
+  --blue: #074862;
+  --brand-gold: #a66c2c;
+  --brand-gold-soft: #f9f0e3;
+  --blue-soft: #eaf2f5;
   --shadow: 0 3px 15px #20345205;
   --danger: #a12435;
-  --sidebar: #0d213c;
+  --sidebar: #0b2338;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
@@ -18,7 +20,9 @@
   --ink: #e8eef7;
   --muted: #a2b2c8;
   --line: #2a3a51;
-  --blue: #88b7ff;
+  --blue: #8fc8df;
+  --brand-gold: #efb56b;
+  --brand-gold-soft: #382b1e;
   --blue-soft: #1c3252;
   --shadow: none;
   --danger: #ff9bab;
@@ -154,32 +158,7 @@ p {
   padding: 0 7px 27px;
   color: #fff !important;
 }
-.brand-mark {
-  height: 42px;
-  width: 42px;
-  border: 1px solid #ffffff38;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  transform: rotate(-7deg);
-}
-.brand strong {
-  display: block;
-  letter-spacing: 2px;
-  font-size: 18px;
-  font-weight: 600;
-}
-.brand b {
-  font-weight: 300;
-  color: #91b8eb;
-}
-.brand small {
-  display: block;
-  font-size: 8px;
-  letter-spacing: 2.5px;
-  margin-top: 2px;
-  color: #9eacc0;
-}
+
 .sidebar-label {
   font-size: 9px;
   letter-spacing: 1.7px;
@@ -205,9 +184,9 @@ p {
   color: #fff;
 }
 .nav-link.active {
-  background: #254e83;
+  background: #ffffff0d;
   color: #fff;
-  box-shadow: inset 3px 0 #8eb8f0;
+  box-shadow: inset 3px 0 #efb56b;
 }
 .sidebar-bottom {
   font-size: 9px;
@@ -338,39 +317,7 @@ p {
   min-height: 36px;
   padding: 7px 12px;
 }
-.hangar-art {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 38%;
-  color: #a6c5e8;
-}
-.hangar-art svg {
-  transform: rotate(-25deg);
-  z-index: 1;
-}
-.hangar-art > span {
-  letter-spacing: 9px;
-  font-size: 11px;
-  z-index: 1;
-}
-.art-ring {
-  position: absolute;
-  width: 230px;
-  height: 230px;
-  border: 1px solid #ffffff14;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 30px #ffffff03,
-    0 0 0 60px #ffffff03;
-}
-.art-coordinate {
-  font-size: 7px;
-  letter-spacing: 2px;
-  margin-top: 18px;
-}
+
 .section-heading {
   display: flex;
   justify-content: space-between;
@@ -1101,9 +1048,7 @@ label small {
   .welcome-band h2 {
     font-size: 24px;
   }
-  .hangar-art {
-    width: 33%;
-  }
+
   .heading-actions {
     align-items: flex-start;
   }
@@ -1180,9 +1125,7 @@ label small {
   .welcome-band p {
     max-width: 220px;
   }
-  .hangar-art {
-    display: none;
-  }
+
   .metrics-grid {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -1334,4 +1277,351 @@ label small {
 }
 .location-tree > li > .location-tree {
   margin-top: 10px;
+}
+
+/* Lavilli Jet: original institutional artwork, preserved on white. */
+.brand-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  padding: 11px 16px;
+  border-radius: 8px;
+  line-height: 1;
+}
+.brand-logo img {
+  display: block;
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.brand-logo small {
+  display: block;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 2.3px;
+  color: #3e566a;
+}
+.sidebar .brand {
+  display: block;
+  padding: 0 0 23px;
+}
+.sidebar .brand-logo {
+  width: 100%;
+  padding: 16px 13px 13px;
+  border-bottom: 3px solid #efb56b;
+  border-radius: 7px;
+}
+.auth-top .brand-logo {
+  padding: 11px 18px;
+  box-shadow: 0 2px 12px #10213506;
+  border: 1px solid #e5e8ec;
+}
+.auth-top .brand-logo img {
+  width: 135px;
+}
+.branded-access {
+  padding-bottom: 22px;
+}
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  max-width: 1120px;
+  margin: 35px auto 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 18px 65px #1426380a;
+}
+.auth-visual {
+  position: relative;
+  isolation: isolate;
+  min-height: 650px;
+  background: #0b2338;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.auth-photo {
+  object-fit: cover;
+  object-position: 42% center;
+  z-index: -2;
+}
+.auth-visual-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #0b233800 12%,
+    #0b23383a 42%,
+    #0b2338ed 100%
+  );
+  z-index: -1;
+}
+.auth-visual-content {
+  padding: 42px 35px;
+  color: #fff;
+}
+.auth-visual-content .eyebrow {
+  color: #f4c17f;
+  font-size: 8px;
+  letter-spacing: 1.7px;
+}
+.auth-visual-content h2 {
+  font-size: 34px;
+  line-height: 1.2;
+  letter-spacing: -0.7px;
+  font-weight: 500;
+  margin: 17px 0;
+}
+.auth-visual-content p {
+  color: #d8e2ed;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.auth-location {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  margin-top: 27px;
+  color: #e7d0b0;
+}
+.auth-layout .login-card {
+  margin: 0;
+  max-width: none;
+  padding: 43px 39px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  align-self: center;
+  width: 100%;
+}
+.auth-layout .auth-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--brand-gold-soft);
+  color: var(--brand-gold);
+  border: 1px solid color-mix(in srgb, var(--brand-gold) 20%, transparent);
+  margin-bottom: 22px;
+}
+.auth-layout .login-card > .eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.3px;
+}
+.auth-layout .login-card h1 {
+  font-size: 27px;
+}
+.auth-layout .login-card form {
+  margin-top: 25px;
+}
+.institutional-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--blue);
+  margin-top: 9px;
+}
+.access-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  max-width: 1120px;
+  margin: 0 auto;
+  font-size: 9px;
+  color: var(--muted);
+}
+.welcome-hangar {
+  isolation: isolate;
+  background: #0b2338;
+  border-top: 3px solid #d9a053;
+}
+.dashboard-hangar-photo {
+  object-fit: cover;
+  object-position: center 55%;
+  z-index: -2;
+}
+.welcome-hangar-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #0b2338f5 0%,
+    #0b2338e8 32%,
+    #0b233877 65%,
+    #0b23380d 100%
+  );
+  z-index: -1;
+}
+.welcome-content {
+  position: relative;
+  max-width: 75%;
+}
+.welcome-hangar .eyebrow {
+  color: #f4c17f;
+}
+.company-contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.company-contact-header h2 {
+  margin: 0;
+  font-size: 21px;
+}
+.company-contact-header .brand-logo {
+  border: 1px solid #e5e8ec;
+  padding: 10px 16px;
+}
+.company-contact-header .brand-logo img {
+  width: 125px;
+}
+.company-contact-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 26px;
+  margin-bottom: 27px;
+}
+.company-contact-grid h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 13px;
+}
+.company-contact-grid h3 svg {
+  color: var(--brand-gold);
+}
+.company-contact-grid address {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.company-contact-grid a {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--blue);
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+.contact-email-label {
+  margin-top: 24px;
+}
+.hangar-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.hangar-gallery figure {
+  margin: 0;
+  min-width: 0;
+}
+.hangar-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.hangar-gallery figcaption {
+  font-size: 10px;
+  color: var(--muted);
+  padding-top: 8px;
+}
+@media (max-width: 1100px) {
+  .auth-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+  .auth-layout .login-card {
+    padding: 35px 29px;
+  }
+  .auth-visual-content {
+    padding: 35px 28px;
+  }
+  .auth-visual-content h2 {
+    font-size: 29px;
+  }
+  .company-contact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .company-contact-grid > section:last-child {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 899px) {
+  .auth-layout {
+    display: block;
+    max-width: 450px;
+    margin-top: 35px;
+  }
+  .auth-visual {
+    display: none;
+  }
+  .auth-layout .login-card {
+    padding: 32px 29px;
+  }
+  .access-footer {
+    max-width: 450px;
+  }
+  .auth-top .brand-logo img {
+    width: 120px;
+  }
+  .welcome-content {
+    max-width: 100%;
+  }
+}
+@media (max-width: 760px) {
+  .auth-top .brand-logo {
+    padding: 9px 13px;
+  }
+  .auth-top .brand-logo img {
+    width: 112px;
+  }
+  .auth-layout {
+    margin-top: 28px;
+  }
+  .auth-layout .login-card {
+    padding: 28px 23px;
+  }
+  .auth-layout .login-card h1 {
+    font-size: 25px;
+  }
+  .access-footer {
+    font-size: 8px;
+  }
+  .welcome-hangar-shade {
+    background: linear-gradient(90deg, #0b2338f5, #0b2338c9);
+  }
+  .company-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .company-contact-grid > section:last-child {
+    grid-column: auto;
+  }
+  .company-contact-header .brand-logo {
+    display: none;
+  }
+  .hangar-gallery {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 }

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { session } from "@/lib/server/auth";
 import Link from "next/link";
 import {
@@ -125,8 +126,16 @@ export default async function Dashboard() {
           }).format(new Date())}
         </span>
       </div>
-      <section className="welcome-band">
-        <div>
+      <section className="welcome-band welcome-hangar">
+        <Image
+          src="/brand/hangar-interior.jpg"
+          alt=""
+          fill
+          sizes="(max-width: 760px) 100vw, 80vw"
+          className="dashboard-hangar-photo"
+        />
+        <div className="welcome-hangar-shade" />
+        <div className="welcome-content">
           <span className="eyebrow">CONTROLE, DO RECEBIMENTO AO DESTINO</span>
           <h2>
             Cada item em seu lugar.
@@ -137,12 +146,6 @@ export default async function Dashboard() {
           <Link className="button band-button" href="/records/stock_lots">
             Movimentar material <ArrowUpRight size={17} />
           </Link>
-        </div>
-        <div className="hangar-art" aria-hidden="true">
-          <div className="art-ring" />
-          <Plane size={130} strokeWidth={0.8} />
-          <span>LAVILLI JET</span>
-          <div className="art-coordinate">GESTÃO OPERACIONAL · HANGAR</div>
         </div>
       </section>
       <div className="section-heading">

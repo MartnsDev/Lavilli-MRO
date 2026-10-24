@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { BrandLogo } from "./brand-logo";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -79,15 +80,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           href="/dashboard"
           onClick={() => setOpen(false)}
         >
-          <span className="brand-mark">
-            <Plane size={23} />
-          </span>
-          <span>
-            <strong>
-              LAVILLI <b>JET</b>
-            </strong>
-            <small>GESTÃO DO HANGAR</small>
-          </span>
+          <BrandLogo subtitle />
         </Link>
         <div className="sidebar-label">ESPAÇO OPERACIONAL</div>
         <nav aria-label="Navegação principal">

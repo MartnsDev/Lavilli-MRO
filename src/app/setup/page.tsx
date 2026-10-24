@@ -1,12 +1,11 @@
-import { Plane, ShieldCheck, Database, KeyRound } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
+import { ShieldCheck, Database, KeyRound } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 export default function Setup() {
   return (
     <main className="auth-page">
       <div className="auth-top">
-        <span className="wordmark">
-          <Plane /> LAVILLI JET
-        </span>
+        <BrandLogo />
         <ThemeToggle />
       </div>
       <section className="setup-card">
