@@ -16,3 +16,6 @@
 14. O esquema derivado é gerado por introspecção PostgreSQL, sem exigir Docker para geração de tipos. Configuração Supabase local existe; testes SQL usam PostgreSQL puro, sem simular que Storage/Resend foram integrados.
 
 15. Vínculos de consumo/reserva com tarefas/OS/aeronaves são colunas opcionais de stock_movements, a fonte do histórico físico. Não há duplicação do saldo em tabelas de materiais. As fichas agregam os registros relacionados mais recentes.
+
+16. O primeiro teste real do SDK revelou exigência de WebSocket nativo no Node 20. Foi adicionado transporte `ws` exclusivo do servidor e dos scripts de backup/restore, com teste de regressão de construção do cliente sem rede. Node 22 continua recomendado para CI/deploy.
+17. O CLI Supabase 2.122.0 foi usado para vincular somente `ecyzjuhryfqqpqoskyth`, cujo PostgreSQL é 17. A configuração local foi ajustada de 16 para 17; testes de domínio anteriores em PostgreSQL 16 permanecem evidência de compatibilidade do SQL.

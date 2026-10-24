@@ -6,7 +6,7 @@ O responsável escolhido é informado/autodeclarado. PIN compartilhado e disposi
 
 ## Dependências de implantação
 
-Faltam credenciais reais Supabase, remetente/Resend/e-mail autorizado, agendador protegido e destino de deploy. Nenhum domínio, serviço pago ou envio de e-mail foi ativado. O aplicativo não opera dados enquanto a configuração está ausente. Testes com PostgreSQL puro não equivalem à validação do gateway Supabase, políticas Storage ou integração Resend.
+O Supabase real já está configurado somente no ambiente local, com migrations e verificações de acesso. Ainda faltam definição local do PIN pelo proprietário, remetente/Resend/e-mail autorizado, agendador protegido e destino de deploy. Nenhum domínio, serviço pago ou envio de e-mail foi ativado. O aplicativo não opera dados enquanto a configuração está ausente. Testes com PostgreSQL puro não equivalem à validação do gateway Supabase, políticas Storage ou integração Resend.
 
 Não houve navegador disponível para revisão visual. Testes de interface desktop/mobile estão escritos, mas não executados. Testes HTTP de negação anônima e testes SQL são evidências distintas, não um fluxo autenticado ponta a ponta completo.
 

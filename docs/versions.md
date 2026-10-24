@@ -1,6 +1,6 @@
 # Versões instaladas
 
-Obtidas dos pacotes locais e fixadas em package-lock.json.
+Obtidas dos pacotes locais e fixadas em package-lock.json. Atualizadas após configuração Supabase.
 
 | Pacote                   | Versão instalada |
 | ------------------------ | ---------------- |
@@ -20,6 +20,7 @@ Obtidas dos pacotes locais e fixadas em package-lock.json.
 | react-dom                | 19.3.1           |
 | server-only              | 0.0.1            |
 | tailwind-merge           | 3.7.0            |
+| ws                       | 8.22.0           |
 | zod                      | 4.6.7            |
 | @playwright/test         | 1.64.1           |
 | @tailwindcss/postcss     | 4.3.3            |
@@ -28,6 +29,7 @@ Obtidas dos pacotes locais e fixadas em package-lock.json.
 | @types/qrcode            | 1.5.6            |
 | @types/react             | 19.3.0           |
 | @types/react-dom         | 19.3.0           |
+| @types/ws                | 8.18.2           |
 | eslint                   | 10.13.0          |
 | eslint-config-next       | 16.4.3           |
 | prettier                 | 3.9.10           |
@@ -36,4 +38,4 @@ Obtidas dos pacotes locais e fixadas em package-lock.json.
 | typescript               | 6.0.3            |
 | vitest                   | 4.1.12           |
 
-Node usado na validação: v20.20.2. npm: 10.8.2. Instalação usa --legacy-peer-deps devido a falha interna do resolvedor npm 10; lint, tipos, build e testes validam a combinação instalada. CI usa Node 22.
+Node utilizado localmente: v20.20.2. npm: 10.8.2. CI/deploy recomendados em Node 22. O transporte ws mantém compatibilidade do SDK Supabase no Node 20. CLI Supabase usado no vínculo e migrations: 2.122.0. Instalação reproduzível: npm ci --legacy-peer-deps.

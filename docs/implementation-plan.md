@@ -17,7 +17,9 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - [x] Confirmação de mutations vinculada a conteúdo/operação/sessão/responsável; expiração e antirreplay.
 - [x] Auditoria por triggers; segredos em tabelas separadas, sem payloads de credenciais.
 - [x] Tipos derivados do PostgreSQL em `src/lib/database.types.ts`.
-- [ ] Homologação Supabase real de RLS, Storage, OTP e sessão em HTTPS.
+- [x] Projeto Supabase real vinculado, seis migrations aplicadas após inspeção e dry-run, 42 tabelas com RLS e acesso anônimo bloqueado.
+- [x] SDK com leitura administrativa real e metadados do bucket privado verificados.
+- [ ] Homologar upload/versionamento real de arquivos, OTP e sessão em HTTPS.
 
 ## Fase 3 — peças e estoque
 

@@ -1,5 +1,9 @@
+import WebSocket from "ws";
 import "server-only";
-import { createClient } from "@supabase/supabase-js";
+import {
+  createClient,
+  type RealtimeClientOptions,
+} from "@supabase/supabase-js";
 export function configured() {
   return Boolean(
     process.env.SUPABASE_URL &&
@@ -14,7 +18,15 @@ export function db() {
   return createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } },
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+      // ws implements the runtime interface; its event typings differ from DOM typings.
+      realtime: {
+        transport: WebSocket as unknown as NonNullable<
+          RealtimeClientOptions["transport"]
+        >,
+      },
+    },
   );
 }
 export async function rpc<T>(

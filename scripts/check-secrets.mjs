@@ -2,6 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 const skip = new Set([
   "node_modules",
+  ".local-secrets",
+  ".temp",
+  ".branches",
   ".next",
   ".git",
   ".agents",

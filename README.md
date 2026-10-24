@@ -10,7 +10,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. Sem configuração, o painel redireciona a `/setup`; não há banco fictício nem modo de demonstração. Para operar, configure Supabase e os segredos descritos em [deploy](docs/deployment.md). Não coloque a senha neste repositório ou no chat.
+Abra http://localhost:3000. Após configurar o Supabase, execute `npm run configure:pin` no seu terminal para definir a senha sem passá-la pelo chat.
+
+Sem configuração, o painel redireciona a `/setup`; não há banco fictício nem modo de demonstração. Para operar, configure Supabase e os segredos descritos em [deploy](docs/deployment.md). Não coloque a senha neste repositório ou no chat.
 
 ## Verificar
 
@@ -46,3 +48,5 @@ O teste de banco cria e remove apenas bancos com prefixo `lavilli_test_`. O test
 A build e os testes locais são a referência de validação; integração real não é comprovada sem homologação. **O escopo integral do prompt ainda possui itens parciais**, inclusive atualização de cadastros por importação, planejamento dedicado de materiais, homologação da câmera, calibração com certificado obrigatório vinculado e filtros avançados de relatórios. Consulte o [checklist verificável](docs/implementation-plan.md) e as [limitações](docs/limitations-and-compliance.md).
 
 Documentação: [arquitetura](docs/architecture.md), [banco](docs/database.md), [segurança](docs/security.md), [operação](docs/operations.md), [decisões](docs/decisions.md), [backup e restauração](docs/backup-restore.md), [manual](docs/manual-usuario.md), [cenários de teste](docs/test-matrix.md), [versões instaladas](docs/versions.md).
+
+Configuração do projeto Supabase e verificações remotas: [status da infraestrutura](docs/infrastructure-setup.md).

@@ -1,3 +1,4 @@
+import WebSocket from "ws";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -38,7 +39,7 @@ await fs.chmod(path.join(target, "database.dump"), 0o600);
 const client = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
-  { auth: { persistSession: false } },
+  { auth: { persistSession: false }, realtime: { transport: WebSocket } },
 );
 const bucket = "operational-documents",
   objects = [];

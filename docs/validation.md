@@ -1,6 +1,6 @@
 # Validação executada
 
-Execução em 23/10/2026, fuso America/Sao_Paulo. Nenhuma credencial real foi fornecida, nenhum dado de produção foi utilizado e nenhum e-mail foi enviado.
+Registro da implementação inicial, anterior à configuração remota. Execução em 23/10/2026, fuso America/Sao_Paulo. Nenhuma credencial real foi fornecida, nenhum dado de produção foi utilizado e nenhum e-mail foi enviado.
 
 | Verificação                                       | Resultado                                                                                                                           |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,3 +20,5 @@ Execução em 23/10/2026, fuso America/Sao_Paulo. Nenhuma credencial real foi fo
 O teste final HTTP foi executado com `TEST_BASE_URL=http://127.0.0.1:3001 npm run test:e2e` contra `next start`. O banco isolado PostgreSQL 16 usou porta 55439; o runner cria e remove somente bancos `lavilli_test_*`. Não foram usados mocks de Supabase para declarar integração real.
 
 Não executado: testes visuais Chromium/mobile, fluxo autenticado no navegador, Supabase gateway/Storage reais, envio Resend, agendador externo, restauração de arquivos reais e deploy HTTPS. O runtime de navegador informou nenhum navegador disponível. O Docker local não estava acessível. Essas verificações continuam pendentes na matriz de aceitação.
+
+Verificações posteriores com o projeto Supabase real e correção do transporte Node 20 estão registradas em [infrastructure-setup.md](infrastructure-setup.md).

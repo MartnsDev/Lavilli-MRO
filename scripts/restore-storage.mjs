@@ -1,3 +1,4 @@
+import WebSocket from "ws";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -20,7 +21,7 @@ const manifest = JSON.parse(
 const client = createClient(
   process.env.RESTORE_SUPABASE_URL,
   process.env.RESTORE_SERVICE_ROLE_KEY,
-  { auth: { persistSession: false } },
+  { auth: { persistSession: false }, realtime: { transport: WebSocket } },
 );
 for (const object of manifest.objects) {
   if (!/^[a-f0-9]{64}$/.test(object.filename))

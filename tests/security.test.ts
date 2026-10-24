@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   digest,
   sign,
@@ -170,5 +170,24 @@ describe("Brazilian date boundary", () => {
   it("uses São Paulo day rather than UTC calendar day", async () => {
     const { dayKeySP } = await import("../src/lib/utils");
     expect(dayKeySP(new Date("2026-10-24T01:00:00Z"))).toBe("2026-10-23");
+  });
+});
+
+describe("Supabase server transport", () => {
+  it("constructs on Node 20 without requiring native WebSocket or network", async () => {
+    const values = {
+      SUPABASE_URL: "https://example.invalid",
+      SUPABASE_SERVICE_ROLE_KEY: "test-only-server-key",
+      PIN_HASH: "test-only-hash",
+      SESSION_SECRET: "test-only-session-secret",
+      APP_URL: "http://localhost:3000",
+    };
+    for (const [key, value] of Object.entries(values)) vi.stubEnv(key, value);
+    try {
+      const { db } = await import("../src/lib/server/db");
+      expect(() => db()).not.toThrow();
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
