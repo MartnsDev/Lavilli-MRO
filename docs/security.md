@@ -17,3 +17,9 @@ CSP restringe origens, frame-ancestors, form-action e objetos. Hidratação Next
 Responsável informado é autodeclarado. Logs técnicos são estruturados e mínimos; mensagens de erro de fornecedor e credenciais não são registradas. Eventos automáticos usam ator Sistema. Revise retenção e privacidade com a organização antes de produção. Valor `retention_days` é configuração declarativa: não apaga dados automaticamente.
 
 Proteja o painel Supabase/Vercel e recuperação com MFA e acesso de infraestrutura. Não habilite credenciais privilegiadas no navegador, não publique um ambiente com banco real antes da homologação e não use a base de testes como produção.
+
+## Inicialização local e formato do hash
+
+`POST /api/auth/initialize` existe somente para primeira configuração local. Exige NODE_ENV=development, APP_URL em loopback, Origin válido, código de recuperação de alta entropia válido e não consumido, confirmação do PIN e limite de tentativas. Em produção/nome remoto ele é recusado antes de chamar o banco. Um arquivo de lock e gravação por rename impedem substituições concorrentes. Só o hash é persistido em `.env.local`, permissão 0600; PIN/código não entram na auditoria. O evento usa Sistema. Arquivo e banco não formam uma transação distribuída: falha de auditoria após gravação gera aviso estruturado para manutenção, sem desfazer a configuração segura.
+
+O valor local PIN_HASH é `argon2id:` seguido do hash Argon2id codificado em base64url; essa representação não contém `$` e não sofre expansão pelo dotenv do Next. A codificação não substitui o hash nem reduz seu custo. Hash cru é aceito quando injetado diretamente pelo provedor. A API de status devolve somente flags de configuração/autorização, nunca valores de segredos. Origem exata continua obrigatória em produção; em desenvolvimento são aceitos aliases de loopback apenas no mesmo protocolo/porta.

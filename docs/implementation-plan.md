@@ -7,7 +7,8 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - [x] Next App Router, React, TS strict, Tailwind e componentes acessíveis Radix/shadcn.
 - [x] Layout responsivo, busca, breadcrumbs, tema persistente, estados vazios e navegação.
 - [x] Ambiente exemplificado, lint, formatador, Vitest, Playwright e documentação.
-- [ ] Revisão visual real em desktop/tablet/celular: navegador indisponível nesta execução.
+- [x] Revisão visual do novo acesso em Chrome automatizado, desktop 1280×900 e mobile 390×844; quatro testes de interface e capturas.
+- [ ] Revisão de todas as telas operacionais autenticadas e tablet.
 
 ## Fase 2 — banco e segurança
 
@@ -87,3 +88,10 @@ Cada marca descreve código existente; testes integrados a serviços externos co
 - `npm run test:ui` está preparado e não foi executado: nenhum navegador conectado/disponível.
 
 Nenhuma etapa parcial está declarada como produção homologada. Novas migrations devem ser revisadas e aplicadas conscientemente; não há reset automático de produção.
+
+## Revisão do design e correção de entrada
+
+- [x] Layout do acesso integrado à marca, Montserrat oficial, botões dourados e logo sem bloco branco isolado.
+- [x] Estado de configuração explícito, primeiro PIN pelo navegador local protegido por recuperação, autorização de dispositivo separada e botão de e-mail somente quando disponível.
+- [x] Hash local portável, sem expansão de `$` pelo Next; teste do carregador real.
+- [x] Testes unitários de login/negação/sessão e configuração em arquivos temporários. O PIN real do proprietário permanece sob controle do próprio proprietário.

@@ -4,17 +4,20 @@ import {
   createClient,
   type RealtimeClientOptions,
 } from "@supabase/supabase-js";
-export function configured() {
+export function infrastructureConfigured() {
   return Boolean(
     process.env.SUPABASE_URL &&
     process.env.SUPABASE_SERVICE_ROLE_KEY &&
-    process.env.PIN_HASH &&
     process.env.SESSION_SECRET &&
+    process.env.SESSION_SECRET.length >= 32 &&
     process.env.APP_URL,
   );
 }
+export function configured() {
+  return infrastructureConfigured() && Boolean(process.env.PIN_HASH);
+}
 export function db() {
-  if (!configured()) throw new Error("SETUP_REQUIRED");
+  if (!infrastructureConfigured()) throw new Error("SETUP_REQUIRED");
   return createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,

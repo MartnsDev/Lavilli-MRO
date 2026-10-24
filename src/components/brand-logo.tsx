@@ -14,10 +14,12 @@ export function BrandLogo({
     <span className={cn("brand-logo", className)}>
       <Image
         src={
-          variant === "blue" ? "/brand/logo-blue.png" : "/brand/logo-ochre.png"
+          variant === "blue"
+            ? "/brand/logo-blue.png"
+            : "/brand/logo-official.png"
         }
         width={300}
-        height={144}
+        height={variant === "blue" ? 144 : 165}
         sizes="(max-width: 760px) 128px, 160px"
         alt="Lavilli Jet"
       />

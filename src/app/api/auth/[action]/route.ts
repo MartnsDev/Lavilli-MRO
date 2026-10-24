@@ -1,3 +1,8 @@
+import {
+  initializeLocalPin,
+  localPinSetupEnabled,
+} from "@/lib/server/local-pin";
+import { accessState } from "@/lib/server/access-state";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { randomInt } from "node:crypto";
@@ -13,7 +18,7 @@ import {
   cookieOptions,
   secret,
 } from "@/lib/server/auth";
-import { db, rpc, configured } from "@/lib/server/db";
+import { db, rpc, configured, infrastructureConfigured } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { digest, token, sign, unsign } from "@/lib/domain/security";
 import { sendMail } from "@/lib/server/mail";
@@ -23,8 +28,28 @@ export async function POST(
 ) {
   try {
     sameOrigin(request);
-    if (!configured()) throw new Error("SETUP_REQUIRED");
+    if (!infrastructureConfigured()) throw new Error("SETUP_REQUIRED");
     const { action } = await params;
+    if (action === "initialize") {
+      if (!localPinSetupEnabled()) throw new Error("LOCAL_SETUP_ONLY");
+      await limit("initialize");
+      const b = z
+        .object({
+          code: z.string().trim().min(32).max(200),
+          pin: z.string().regex(/^\d{4}$/),
+          pin_confirmation: z.string().regex(/^\d{4}$/),
+        })
+        .strict()
+        .refine(
+          (v) => v.pin === v.pin_confirmation,
+          "As senhas precisam ser iguais.",
+        )
+        .parse(await request.json());
+      await initializeLocalPin(b.code, b.pin);
+      await clearLimit("initialize");
+      return NextResponse.json({ ok: true, next: "enroll" });
+    }
+    if (!configured()) throw new Error("PIN_NOT_CONFIGURED");
     const c = await cookies();
     if (action === "logout") {
       const s = await session();
@@ -37,7 +62,14 @@ export async function POST(
       return NextResponse.json({ ok: true });
     }
     if (action === "login") {
-      const d = await device();
+      let d: string;
+      try {
+        d = await device();
+      } catch (error) {
+        if ((error as Error).message === "UNAUTHORIZED")
+          throw new Error("DEVICE_REQUIRED");
+        throw error;
+      }
       await limit("login", d);
       const { pin } = z
         .object({ pin: z.string().length(4) })
@@ -51,7 +83,7 @@ export async function POST(
     await limit("enroll");
     if (action === "request-code") {
       const email = process.env.AUTHORIZED_EMAIL;
-      if (!email) throw new Error("SETUP_REQUIRED");
+      if (!email) throw new Error("EMAIL_DISABLED");
       const browser = token();
       const code = String(randomInt(100000, 1000000));
       const { data, error } = await db()
@@ -94,7 +126,7 @@ export async function POST(
           body.code.length < 32 ||
           digest(body.code) !== process.env.DEVICE_BOOTSTRAP_HASH
         )
-          throw new Error("FORBIDDEN");
+          throw new Error("INVALID_BOOTSTRAP");
         bootstrap = digest(body.code);
       } else if (!browser || !body.challenge) throw new Error("FORBIDDEN");
       const raw = token();
@@ -115,6 +147,31 @@ export async function POST(
     }
     throw new Error("INVALID_OPERATION");
   } catch (error) {
-    return failure(error);
+    const response = failure(error);
+    const code = error instanceof Error ? error.message : "INTERNAL";
+    if (
+      [
+        "PIN_NOT_CONFIGURED",
+        "PIN_CONFIGURATION_INVALID",
+        "PIN_ALREADY_CONFIGURED",
+        "DEVICE_REQUIRED",
+        "LOCAL_SETUP_ONLY",
+        "BOOTSTRAP_USED",
+      ].includes(code)
+    ) {
+      const body = await response.json();
+      return NextResponse.json({ ...body, code }, { status: response.status });
+    }
+    return response;
   }
+}
+export async function GET(
+  _: Request,
+  { params }: { params: Promise<{ action: string }> },
+) {
+  if ((await params).action !== "status")
+    return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
+  return NextResponse.json(await accessState(), {
+    headers: { "Cache-Control": "no-store" },
+  });
 }

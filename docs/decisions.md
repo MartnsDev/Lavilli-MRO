@@ -19,3 +19,7 @@
 
 16. O primeiro teste real do SDK revelou exigência de WebSocket nativo no Node 20. Foi adicionado transporte `ws` exclusivo do servidor e dos scripts de backup/restore, com teste de regressão de construção do cliente sem rede. Node 22 continua recomendado para CI/deploy.
 17. O CLI Supabase 2.122.0 foi usado para vincular somente `ecyzjuhryfqqpqoskyth`, cujo PostgreSQL é 17. A configuração local foi ajustada de 16 para 17; testes de domínio anteriores em PostgreSQL 16 permanecem evidência de compatibilidade do SQL.
+
+18. O acesso foi refeito com a paleta real do site (#051C2C, #125572, #E2B476), Montserrat local e logotipo original `logo-lavilli-1.png`, integrado ao cabeçalho. Fonte com licença OFL incluída. Chrome automatizado em perfil temporário permitiu testar desktop/mobile e revisar capturas, embora o conector Browser permanecesse sem sessão conectada.
+19. O erro de entrada veio de PIN_HASH ausente. A primeira definição agora pode ocorrer no navegador somente em desenvolvimento local, com prova de recuperação forte e sem sobrescrever senha existente. Produção continua exigindo configuração pelo ambiente seguro.
+20. Hashes Argon2 contêm `$`; os scripts e a inicialização local agora armazenam representação portável base64url, validada pelo carregador dotenv real do Next. A verificação central também aceita hash cru de provedores e atende tanto login quanto confirmação de mutations.

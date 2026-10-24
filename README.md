@@ -10,9 +10,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. Após configurar o Supabase, execute `npm run configure:pin` no seu terminal para definir a senha sem passá-la pelo chat.
+Abra http://localhost:3000. No ambiente local, abra `/login`: se a senha ainda não existir, a tela **Defina a senha do hangar** permite criá-la com o código privado de primeiro acesso. Depois, autorize o dispositivo e entre com o PIN. A alternativa pelo terminal continua sendo `npm run configure:pin`. Nunca informe o PIN pelo chat.
 
-Sem configuração, o painel redireciona a `/setup`; não há banco fictício nem modo de demonstração. Para operar, configure Supabase e os segredos descritos em [deploy](docs/deployment.md). Não coloque a senha neste repositório ou no chat.
+Sem conexão/configuração de infraestrutura, o painel redireciona a `/setup`; com infraestrutura pronta e PIN ausente, ele direciona ao primeiro acesso em `/login`; não há banco fictício nem modo de demonstração. Para operar, configure Supabase e os segredos descritos em [deploy](docs/deployment.md). Não coloque a senha neste repositório ou no chat.
 
 ## Verificar
 

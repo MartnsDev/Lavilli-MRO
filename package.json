@@ -21,7 +21,8 @@
     "test:ui": "playwright test --project=chromium --project=mobile",
     "verify:env": "node --env-file=.env.local scripts/verify-env.mjs",
     "db:types": "node scripts/generate-types.mjs",
-    "configure:pin": "node scripts/configure-pin.mjs"
+    "configure:pin": "node scripts/configure-pin.mjs",
+    "pin:normalize": "node scripts/normalize-pin-hash.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

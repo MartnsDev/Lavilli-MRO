@@ -1,3 +1,4 @@
+import { decodePinHash } from "../src/lib/domain/pin-hash.mjs";
 const required = [
   "APP_URL",
   "SUPABASE_URL",
@@ -9,8 +10,7 @@ for (const name of required)
   if (!process.env[name]) throw Error(`Variável ausente: ${name}`);
 if (process.env.SESSION_SECRET.length < 32)
   throw Error("SESSION_SECRET precisa ter ao menos 32 caracteres aleatórios.");
-if (!process.env.PIN_HASH.startsWith("$argon2id$"))
-  throw Error("PIN_HASH deve usar Argon2id.");
+decodePinHash(process.env.PIN_HASH);
 if (
   process.env.NODE_ENV === "production" &&
   !process.env.APP_URL.startsWith("https://")

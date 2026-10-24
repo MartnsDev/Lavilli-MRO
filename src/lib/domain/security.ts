@@ -47,3 +47,31 @@ export function safeCSV(value: unknown) {
     '"'
   );
 }
+
+export function sameAppOrigin(
+  origin: string | null,
+  appURL: string | undefined,
+  development = false,
+) {
+  if (!origin || !appURL) return false;
+  try {
+    const expected = new URL(appURL),
+      actual = new URL(origin);
+    if (
+      !["http:", "https:"].includes(expected.protocol) ||
+      actual.origin !== origin
+    )
+      return false;
+    if (actual.origin === expected.origin) return true;
+    const loopback = new Set(["localhost", "127.0.0.1", "[::1]"]);
+    return (
+      development &&
+      loopback.has(actual.hostname) &&
+      loopback.has(expected.hostname) &&
+      actual.port === expected.port &&
+      actual.protocol === expected.protocol
+    );
+  } catch {
+    return false;
+  }
+}

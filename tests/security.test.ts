@@ -179,7 +179,7 @@ describe("Supabase server transport", () => {
       SUPABASE_URL: "https://example.invalid",
       SUPABASE_SERVICE_ROLE_KEY: "test-only-server-key",
       PIN_HASH: "test-only-hash",
-      SESSION_SECRET: "test-only-session-secret",
+      SESSION_SECRET: "test-only-session-secret".repeat(3),
       APP_URL: "http://localhost:3000",
     };
     for (const [key, value] of Object.entries(values)) vi.stubEnv(key, value);
@@ -189,5 +189,46 @@ describe("Supabase server transport", () => {
     } finally {
       vi.unstubAllEnvs();
     }
+  });
+});
+
+describe("CSRF origin and local development aliases", () => {
+  it("accepts only the configured origin in production", async () => {
+    const { sameAppOrigin } = await import("../src/lib/domain/security");
+    expect(
+      sameAppOrigin(
+        "https://hangar.example.invalid",
+        "https://hangar.example.invalid",
+      ),
+    ).toBe(true);
+    expect(
+      sameAppOrigin("http://127.0.0.1:3000", "http://localhost:3000"),
+    ).toBe(false);
+    expect(
+      sameAppOrigin(
+        "https://foreign.example.invalid",
+        "https://hangar.example.invalid",
+      ),
+    ).toBe(false);
+    expect(sameAppOrigin(null, "https://hangar.example.invalid")).toBe(false);
+  });
+  it("accepts loopback hostname aliases only in development with matching port and protocol", async () => {
+    const { sameAppOrigin } = await import("../src/lib/domain/security");
+    expect(
+      sameAppOrigin("http://127.0.0.1:3000", "http://localhost:3000", true),
+    ).toBe(true);
+    expect(
+      sameAppOrigin("http://127.0.0.1:3001", "http://localhost:3000", true),
+    ).toBe(false);
+    expect(
+      sameAppOrigin("https://127.0.0.1:3000", "http://localhost:3000", true),
+    ).toBe(false);
+    expect(
+      sameAppOrigin(
+        "https://foreign.example.invalid",
+        "http://localhost:3000",
+        true,
+      ),
+    ).toBe(false);
   });
 });

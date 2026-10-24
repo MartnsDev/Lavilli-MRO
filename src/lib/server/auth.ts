@@ -1,8 +1,15 @@
+import { decodePinHash } from "@/lib/domain/pin-hash.mjs";
 import "server-only";
 import { cookies, headers } from "next/headers";
 import { verify } from "@node-rs/argon2";
-import { db, rpc } from "./db";
-import { digest, token, sign, unsign } from "@/lib/domain/security";
+import { db, rpc, configured } from "./db";
+import {
+  digest,
+  token,
+  sign,
+  unsign,
+  sameAppOrigin,
+} from "@/lib/domain/security";
 export const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -15,8 +22,13 @@ export function secret() {
   return s;
 }
 export function sameOrigin(request: Request) {
-  const expected = process.env.APP_URL;
-  if (!expected || request.headers.get("origin") !== new URL(expected).origin)
+  if (
+    !sameAppOrigin(
+      request.headers.get("origin"),
+      process.env.APP_URL,
+      process.env.NODE_ENV === "development",
+    )
+  )
     throw new Error("CSRF");
 }
 export async function fingerprint() {
@@ -38,14 +50,18 @@ export async function clearLimit(scope: string, device = "") {
   });
 }
 export async function checkPin(pin: string) {
-  if (
-    !/^\d{4}$/.test(pin) ||
-    !process.env.PIN_HASH ||
-    !(await verify(process.env.PIN_HASH, pin))
-  )
+  if (!/^\d{4}$/.test(pin) || !process.env.PIN_HASH)
     throw new Error("INVALID_PIN");
+  let valid: boolean;
+  try {
+    valid = await verify(decodePinHash(process.env.PIN_HASH), pin);
+  } catch {
+    throw new Error("PIN_CONFIGURATION_INVALID");
+  }
+  if (!valid) throw new Error("INVALID_PIN");
 }
 export async function device() {
+  if (!configured()) throw new Error("PIN_NOT_CONFIGURED");
   const c = await cookies();
   const cookie = c.get("lavilli_device")?.value;
   if (!cookie) throw new Error("UNAUTHORIZED");
@@ -62,6 +78,7 @@ export async function device() {
   return data.id as string;
 }
 export async function session() {
+  if (!configured()) throw new Error("UNAUTHORIZED");
   const c = await cookies();
   const cookie = c.get("lavilli_session")?.value;
   if (!cookie) throw new Error("UNAUTHORIZED");

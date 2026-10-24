@@ -1,3 +1,4 @@
+import { encodePinHash } from "../src/lib/domain/pin-hash.mjs";
 import fs from "node:fs";
 import { hash } from "@node-rs/argon2";
 
@@ -60,7 +61,7 @@ try {
   let repeated = await readMasked("Confirme a senha: ");
   if (!/^[0-9]{4}$/.test(pin) || pin !== repeated)
     throw new Error(
-      "As entradas devem conter quatro dígitos iguais entre si. Nada foi alterado.",
+      "Informe quatro dígitos e repita exatamente a mesma senha. Nada foi alterado.",
     );
   const encoded = await hash(pin, {
     algorithm: 2,
@@ -70,9 +71,10 @@ try {
   });
   pin = "";
   repeated = "";
+  const stored = encodePinHash(encoded);
   content = /^PIN_HASH=.*$/m.test(content)
-    ? content.replace(/^PIN_HASH=.*$/m, () => `PIN_HASH=${encoded}`)
-    : content + `\nPIN_HASH=${encoded}\n`;
+    ? content.replace(/^PIN_HASH=.*$/m, () => `PIN_HASH=${stored}`)
+    : content + `\nPIN_HASH=${stored}\n`;
   fs.writeFileSync(".env.local", content, { mode: 0o600 });
   fs.chmodSync(".env.local", 0o600);
   console.log(

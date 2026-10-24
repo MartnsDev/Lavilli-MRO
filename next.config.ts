@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   poweredByHeader: false,
+  devIndicators: false,
   experimental: { useTypeScriptCli: false },
   serverExternalPackages: ["@node-rs/argon2"],
   async headers() {

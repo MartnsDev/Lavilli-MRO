@@ -9,6 +9,42 @@ export function failure(error: unknown) {
     CSRF: [403, "Origem da requisição inválida."],
     INVALID_PIN: [403, "Senha ou confirmação inválida."],
     RATE_LIMIT: [429, "Muitas tentativas. Aguarde 15 minutos."],
+    PIN_CONFIGURATION_INVALID: [
+      503,
+      "A configuração da senha precisa ser refeita pelo proprietário usando o comando de configuração no terminal.",
+    ],
+    PIN_NOT_CONFIGURED: [
+      503,
+      "A senha geral ainda não foi definida. Conclua o primeiro acesso.",
+    ],
+    DEVICE_REQUIRED: [
+      401,
+      "Autorize este dispositivo antes de entrar com a senha.",
+    ],
+    PIN_ALREADY_CONFIGURED: [
+      409,
+      "A senha já foi definida. Continue autorizando este dispositivo.",
+    ],
+    INVALID_BOOTSTRAP: [
+      403,
+      "O código de primeiro acesso não confere. Copie o código privado completo e tente novamente.",
+    ],
+    BOOTSTRAP_USED: [
+      403,
+      "Este código de recuperação já foi utilizado. Solicite um novo ao proprietário.",
+    ],
+    LOCAL_SETUP_ONLY: [
+      403,
+      "A definição inicial pelo navegador está disponível somente no ambiente local. Configure PIN_HASH no ambiente de hospedagem.",
+    ],
+    SETUP_WRITE_FAILED: [
+      503,
+      "Não foi possível salvar a senha no ambiente local. Use o comando de configuração no terminal.",
+    ],
+    SETUP_BUSY: [
+      409,
+      "Outra configuração está em andamento. Aguarde alguns segundos e tente novamente.",
+    ],
     SETUP_REQUIRED: [503, "Configuração do servidor pendente."],
     CONFLICT: [
       409,
