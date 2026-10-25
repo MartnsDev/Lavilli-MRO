@@ -457,3 +457,25 @@ test("a new PN can be created before its serialized unit without losing the revi
   expect(saved.error).toBeNull();
   expect(saved.data).toEqual({ catalog_id: catalog.id, serial_number: sn });
 });
+
+test("reads the known finder pattern and handles a missing record safely", async ({
+  page,
+}) => {
+  const path = "/records/locations/f7a43678-ea9a-4429-a7af-88444d19995b";
+  const png = await QRCode.toBuffer("http://localhost:3100" + path, {
+    width: 700,
+    margin: 4,
+  });
+  await page.goto("/scan");
+  const gallery = page.getByLabel("Ler foto da galeria", { exact: true });
+  await expect(gallery).toBeEnabled();
+  await gallery.setInputFiles({
+    name: "known-pattern.png",
+    mimeType: "image/png",
+    buffer: png,
+  });
+  await expect(page).toHaveURL(new RegExp(path + "$"));
+  await expect(
+    page.getByRole("heading", { name: "Registro não encontrado", exact: true }),
+  ).toBeVisible();
+});
