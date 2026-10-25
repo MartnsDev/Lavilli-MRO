@@ -29,7 +29,8 @@
     "security:scan": "node --env-file=.env.local scripts/scan-document.mjs",
     "demo:local": "node scripts/demo.mjs",
     "demo:prepare": "node scripts/demo-stack.mjs",
-    "demo:verify": "node scripts/verify-demo.mjs"
+    "demo:verify": "node scripts/verify-demo.mjs",
+    "test:deploy": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

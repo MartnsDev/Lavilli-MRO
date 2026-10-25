@@ -22,6 +22,8 @@ Em uma instalação nova, configure as variáveis de infraestrutura e use `npm r
 
 ## Verificar
 
+O endereço publicado também tem [teste automatizado de deploy](docs/DEPLOY_TESTS.md), com login real e relatório sanitizado, sem cadastros de teste no banco da oficina.
+
 ```bash
 npm run format:check
 npm run lint

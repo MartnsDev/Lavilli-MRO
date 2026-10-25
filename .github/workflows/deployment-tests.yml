@@ -1,0 +1,60 @@
+name: Deployment tests
+on:
+  repository_dispatch:
+    types: [vercel.deployment.success]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Endereço autorizado (o teste não cria dados operacionais)"
+        type: choice
+        options:
+          - https://lavilli-control.vercel.app
+          - https://lavilli-control-test.vercel.app
+        default: https://lavilli-control.vercel.app
+      smoke_only:
+        description: "Somente acesso/navegação; ainda registra documentos indisponíveis"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: deployment-tests-${{ inputs.target || github.event.client_payload.project.id }}
+  cancel-in-progress: false
+jobs:
+  deployed-application:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.client_payload.environment == 'production' &&
+       ((github.event.client_payload.project.id == 'prj_spaV203Tb9YLtHAfz9a8cL4t0VZK' &&
+         contains(github.event.client_payload.alias, 'lavilli-control.vercel.app')) ||
+        (github.event.client_payload.project.name == 'lavilli-control-test' &&
+         contains(github.event.client_payload.alias, 'lavilli-control-test.vercel.app'))))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npx playwright install --with-deps chromium
+      - name: Testar aplicação publicada
+        run: |
+          if [ "$SMOKE_ONLY" = "true" ]; then
+            npm run test:deploy -- --smoke-only
+          else
+            npm run test:deploy
+          fi
+        env:
+          DEPLOY_TEST_URL: ${{ inputs.target || (github.event.client_payload.project.name == 'lavilli-control-test' && 'https://lavilli-control-test.vercel.app' || 'https://lavilli-control.vercel.app') }}
+          DEPLOY_TEST_PIN: ${{ secrets.LAVILLI_DEPLOY_TEST_PIN }}
+          PLAYWRIGHT_CHANNEL: chromium
+          SMOKE_ONLY: ${{ inputs.smoke_only }}
+      - name: Guardar somente resultado sanitizado
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: deployment-test-result
+          path: test-results/deploy/result.json
+          retention-days: 7
