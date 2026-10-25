@@ -2,6 +2,7 @@
 
 - Código publicado na Vercel com compatibilidade para as oito migrations existentes; migration 009 continua pendente. Fluxos básicos de acesso/navegação foram verificados em HTTPS; funcionalidades dependentes de 009 não estão homologadas no backend remoto. Veja DEPLOYMENT_REPORT.md.
 - Preview Vercel permanece desativado e sem backend remoto isolado. Projeto de produção lavilli-control criado e publicado com autorização. Plano atual Hobby; regularizar plano para uso comercial conforme regras da Vercel, sem upgrade automático.
+- Upload/download online indisponíveis enquanto faltam as funções de segurança da migration 009. A interface e as APIs agora informam esse estado explicitamente; PN, serial e vínculo foram testados no ambiente isolado. Veja PART_DOCUMENT_VERIFICATION.md.
 - Scanner operacional não configurado; assinaturas locais com 27 dias são recusadas; uploads permanecem pending e downloads são bloqueados. Teste de parecer clean simulado não equivale a antivírus.
 - E-mail real/provedor/domínio/agendamento e entrega não comprovados; demonstração mantém EMAIL_MODE=disabled.
 - Backup externo, retenção, chaves de recuperação e restauração integral banco+Storage ainda pendentes; metas RPO 24h/RTO 4h não são SLA comprovado.

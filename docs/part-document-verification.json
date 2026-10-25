@@ -1,0 +1,26 @@
+{
+  "url": "https://lavilli-control.vercel.app",
+  "checkedAt": "2026-10-25T01:11:19.508Z",
+  "businessWrites": false,
+  "documentBytesRead": false,
+  "unsupportedUploadReturns503": true,
+  "unsupportedDownloadReturns503": true,
+  "unavailableUploadUiVerified": false,
+  "uiCheckSkipped": "No existing document; no production record created",
+  "anonymousUploadDenied": true,
+  "javascriptErrors": 0,
+  "passed": true,
+  "codeCommit": "fbd3f6211a459d5efc4ad12b77f10aef23fbc370",
+  "deployment": "dpl_5aqbRF3Z8Dum5pzuGreBLrxb9MiZ",
+  "remoteDocumentUploadReady": false,
+  "remoteScannerRpcAvailable": false,
+  "remoteScanStatusColumnAvailable": false,
+  "localValidation": {
+    "unitPassed": 49,
+    "focusedIntegratedPassed": 8,
+    "focusedIntegratedSeconds": 50.7,
+    "browsers": ["Firefox", "Chrome desktop", "Chrome mobile"],
+    "scannerVerdict": "simulated only in isolated local database",
+    "legacyDocumentUi": "rendered with mocked metadata; no unusable file picker"
+  }
+}

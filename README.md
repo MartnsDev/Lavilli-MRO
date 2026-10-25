@@ -64,6 +64,8 @@ A suíte completa usa uma build separada em `.next-verification`, porta 3100 e s
 
 ## Status e limites
 
+Verificação específica de peça, serial e arquivo: [resultado e pendências online](docs/PART_DOCUMENT_VERIFICATION.md). O envio de documentos na nuvem ainda está indisponível.
+
 A build e os testes locais são a referência de validação; integração real não é comprovada sem homologação. **O escopo integral do prompt ainda possui itens parciais**, inclusive atualização de cadastros por importação, planejamento dedicado de materiais, homologação da câmera, calibração com certificado obrigatório vinculado e filtros avançados de relatórios. Consulte o [checklist verificável](docs/implementation-plan.md) e as [limitações](docs/limitations-and-compliance.md).
 
 Documentação: [arquitetura](docs/architecture.md), [banco](docs/database.md), [segurança](docs/security.md), [operação](docs/operations.md), [decisões](docs/decisions.md), [backup e restauração](docs/backup-restore.md), [manual](docs/manual-usuario.md), [cenários de teste](docs/test-matrix.md), [versões instaladas](docs/versions.md).

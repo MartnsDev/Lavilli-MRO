@@ -6,7 +6,7 @@ Publicação autorizada pelo proprietário e concluída em 24/10/2026 (America/S
 
 - Repositório exclusivo: `MartnsDev/Lavilli-MRO`.
 - Projeto Vercel: `lavilli-control`, equipe `matheus-s-projects-3ebcc424`.
-- Código publicado: `a3fcb179b05f07231d173f9bddf55a8ebcfd3ae4`.
+- Código publicado: `fbd3f6211a459d5efc4ad12b77f10aef23fbc370` (correção de disponibilidade de documentos); ver [PART_DOCUMENT_VERIFICATION.md](PART_DOCUMENT_VERIFICATION.md).
 - Node `22.x`, Next.js, região `iad1`.
 - Instalação: `npm ci --legacy-peer-deps`; build: `npm run build`.
 - Publicação manual via CLI; auto deploy Git continua desativado em `vercel.json`. Preview desativado e sem credenciais de produção.

@@ -1,3 +1,5 @@
+> Atualização posterior: a correção de disponibilidade de documentos foi publicada e verificada. Veja [PART_DOCUMENT_VERIFICATION.md](PART_DOCUMENT_VERIFICATION.md) para a versão atual e seus limites. O registro abaixo descreve a primeira publicação.
+
 # Publicação e verificação — Lavilli Control
 
 24/10/2026, America/Sao_Paulo. O proprietário autorizou configurar e publicar. **Publicação concluída e acesso verificado** em https://lavilli-control.vercel.app. Isso não declara conclusão integral do produto nem certificação de segurança.
