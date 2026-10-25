@@ -1,10 +1,9 @@
-// Read only demo UI checks, plus renewal of one-time LOCAL administrative grants.
+// Verify the local shared-PIN flow; no enrollment or administrative codes.
 import { chromium, expect } from "@playwright/test";
 import fs from "node:fs";
 import { execFileSync } from "node:child_process";
 import { createClient } from "@supabase/supabase-js";
 import WebSocket from "ws";
-import { randomBytes, createHash } from "node:crypto";
 const file = ".local-secrets/demo-access.txt",
   access = JSON.parse(fs.readFileSync(file, "utf8"));
 if (access.url !== "http://localhost:3200")
@@ -48,12 +47,10 @@ try {
     "method",
     "post",
   );
-  await page
-    .getByLabel("Código administrativo temporário")
-    .fill(access.enrollmentCode);
-  await page
-    .getByRole("button", { name: "Autorizar acesso", exact: true })
-    .click();
+  await expect(
+    page.getByRole("heading", { name: "Bem-vindo à Lavilli" }),
+  ).toBeVisible();
+  await expect(page.getByLabel(/Código administrativo/)).toHaveCount(0);
   await page
     .getByLabel("Quem está acessando?")
     .selectOption({ label: "César" });
@@ -129,18 +126,6 @@ try {
   expect(testRows).toBe(0);
   expect(alerts).toBeGreaterThan(0);
   expect(pending).toBeGreaterThan(0);
-  for (const [purpose, key] of [
-    ["enroll", "enrollmentCode"],
-    ["admin", "adminCode"],
-  ]) {
-    const code = randomBytes(32).toString("base64url");
-    const { error } = await db.rpc("issue_device_grant", {
-      p_hash: createHash("sha256").update(code).digest("hex"),
-      p_purpose: purpose,
-    });
-    if (error) throw Error("Não foi possível renovar autorização local");
-    access[key] = code;
-  }
   fs.writeFileSync(file, JSON.stringify(access, null, 2), { mode: 0o600 });
   console.log(
     JSON.stringify({

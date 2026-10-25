@@ -52,3 +52,27 @@ export async function rpc<T>(
   if (error) throw new Error(error.message);
   return data as T;
 }
+
+let boundaryProbe: Promise<boolean> | undefined;
+// Capability check reads zero rows; legacy compatibility never runs on a partial/network failure.
+export function securityBoundaryReady() {
+  if (!boundaryProbe)
+    boundaryProbe = (async () => {
+      const { error } = await db()
+        .from("access_sessions")
+        .select("credential_version")
+        .limit(0);
+      if (!error) return true;
+      if (
+        error.code === "42703" ||
+        (error.code === "PGRST204" &&
+          error.message.includes("credential_version"))
+      )
+        return false;
+      throw Error("SETUP_REQUIRED");
+    })().catch((error) => {
+      boundaryProbe = undefined;
+      throw error;
+    });
+  return boundaryProbe;
+}

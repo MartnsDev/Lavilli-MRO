@@ -1,4 +1,3 @@
-import { SecurityControls } from "@/components/security-controls";
 import { resources } from "@/lib/domain/resources";
 export default function Reports() {
   return (
@@ -11,7 +10,6 @@ export default function Reports() {
           registros por página de relatório.
         </p>
       </div>
-      <SecurityControls />
       <form action="/api/reports" className="card stack">
         <label>
           Relatório

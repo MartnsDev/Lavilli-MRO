@@ -16,7 +16,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Abra http://localhost:3000. Conforme a auditoria de segurança posterior, autorize cada aparelho uma vez com código independente emitido pelo operador (`npm run security:grant`). Depois, o acesso diário pede o mecânico e a senha geral. Operações administrativas exigem elevação independente de cinco minutos. A migration 009 precisa estar aplicada no backend antes de usar o código novo; ela ainda não foi promovida ao banco remoto.
+Abra http://localhost:3000. Selecione César ou Maranhão e informe a senha geral configurada pelo proprietário. Não há código administrativo nem autorização prévia de aparelho. A administração do dashboard usa a mesma senha. Consulte a [política atual de acesso](docs/ACCESS_POLICY.md).
 
 Em uma instalação nova, configure as variáveis de infraestrutura e use `npm run configure:pin` para salvar o hash da senha escolhida. Consulte [deploy](docs/deployment.md). O arquivo `.env.local` permanece privado.
 
@@ -54,7 +54,7 @@ A suíte completa usa uma build separada em `.next-verification`, porta 3100 e s
 
 ## Implementado
 
-- Autorização inicial independente de aparelho; acesso diário com mecânico e senha compartilhada. Sessões opacas, HttpOnly, revogação, inatividade e máximo de oito horas.
+- Acesso direto com mecânico e senha compartilhada, sem código de aparelho ou código administrativo. Sessões opacas, HttpOnly, revogação, inatividade e máximo de oito horas.
 - Senha geral com Argon2id; cada alteração operacional requer responsável informado e reconfirmação vinculada ao conteúdo, válida por dois minutos. Limites persistentes de tentativas.
 - Cadastros, localizações hierárquicas, catálogo e peças serializadas; lotes, recebimentos, reservas, consumo, transferência, baixa e inventário com conciliação.
 - Ferramentas, kits, conferência de saída/retorno, ocorrências e registros de calibração; bloqueios de disponibilidade no banco.

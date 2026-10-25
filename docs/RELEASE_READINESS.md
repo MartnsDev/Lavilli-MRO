@@ -1,3 +1,5 @@
+> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+
 # Prontidão para apresentação e deploy
 
 24/10/2026. **PRONTO PARA DEMONSTRAÇÃO**, exclusivamente local e com as limitações declaradas. **Produção: NÃO PRONTO.** Não houve deploy ou alteração do banco remoto.

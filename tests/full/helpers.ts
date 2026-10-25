@@ -1,7 +1,7 @@
 import { expect, type APIRequestContext } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import WebSocket from "ws";
-import { randomUUID, randomBytes, createHash } from "node:crypto";
+import { randomUUID } from "node:crypto";
 const actors = new WeakMap<APIRequestContext, string>();
 export function isolated() {
   if (
@@ -24,32 +24,10 @@ export function admin() {
     },
   );
 }
-export async function enroll(request: APIRequestContext) {
-  isolated();
-  const state = await (await request.get("/api/auth/status")).json();
-  if (state.deviceAuthorized) return;
-  const code = randomBytes(32).toString("base64url");
-  const { error } = await admin().rpc("issue_device_grant", {
-    p_hash: createHash("sha256").update(code).digest("hex"),
-    p_purpose: "enroll",
-  });
-  expect(error).toBeNull();
-  const r = await request.post("/api/auth/enroll", {
-    headers: { origin: "http://localhost:3100" },
-    data: { code },
-  });
-  expect(r.status(), await r.text()).toBe(200);
-}
 export async function elevate(request: APIRequestContext) {
-  const code = randomBytes(32).toString("base64url");
-  const { error } = await admin().rpc("issue_device_grant", {
-    p_hash: createHash("sha256").update(code).digest("hex"),
-    p_purpose: "admin",
-  });
-  expect(error).toBeNull();
   const r = await request.post("/api/security", {
     headers: { origin: "http://localhost:3100" },
-    data: { action: "elevate", pin: process.env.TEST_PIN, code },
+    data: { action: "elevate", pin: process.env.TEST_PIN },
   });
   expect(r.status(), await r.text()).toBe(200);
 }
@@ -58,7 +36,6 @@ export async function login(
   name = "César",
   elevated = true,
 ) {
-  await enroll(request);
   const state = await (await request.get("/api/auth/status")).json();
   const mechanic = state.mechanics.find(
     (m: { name: string }) => m.name === name,

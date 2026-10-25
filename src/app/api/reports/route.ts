@@ -1,8 +1,9 @@
+import { audit } from "@/lib/server/audit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { session, requireElevation, limit } from "@/lib/server/auth";
-import { db, rpc } from "@/lib/server/db";
+import { db } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { safeCSV } from "@/lib/domain/security";
 import { resources, label } from "@/lib/domain/resources";
@@ -77,12 +78,7 @@ export async function GET(request: Request) {
     }
     const { data, error } = await query;
     if (error) throw error;
-    await rpc("security_event", {
-      p_kind: "export",
-      p_session: s.id,
-      p_entity: entity,
-      p_outcome: "success",
-    });
+    await audit("export", s.id, entity, null, "success", true);
     const rows = data ?? [],
       keys = rows.length ? Object.keys(rows[0]) : ["id"];
     const now = dateBR(new Date().toISOString());

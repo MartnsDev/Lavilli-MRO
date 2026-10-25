@@ -8,16 +8,13 @@ import {
   checkPin,
   startSession,
   session,
-  device,
+  loginDevice,
   cookieName,
-  cookieOptions,
-  secret,
 } from "@/lib/server/auth";
-import { db, rpc, configured } from "@/lib/server/db";
+import { db, configured } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { accessState } from "@/lib/server/access-state";
 import { jsonBody } from "@/lib/server/request";
-import { digest, token, sign } from "@/lib/domain/security";
 import { audit } from "@/lib/server/audit";
 export async function POST(
   request: Request,
@@ -28,26 +25,9 @@ export async function POST(
     sameOrigin(request);
     const { action } = await params;
     actionName = action;
-    if (!["login", "logout", "enroll"].includes(action))
+    if (!["login", "logout"].includes(action))
       return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
     if (!configured()) throw Error("SETUP_REQUIRED");
-    if (action === "enroll") {
-      await limit("enroll");
-      const b = z
-        .object({ code: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })
-        .strict()
-        .parse(await jsonBody(request, 1024));
-      const raw = token();
-      await rpc("authorize_device", {
-        p_grant: digest(b.code),
-        p_token: digest(raw),
-      });
-      (await cookies()).set(cookieName("device"), sign(raw, secret()), {
-        ...cookieOptions,
-        maxAge: 90 * 86400,
-      });
-      return NextResponse.json({ ok: true });
-    }
     if (action === "logout") {
       const s = await session();
       const { error } = await db()
@@ -59,8 +39,7 @@ export async function POST(
       (await cookies()).delete(cookieName("session"));
       return NextResponse.json({ ok: true });
     }
-    const d = await device();
-    await limit("login", d.id);
+    await limit("login");
     const b = z
       .object({ pin: z.string().regex(/^\d{4}$/), mechanic_id: z.uuid() })
       .strict()
@@ -73,8 +52,9 @@ export async function POST(
       .eq("active", true)
       .maybeSingle();
     if (error || !data) throw Error("UNAUTHORIZED");
-    const id = await startSession(data.id);
-    await clearLimit("login", d.id);
+    const d = await loginDevice();
+    const id = await startSession(data.id, d);
+    await clearLimit("login");
     await audit("login", id, "access_sessions", id, "success");
     return NextResponse.json({ ok: true });
   } catch (e) {

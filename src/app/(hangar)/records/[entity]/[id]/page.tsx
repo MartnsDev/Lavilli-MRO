@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { resources, label } from "@/lib/domain/resources";
 import { get, referenceLabels } from "@/lib/server/queries";
-import { db } from "@/lib/server/db";
+import { db, securityBoundaryReady } from "@/lib/server/db";
 import { dateBR } from "@/lib/utils";
 import { RecordActions } from "@/components/record-actions";
 import { DocumentUpload } from "@/components/document-upload";
@@ -35,15 +35,27 @@ export default async function Detail({
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
+  const hardened = await securityBoundaryReady();
   const { data: versions, error: ve } =
     entity === "documents"
       ? await db()
           .from("document_versions")
-          .select("id,revision,created_at,mime_type,size_bytes,scan_status")
+          .select(
+            hardened
+              ? "id,revision,created_at,mime_type,size_bytes,scan_status"
+              : "id,revision,created_at,mime_type,size_bytes",
+          )
           .eq("document_id", id)
           .order("revision", { ascending: false })
       : { data: null, error: null };
   if (ve) throw ve;
+  const versionRows = (versions ?? []) as unknown as Array<{
+    id: string;
+    revision: number;
+    mime_type: string;
+    created_at: string;
+    scan_status?: string;
+  }>;
   return (
     <>
       <div className="breadcrumb">
@@ -164,9 +176,10 @@ export default async function Detail({
             disponível somente após a liberação.
           </p>
           <ul className="document-versions" aria-live="polite">
-            {versions?.map((v) => (
+            {versionRows.map((v) => (
               <li key={v.id}>
-                {v.scan_status === "clean" ? (
+                {("scan_status" in v ? v.scan_status : "pending") ===
+                "clean" ? (
                   <a
                     href={`/api/documents/${v.id}`}
                     target="_blank"
@@ -180,10 +193,14 @@ export default async function Detail({
                     <span
                       className="badge"
                       data-state={
-                        v.scan_status === "rejected" ? "rejected" : "pending"
+                        ("scan_status" in v ? v.scan_status : "pending") ===
+                        "rejected"
+                          ? "rejected"
+                          : "pending"
                       }
                     >
-                      {v.scan_status === "rejected"
+                      {("scan_status" in v ? v.scan_status : "pending") ===
+                      "rejected"
                         ? "Bloqueado pela verificação"
                         : "Aguardando verificação de segurança"}
                     </span>

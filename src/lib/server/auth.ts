@@ -2,7 +2,7 @@ import { decodePinHash } from "@/lib/domain/pin-hash.mjs";
 import "server-only";
 import { cookies, headers } from "next/headers";
 import { verify } from "@node-rs/argon2";
-import { db, rpc, configured } from "./db";
+import { db, rpc, configured, securityBoundaryReady } from "./db";
 import {
   digest,
   token,
@@ -54,6 +54,23 @@ export function cookieName(kind: "session" | "device") {
 export async function limit(scope: string, identity = "", read = false) {
   const origin = await fingerprint();
   const key = digest(scope + (identity || origin) + secret());
+  if (!(await securityBoundaryReady())) {
+    const keys = [
+      digest("global:" + scope + secret()),
+      digest("origin:" + scope + origin),
+      key,
+    ];
+    const limits = read
+      ? [20000, 10000, 2000]
+      : [
+          10000,
+          2000,
+          ["login", "confirm", "elevate"].includes(scope) ? 5 : 200,
+        ];
+    for (let i = 0; i < keys.length; i++)
+      await rpc("take_attempt", { p_key: keys[i], p_limit: limits[i] });
+    return;
+  }
   const result = await rpc<{ allowed: boolean; delay_ms: number }>(
     "security_limit",
     {
@@ -83,9 +100,12 @@ export async function limit(scope: string, identity = "", read = false) {
     await new Promise((r) => setTimeout(r, result.delay_ms));
 }
 export async function clearLimit(scope: string, identity = "") {
-  await rpc("clear_security_limit", {
-    p_key: digest(scope + (identity || (await fingerprint())) + secret()),
-  });
+  await rpc(
+    (await securityBoundaryReady()) ? "clear_security_limit" : "reset_attempt",
+    {
+      p_key: digest(scope + (identity || (await fingerprint())) + secret()),
+    },
+  );
 }
 export async function checkPin(pin: string) {
   if (!/^\d{4}$/.test(pin) || !process.env.PIN_HASH) throw Error("INVALID_PIN");
@@ -102,7 +122,20 @@ export async function device() {
   const c = await cookies();
   const raw = unsign(c.get(cookieName("device"))?.value, secret());
   if (!raw) throw Error("UNAUTHORIZED");
-  const id = await rpc<string | null>("check_device", { p_hash: digest(raw) });
+  let id: string | null;
+  if (await securityBoundaryReady())
+    id = await rpc<string | null>("check_device", { p_hash: digest(raw) });
+  else {
+    const { data, error } = await db()
+      .from("authorized_devices")
+      .select("id")
+      .eq("token_hash", digest(raw))
+      .is("revoked_at", null)
+      .gt("expires_at", new Date().toISOString())
+      .maybeSingle();
+    if (error) throw Error("INTERNAL");
+    id = data?.id ?? null;
+  }
   if (!id) throw Error("UNAUTHORIZED");
   return { id, hash: digest(raw) };
 }
@@ -117,6 +150,31 @@ export async function session(): Promise<Session> {
   const c = await cookies();
   const raw = unsign(c.get(cookieName("session"))?.value, secret());
   if (!raw) throw Error("UNAUTHORIZED");
+  if (!(await securityBoundaryReady())) {
+    if (!raw.startsWith(digest(process.env.PIN_HASH!).slice(0, 32)))
+      throw Error("UNAUTHORIZED");
+    const { data: s, error } = await db()
+      .from("access_sessions")
+      .select("id,mechanic_id,device_id,created_at,expires_at")
+      .eq("token_hash", digest(raw))
+      .eq("device_id", d.id)
+      .is("revoked_at", null)
+      .gt("expires_at", new Date().toISOString())
+      .gt("created_at", new Date(Date.now() - 8 * 3600000).toISOString())
+      .maybeSingle();
+    if (error || !s) throw Error("UNAUTHORIZED");
+    const expires = new Date(
+      Math.min(Date.parse(s.created_at) + 8 * 3600000, Date.now() + 30 * 60000),
+    ).toISOString();
+    const touched = await db()
+      .from("access_sessions")
+      .update({ expires_at: expires })
+      .eq("id", s.id)
+      .is("revoked_at", null);
+    if (touched.error) throw Error("INTERNAL");
+    await limit("read", d.id, true);
+    return { ...s, elevated_until: expires };
+  }
   const rows = await rpc<Session[]>("validate_session", {
     p_hash: digest(raw),
     p_device: d.hash,
@@ -130,8 +188,45 @@ export function requireElevation(s: Session) {
   if (!s.elevated_until || Date.parse(s.elevated_until) <= Date.now())
     throw Error("REAUTH_REQUIRED");
 }
-export async function startSession(mechanicId: string) {
-  const d = await device();
+// Successful shared-PIN login provisions its internal session binding automatically.
+// No grant, device authorization or extra credential is requested from the user.
+export async function loginDevice() {
+  const raw = token(),
+    grant = token();
+  let id: string;
+  if (await securityBoundaryReady()) {
+    await rpc("issue_device_grant", {
+      p_hash: digest(grant),
+      p_purpose: "enroll",
+    });
+    id = await rpc<string>("authorize_device", {
+      p_grant: digest(grant),
+      p_token: digest(raw),
+    });
+  } else {
+    const { data, error } = await db()
+      .from("authorized_devices")
+      .insert({
+        token_hash: digest(raw),
+        label: "Sessão de acesso",
+        expires_at: new Date(Date.now() + 90 * 86400000).toISOString(),
+      })
+      .select("id")
+      .single();
+    if (error || !data) throw Error("INTERNAL");
+    id = data.id;
+  }
+  (await cookies()).set(cookieName("device"), sign(raw, secret()), {
+    ...cookieOptions,
+    maxAge: 90 * 86400,
+  });
+  return { id, hash: digest(raw) };
+}
+export async function startSession(
+  mechanicId: string,
+  loginDevice?: { id: string; hash: string },
+) {
+  const d = loginDevice ?? (await device());
   const c = await cookies();
   const old = unsign(c.get(cookieName("session"))?.value, secret());
   if (old) {
@@ -141,15 +236,24 @@ export async function startSession(mechanicId: string) {
       .eq("token_hash", digest(old));
     if (error) throw Error("INTERNAL");
   }
-  const raw = token();
+  const hardened = await securityBoundaryReady();
+  const raw =
+    (hardened ? "" : digest(process.env.PIN_HASH!).slice(0, 32)) + token();
   const { data, error } = await db()
     .from("access_sessions")
     .insert({
       mechanic_id: mechanicId,
       device_id: d.id,
-      credential_version: digest(process.env.PIN_HASH!),
+      ...(hardened
+        ? { credential_version: digest(process.env.PIN_HASH!) }
+        : {}),
       token_hash: digest(raw),
-      expires_at: new Date(Date.now() + 8 * 3600000).toISOString(),
+      expires_at: new Date(
+        Date.now() + (hardened ? 8 * 3600000 : 30 * 60000),
+      ).toISOString(),
+      ...(hardened
+        ? { elevated_until: new Date(Date.now() + 8 * 3600000).toISOString() }
+        : {}),
     })
     .select("id")
     .single();

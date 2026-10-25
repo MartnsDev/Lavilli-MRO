@@ -1,4 +1,3 @@
-import { SecurityControls } from "@/components/security-controls";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Plus, ArrowUpRight, Filter, PackageOpen } from "lucide-react";
@@ -89,12 +88,7 @@ export default async function Records({
           </OperationForm>
         )}
       </div>
-      {[
-        "mechanics",
-        "app_settings",
-        "notification_recipients",
-        "notification_rules",
-      ].includes(entity) && <SecurityControls />}
+
       {entity === "locations" && (
         <div className="subnav">
           <Link href="/locations">Ver árvore hierárquica →</Link>

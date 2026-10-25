@@ -5,6 +5,7 @@ import { sign, unsign, digest } from "../src/lib/domain/security";
 const id = "00000000-0000-4000-8000-000000000001";
 const fake = vi.hoisted(() => ({
   device: true,
+  hardened: true,
   jar: new Map<string, { value: string }>(),
   set: vi.fn(),
   insert: vi.fn(),
@@ -20,6 +21,7 @@ vi.mock("next/headers", () => ({
 }));
 vi.mock("../src/lib/server/db", () => ({
   configured: () => Boolean(process.env.PIN_HASH),
+  securityBoundaryReady: async () => fake.hardened,
   infrastructureConfigured: () => true,
   rpc: fake.rpc,
   db: () => ({
@@ -53,6 +55,7 @@ beforeEach(async () => {
     await hash(pin, { algorithm: 2, memoryCost: 4096, timeCost: 1 }),
   );
   fake.device = true;
+  fake.hardened = true;
   fake.jar.clear();
   fake.jar.set("__Host-lavilli_device", {
     value: sign(randomBytes(32).toString("base64url"), secret),
@@ -62,13 +65,15 @@ beforeEach(async () => {
   fake.rpc
     .mockReset()
     .mockImplementation(async (name: string) =>
-      name === "check_device"
-        ? fake.device
-          ? id
-          : null
-        : name === "security_limit"
-          ? { allowed: true, delay_ms: 0 }
-          : null,
+      name === "authorize_device"
+        ? id
+        : name === "check_device"
+          ? fake.device
+            ? id
+            : null
+          : name === "security_limit"
+            ? { allowed: true, delay_ms: 0 }
+            : null,
     );
 });
 afterEach(() => vi.unstubAllEnvs());
@@ -87,22 +92,50 @@ async function post(
     { params: Promise.resolve({ action }) },
   );
 }
-describe("device-bound authentication", () => {
-  it("requires a separately authorized device even when the shared PIN is correct", async () => {
-    fake.device = false;
-    expect((await post("login", { pin, mechanic_id: id })).status).toBe(401);
-    expect(fake.insert).not.toHaveBeenCalled();
-    expect(fake.set).not.toHaveBeenCalled();
-  });
-  it("requires the device cookie and refuses PIN-only takeover", async () => {
+describe("shared PIN authentication", () => {
+  it("supports the existing database schema without applying migrations", async () => {
+    fake.hardened = false;
     fake.jar.clear();
-    expect((await post("login", { pin, mechanic_id: id })).status).toBe(401);
+    expect((await post("login", { pin, mechanic_id: id })).status).toBe(200);
+    expect(fake.rpc).toHaveBeenCalledWith("take_attempt", expect.any(Object));
+    expect(fake.rpc.mock.calls.some((c) => c[0] === "issue_device_grant")).toBe(
+      false,
+    );
+  });
+  it("accepts the correct PIN in a fresh browser without enrollment", async () => {
+    fake.jar.clear();
+    expect((await post("login", { pin, mechanic_id: id })).status).toBe(200);
+    expect(fake.rpc).toHaveBeenCalledWith(
+      "authorize_device",
+      expect.any(Object),
+    );
+  });
+  it("does not provision access before checking the PIN", async () => {
+    fake.jar.clear();
+    expect(
+      (await post("login", { pin: "00000", mechanic_id: id })).status,
+    ).toBe(400);
     expect(fake.insert).not.toHaveBeenCalled();
+    expect(fake.rpc.mock.calls.some((c) => c[0] === "issue_device_grant")).toBe(
+      false,
+    );
+  });
+  it("refuses a wrong four-digit PIN before creating a session", async () => {
+    fake.jar.clear();
+    expect((await post("login", { pin: "0000", mechanic_id: id })).status).toBe(
+      403,
+    );
+    expect(fake.insert).not.toHaveBeenCalled();
+    expect(fake.rpc.mock.calls.some((c) => c[0] === "issue_device_grant")).toBe(
+      false,
+    );
   });
   it("creates an opaque device-bound secure session", async () => {
     const r = await post("login", { pin, mechanic_id: id });
     expect(r.status).toBe(200);
-    const [name, value, opts] = fake.set.mock.calls[0];
+    const [name, value, opts] = fake.set.mock.calls.find(
+      (c) => c[0] === "__Host-lavilli_session",
+    )!;
     expect(name).toBe("__Host-lavilli_session");
     expect(opts).toMatchObject({
       httpOnly: true,
@@ -134,18 +167,12 @@ describe("device-bound authentication", () => {
     ).toBe(403);
     expect(fake.insert).not.toHaveBeenCalled();
   });
-  it("only enrollment can issue the long-lived device cookie", async () => {
+  it("does not expose the retired enrollment endpoint", async () => {
     expect(
       (await post("enroll", { code: randomBytes(32).toString("base64url") }))
         .status,
-    ).toBe(200);
-    expect(fake.rpc).toHaveBeenCalledWith(
-      "authorize_device",
-      expect.objectContaining({
-        p_grant: expect.stringMatching(/^[a-f0-9]{64}$/),
-      }),
-    );
-    expect(fake.set.mock.calls[0][0]).toBe("__Host-lavilli_device");
+    ).toBe(404);
+    expect(fake.set).not.toHaveBeenCalled();
   });
   it("does not allow public PIN initialization", async () => {
     for (const action of ["initialize", "bootstrap", "request-otp"])

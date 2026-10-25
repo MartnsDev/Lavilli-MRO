@@ -2,7 +2,7 @@
 
 **Quem usa?** César e Maranhão constam como mecânicos iniciais. O nome selecionado declara responsabilidade; senha compartilhada não comprova identidade individual.
 
-**Por que autorizar aparelho?** O requisito posterior de auditoria exige uma barreira independente do PIN. É uma preparação administrativa inicial; no cotidiano o aparelho autorizado pede nome e senha.
+**Preciso autorizar o aparelho?** Não. Selecione seu nome e informe a senha geral. Nenhum código administrativo, e-mail ou cadastro de navegador é exigido.
 
 **Os dados da apresentação são reais?** Não. O modo local bloqueia backend remoto e mostra banner. A demo tem prefixos DEMO em banco próprio. TEST fica no stack separado dos testes.
 

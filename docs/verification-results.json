@@ -1276,5 +1276,16 @@
     "actual_secret_values_checked": 4,
     "history": "checked",
     "findings": []
+  },
+  "historicalSnapshot": true,
+  "currentAccessPolicy": "ACCESS_POLICY.md",
+  "latestAccessChecks": {
+    "policy": "mechanic and shared PIN only; no enrollment or admin code",
+    "unitTestsPassed": 45,
+    "targetedLocalBrowserApiCasesPassed": 5,
+    "existingApplicationPort": 3000,
+    "existingApplicationMechanicsVerified": ["César", "Maranhão"],
+    "businessDataExported": false,
+    "remoteMigrationsApplied": false
   }
 }

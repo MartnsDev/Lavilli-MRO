@@ -1,15 +1,9 @@
 import "server-only";
-import { device } from "./auth";
 import { configured, infrastructureConfigured, db } from "./db";
 import type { AccessState, LoginMechanic } from "@/lib/domain/access";
 export async function accessState(): Promise<AccessState> {
   let mechanics: LoginMechanic[] = [];
-  let deviceAuthorized = false;
-  try {
-    await device();
-    deviceAuthorized = true;
-  } catch {}
-  if (configured() && deviceAuthorized) {
+  if (configured()) {
     const { data, error } = await db()
       .from("mechanics")
       .select("id,name")
@@ -20,7 +14,6 @@ export async function accessState(): Promise<AccessState> {
     mechanics = data ?? [];
   }
   return {
-    deviceAuthorized,
     infrastructureReady: infrastructureConfigured(),
     passwordConfigured: Boolean(process.env.PIN_HASH),
     mechanics,

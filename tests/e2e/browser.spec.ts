@@ -7,7 +7,7 @@ test("access layout fits desktop and mobile, official logo renders, theme persis
   await request.get("/api/auth/status");
   await page.goto("/login");
   await expect(
-    page.getByRole("heading", { name: "Autorizar este aparelho" }),
+    page.getByRole("heading", { name: "Bem-vindo à Lavilli" }),
   ).toBeVisible();
   await expect(
     page.getByRole("img", { name: "Lavilli Jet", exact: true }),
@@ -47,7 +47,7 @@ test("access layout fits desktop and mobile, official logo renders, theme persis
     fullPage: true,
   });
 });
-test("unauthorized visitor sees enrollment, not mechanic identities or a PIN-only login", async ({
+test("fresh browser shows only mechanic and shared password", async ({
   page,
 }) => {
   await page.goto("/login");
@@ -55,13 +55,12 @@ test("unauthorized visitor sees enrollment, not mechanic identities or a PIN-onl
     "method",
     "post",
   );
+  await expect(page.getByLabel("Quem está acessando?")).toBeVisible();
   await expect(
-    page.getByLabel("Código administrativo temporário"),
+    page.getByLabel("Senha do hangar", { exact: true }),
   ).toHaveAttribute("type", "password");
-  await expect(page.getByLabel("Senha do hangar", { exact: true })).toHaveCount(
-    0,
-  );
+  await expect(page.getByLabel(/Código administrativo/)).toHaveCount(0);
   await expect(
-    page.getByRole("button", { name: "Autorizar acesso", exact: true }),
+    page.getByRole("button", { name: "Entrar no hangar", exact: true }),
   ).toBeEnabled();
 });

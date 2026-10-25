@@ -2,7 +2,7 @@
 
 Executar somente em demo/homologação isolada. Não usar dados reais ou e-mail real.
 
-1. Aparelho novo não entra apenas com PIN; código independente funciona uma vez, expirado/reutilizado falha. Após autorização, nome + PIN abre dashboard.
+1. Navegador novo mostra somente nome e senha; PIN correto abre dashboard, PIN incorreto é rejeitado. Nenhum código administrativo é solicitado e o endpoint antigo de inscrição retorna 404.
 2. César cria localização, catálogo, lote pendente; recebe quantidade, verifica condição/documentação e movimenta para destino. Recarregar confirma persistência e histórico.
 3. Maranhão retira ferramenta; segunda retirada falha. Devolver deixa em quarentena. Inspecionar/liberar explicitamente. Ferramenta vencida não pode sair.
 4. Abrir OS e tarefa, comentar, avançar status e concluir administrativamente; dependências impedem conclusão inválida.
@@ -10,7 +10,7 @@ Executar somente em demo/homologação isolada. Não usar dados reais ou e-mail 
 6. Importar CSV válido, mapear colunas, confirmar e conferir histórico/original; CSV inválido mostra erros sem persistir. Repetir com XLSX em testes automatizados.
 7. Enviar PDF fictício: pending bloqueia leitura. Após scanner real, clean permite proxy autenticado sem URL pública. Revogar sessão bloqueia novo download. Não simular clean na produção.
 8. Ler etiqueta/QR e abrir destino; testar permissão de câmera no dispositivo de apresentação ou usar entrada manual.
-9. Elevar administração, exportar CSV e conferir auditoria. PIN sozinho não eleva. Célula iniciada por fórmula deve ser neutralizada.
+9. Após o login, exportar CSV sem código independente e conferir auditoria. Célula iniciada por fórmula deve ser neutralizada. Ações confirmadas utilizam a mesma senha geral.
 10. Abrir alertas e histórico; e-mail deve aparecer como não configurado/desativado, nunca como enviado.
 11. Claro/escuro, 320px, tablet, 1366x768, desktop: abrir menus/modais, percorrer teclado, Escape e foco de retorno; tabelas rolam localmente.
 12. Logout e revogação impedem reuso dos cookies. Confirmar ausência de erros JS, 500, dados de demonstração no backend real e segredos em bundles.

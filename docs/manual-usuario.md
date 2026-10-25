@@ -2,7 +2,7 @@
 
 ## Acesso
 
-A administração autoriza cada aparelho uma vez com código temporário independente. Depois, selecione **César** ou **Maranhão**, informe a senha geral e clique em **Entrar no hangar**. A mesma senha funciona para ambos. Use **Sair** quando terminar. A interface solicita saída após 30 minutos sem interação; o servidor também limita atividade e duração máxima. Configurações sensíveis e exportações exigem confirmação administrativa independente por cinco minutos.
+Selecione César ou Maranhão, informe a senha geral e clique em Entrar no hangar. Não há autorização de aparelho, código administrativo nem cadastro. A mesma senha funciona para ambos e para as confirmações operacionais. Use Sair ao terminar.
 
 ## Alterações
 

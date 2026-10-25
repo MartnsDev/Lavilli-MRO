@@ -1,3 +1,5 @@
+> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](docs/ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+
 # Auditoria de segurança — Lavilli Control
 
 Data: 24/10/2026. Escopo: código Next.js/API, 42 tabelas públicas, RPCs, Storage, autenticação, operações e configuração de entrega. Auditoria técnica, não certificação de segurança ou conformidade. Produção não foi alterada. A migration 009 está preparada e validada apenas localmente; a aplicação nova depende dela.

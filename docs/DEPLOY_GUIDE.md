@@ -1,3 +1,5 @@
+> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+
 # Preparação do deploy Vercel
 
 Sem publicação autorizada. Repositório exclusivo: MartnsDev/Lavilli-MRO. Nunca enviar esta aplicação a outro repositório. Publicar primeiro uma branch de revisão; não atualizar main automaticamente, pois uma integração existente pode disparar produção.

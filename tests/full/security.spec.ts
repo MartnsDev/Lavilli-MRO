@@ -4,47 +4,28 @@ import { admin, isolated, login } from "./helpers";
 const origin = "http://localhost:3100";
 const hash = (v: string) => createHash("sha256").update(v).digest("hex");
 test.beforeEach(() => isolated());
-test("correct shared PIN alone cannot create a session or reveal mechanic identities", async ({
+test("fresh browser enters with shared PIN and mechanic without enrollment", async ({
   request,
 }) => {
   const state = await (await request.get("/api/auth/status")).json();
-  expect(state.deviceAuthorized).toBe(false);
-  expect(state.mechanics).toEqual([]);
-  const { data } = await admin()
-    .from("mechanics")
-    .select("id")
-    .eq("name", "César")
-    .single();
-  const r = await request.post("/api/auth/login", {
-    headers: { origin },
-    data: { pin: process.env.TEST_PIN, mechanic_id: data!.id },
-  });
-  expect(r.status()).toBe(401);
-  expect(r.headers()["set-cookie"]).toBeUndefined();
+  expect(
+    state.mechanics.some((m: { name: string }) => m.name === "César"),
+  ).toBe(true);
+  await login(request);
+  expect((await request.get("/api/options/tools")).status()).toBe(200);
 });
-test("invalid, expired and replayed independent enrollment grants cannot authorize devices", async ({
-  playwright,
+test("retired enrollment endpoint never asks for or accepts administrative codes", async ({
   request,
 }) => {
-  const code = randomBytes(32).toString("base64url");
-  const issue = await admin().rpc("issue_device_grant", {
-    p_hash: hash(code),
-    p_purpose: "enroll",
-  });
-  expect(issue.error).toBeNull();
-  const other = await playwright.request.newContext({ baseURL: origin });
-  const responses = await Promise.all(
-    [request, other].map((r) =>
-      r.post("/api/auth/enroll", { headers: { origin }, data: { code } }),
-    ),
-  );
-  expect(responses.map((r) => r.status()).sort()).toEqual([200, 403]);
-  const bad = await other.post("/api/auth/enroll", {
-    headers: { origin },
-    data: { code: randomBytes(32).toString("base64url") },
-  });
-  expect(bad.status()).toBe(403);
-  await other.dispose();
+  for (const code of ["invalid", randomBytes(32).toString("base64url")])
+    expect(
+      (
+        await request.post("/api/auth/enroll", {
+          headers: { origin },
+          data: { code },
+        })
+      ).status(),
+    ).toBe(404);
 });
 test("every private API refuses anonymous reads and writes with no-store responses", async ({
   request,
@@ -118,21 +99,27 @@ test("session token alone, revoked device and copied cookies fail the central da
   await clone.dispose();
   await sessionOnly.dispose();
 });
-test("ordinary session cannot export or change security; the short PIN cannot elevate itself", async ({
+test("shared PIN login includes dashboard administration without an independent code", async ({
   request,
 }) => {
   await login(request, "César", false);
-  expect((await request.get("/api/reports?entity=tools")).status()).toBe(403);
-  const r = await request.post("/api/security", {
-    headers: { origin },
-    data: { action: "elevate", pin: process.env.TEST_PIN },
-  });
-  expect(r.status()).toBe(403);
-  const forbidden = await request.post("/api/security", {
-    headers: { origin },
-    data: { action: "revoke_sessions", pin: process.env.TEST_PIN },
-  });
-  expect(forbidden.status()).toBe(403);
+  expect((await request.get("/api/reports?entity=tools")).status()).toBe(200);
+  expect(
+    (
+      await request.post("/api/security", {
+        headers: { origin },
+        data: { action: "elevate", pin: process.env.TEST_PIN },
+      })
+    ).status(),
+  ).toBe(200);
+  expect(
+    (
+      await request.post("/api/security", {
+        headers: { origin },
+        data: { action: "elevate", pin: "invalid" },
+      })
+    ).status(),
+  ).toBe(400);
 });
 test("distributed limiter persists and serializes concurrent attempts in database", async () => {
   const key = hash(randomUUID());

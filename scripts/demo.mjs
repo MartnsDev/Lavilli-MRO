@@ -126,16 +126,6 @@ try {
       );
     return body;
   }
-  async function grant(purpose) {
-    const code = randomBytes(32).toString("base64url");
-    const { error } = await db.rpc("issue_device_grant", {
-      p_hash: createHash("sha256").update(code).digest("hex"),
-      p_purpose: purpose,
-    });
-    if (error) throw Error("Migration de segurança local ausente");
-    return code;
-  }
-  await post("/api/auth/enroll", { code: await grant("enroll") });
   const { data: mechanics, error } = await db
     .from("mechanics")
     .select("id,name")
@@ -320,9 +310,6 @@ try {
       {
         url: env.APP_URL,
         pin,
-        enrollmentCode: await grant("enroll"),
-        adminCode: await grant("admin"),
-        codeExpiresMinutes: 15,
         label,
       },
       null,
@@ -331,7 +318,7 @@ try {
     { mode: 0o600 },
   );
   console.log(
-    "Demo local em http://localhost:3200. Credenciais temporárias: .local-secrets/demo-access.txt (privado). Todos os dados são fictícios; e-mail desativado. Ctrl+C encerra o servidor.",
+    "Demo local em http://localhost:3200. Configuração privada do acesso: .local-secrets/demo-access.txt (privado). Todos os dados são fictícios; e-mail desativado. Ctrl+C encerra o servidor.",
   );
   await new Promise((resolve) => server.once("exit", resolve));
 } catch (error) {

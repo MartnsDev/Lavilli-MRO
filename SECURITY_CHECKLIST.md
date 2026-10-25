@@ -1,3 +1,5 @@
+> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](docs/ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+
 # Checklist de segurança
 
 24/10/2026 — implementação local; produção não certificada.
