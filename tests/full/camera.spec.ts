@@ -57,7 +57,9 @@ test("reads a QR photo with no native BarcodeDetector and never sends the image"
     width: 700,
     margin: 4,
   });
-  await page.getByLabel("Ler foto da galeria", { exact: true }).setInputFiles({
+  const gallery = page.getByLabel("Ler foto da galeria", { exact: true });
+  await expect(gallery).toBeEnabled();
+  await gallery.setInputFiles({
     name: "etiqueta.png",
     mimeType: "image/png",
     buffer: png,
@@ -77,9 +79,13 @@ test("reads a photographed Code 128 and searches its actual value", async ({
     padding: 20,
     backgroundcolor: "FFFFFF",
   });
-  await page
-    .getByLabel("Fotografar etiqueta", { exact: true })
-    .setInputFiles({ name: "barcode.png", mimeType: "image/png", buffer: png });
+  const photo = page.getByLabel("Fotografar etiqueta", { exact: true });
+  await expect(photo).toBeEnabled();
+  await photo.setInputFiles({
+    name: "barcode.png",
+    mimeType: "image/png",
+    buffer: png,
+  });
   await expect(page).toHaveURL(/\/search\?q=/);
   expect(new URL(page.url()).searchParams.get("q")).toBe(f.t);
 });
@@ -108,8 +114,15 @@ test("decodes a real synthetic camera stream and releases its track after openin
           state.cameraCanvas = canvas;
           const ctx = canvas.getContext("2d")!;
           const media = canvas.captureStream(10);
-          const timer = setInterval(() => ctx.drawImage(img, 0, 0), 80);
-          ctx.drawImage(img, 0, 0);
+          const started = performance.now();
+          const paint = () => {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, 700, 700);
+            // The label enters later: scanning must survive initial empty frames.
+            if (performance.now() - started > 1000) ctx.drawImage(img, 0, 0);
+          };
+          const timer = setInterval(paint, 80);
+          paint();
           for (const track of media.getTracks()) {
             const stop = track.stop.bind(track);
             track.stop = () => {
@@ -227,6 +240,7 @@ test("camera photo is normalized, previewed and saved as a private pending JPEG"
   await page.goto("/records/documents/" + d.id);
   const camera = page.getByLabel("Tirar foto do documento", { exact: true });
   await expect(camera).toHaveAttribute("capture", "environment");
+  await expect(camera).toBeEnabled();
   await camera.setInputFiles({
     name: "camera.png",
     mimeType: "image/png",
@@ -297,13 +311,15 @@ test("real local OCR prefills the exact catalog and serial and preserves its pho
       uploads.push(r.method());
   });
   await page.goto("/scan");
-  await page
-    .getByLabel("Selecionar foto do documento", { exact: true })
-    .setInputFiles({
-      name: "identificacao.png",
-      mimeType: "image/png",
-      buffer: image,
-    });
+  const input = page.getByLabel("Selecionar foto do documento", {
+    exact: true,
+  });
+  await expect(input).toBeEnabled();
+  await input.setInputFiles({
+    name: "identificacao.png",
+    mimeType: "image/png",
+    buffer: image,
+  });
   await expect(page.getByLabel("Part Number (conferir)")).toHaveValue(
     "TEST-PN-789456",
     { timeout: 120000 },

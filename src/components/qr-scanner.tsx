@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { scanDestination } from "@/lib/domain/scan";
 import { preparePhoto } from "@/lib/photo";
 import { useHydrated } from "@/lib/use-hydrated";
+import { decodeQrFrame } from "@/lib/qr-frame";
 
 export function QrScanner() {
   const router = useRouter(),
@@ -80,6 +81,7 @@ export function QrScanner() {
       stream.current = media;
       setActive(true);
       const reader = new BrowserMultiFormatReader();
+      let qrDecoding = false;
       const scanner = await reader.decodeFromStream(
         media,
         video.current,
@@ -91,6 +93,19 @@ export function QrScanner() {
           if (result) {
             controller.stop();
             openCode(result.getText());
+          } else if (!qrDecoding && video.current) {
+            qrDecoding = true;
+            void decodeQrFrame(video.current)
+              .then((code) => {
+                if (code && current === generation.current) {
+                  controller.stop();
+                  openCode(code);
+                }
+              })
+              .catch(() => {})
+              .finally(() => {
+                qrDecoding = false;
+              });
           }
         },
       );
@@ -120,10 +135,19 @@ export function QrScanner() {
       url = URL.createObjectURL(normalized);
       const { BrowserMultiFormatReader } = await import("@zxing/browser");
       if (current !== generation.current) return;
-      const result = await new BrowserMultiFormatReader().decodeFromImageUrl(
-        url,
-      );
-      if (current === generation.current) openCode(result.getText());
+      let code: string | null;
+      try {
+        code = (
+          await new BrowserMultiFormatReader().decodeFromImageUrl(url)
+        ).getText();
+      } catch {
+        const source = new Image();
+        source.src = url;
+        await source.decode();
+        code = await decodeQrFrame(source);
+      }
+      if (!code) throw Error("Unreadable code");
+      if (current === generation.current) openCode(code);
     } catch {
       if (current === generation.current)
         setError(
