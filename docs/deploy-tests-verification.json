@@ -1,0 +1,112 @@
+{
+  "githubDeploymentCheck": {
+    "checkedAt": "2026-10-25T01:30:25.474Z",
+    "checks": [
+      {
+        "name": "César:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "César:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "document-upload-capability",
+        "passed": false,
+        "status": 503
+      },
+      {
+        "name": "César:logout-and-anonymous-denial",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "mobile-menu",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:logout-and-anonymous-denial",
+        "passed": true
+      }
+    ],
+    "operationalWritesAttempted": false,
+    "filesUploaded": false,
+    "documentBytesRead": false,
+    "fullFunctionalValidation": false,
+    "url": "https://lavilli-control.vercel.app",
+    "requireDocuments": true,
+    "documentUploadCapability": false,
+    "passed": false,
+    "blocker": "Document upload is unavailable on this deployment",
+    "githubRun": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40150831557"
+  },
+  "localLimitedSmoke": {
+    "checkedAt": "2026-10-25T01:36:52.939Z",
+    "checks": [
+      {
+        "name": "César:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "César:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "document-upload-capability",
+        "passed": false,
+        "status": 503
+      },
+      {
+        "name": "César:logout-and-anonymous-denial",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "mobile-menu",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:logout-and-anonymous-denial",
+        "passed": true
+      }
+    ],
+    "operationalWritesAttempted": false,
+    "filesUploaded": false,
+    "documentBytesRead": false,
+    "fullFunctionalValidation": false,
+    "url": "https://lavilli-control.vercel.app",
+    "requireDocuments": false,
+    "documentUploadCapability": false,
+    "passed": true
+  },
+  "localUnitPassed": 65,
+  "localFocusedIntegratedPassed": 2,
+  "ciComplete": {
+    "commit": "0a9a52ab3f106d5e90d5a154ae79e23669084c69",
+    "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40150754870",
+    "conclusion": "success",
+    "jobs": ["application", "database", "functional"]
+  },
+  "testEnvironment": {
+    "vercelProjectPrepared": true,
+    "backendAvailable": false,
+    "deployed": false,
+    "blocker": "Two active Free Supabase project slots are occupied; awaiting separate backend decision"
+  },
+  "vercelRepositoryDispatchEnabled": true,
+  "vercelCliEventDeliveryProved": false
+}

@@ -30,7 +30,8 @@
     "demo:local": "node scripts/demo.mjs",
     "demo:prepare": "node scripts/demo-stack.mjs",
     "demo:verify": "node scripts/verify-demo.mjs",
-    "test:deploy": "node scripts/verify-deployment.mjs"
+    "test:deploy": "node scripts/verify-deployment.mjs",
+    "deploy:checked": "node scripts/deploy-checked.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

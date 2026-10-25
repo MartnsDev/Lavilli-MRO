@@ -1,9 +1,13 @@
 // HTTPS smoke checks only. Never creates business records, uploads files or captures real data.
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
-import { readFile, stat, mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { deploymentTarget, deploymentPassed } from "./lib/deployment-check.mjs";
+import {
+  deploymentTarget,
+  deploymentPassed,
+  deploymentPin,
+} from "./lib/deployment-check.mjs";
 
 const report = {
   checkedAt: new Date().toISOString(),
@@ -30,15 +34,7 @@ try {
   report.url = base;
   const requireDocuments = !process.argv.includes("--smoke-only");
   report.requireDocuments = requireDocuments;
-  let pin = process.env.DEPLOY_TEST_PIN;
-  if (process.env.DEPLOY_TEST_PIN_FILE) {
-    if (pin) throw Error("Use only one PIN source");
-    const file = process.env.DEPLOY_TEST_PIN_FILE;
-    if ((await stat(file)).mode & 0o077)
-      throw Error("PIN file must be private");
-    pin = (await readFile(file, "utf8")).trim();
-  }
-  if (!/^\d{4}$/.test(pin || "")) throw Error("Configure the private PIN");
+  const pin = await deploymentPin(process.env);
   browser = await chromium.launch({
     channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
   });
