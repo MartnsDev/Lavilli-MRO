@@ -1,21 +1,74 @@
 import Link from "next/link";
+import { z } from "zod";
 import { notFound } from "next/navigation";
-import { Plus, ArrowUpRight, Filter, PackageOpen } from "lucide-react";
+import { ArrowUpRight, Filter, PackageOpen } from "lucide-react";
 import { resources, label } from "@/lib/domain/resources";
 import { list, referenceLabels } from "@/lib/server/queries";
-import { OperationForm } from "@/components/operation-form";
+import { RecordCreate } from "@/components/record-create";
+import { db } from "@/lib/server/db";
 import { dateBR, dayKeySP } from "@/lib/utils";
 export default async function Records({
   params,
   searchParams,
 }: {
   params: Promise<{ entity: string }>;
-  searchParams: Promise<{ q?: string; page?: string; status?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    page?: string;
+    status?: string;
+    part_number?: string;
+    serial_number?: string;
+    catalog_id?: string;
+  }>;
 }) {
   const { entity } = await params,
     meta = resources[entity];
   if (!meta) notFound();
   const raw = await searchParams;
+  const pn =
+    typeof raw.part_number === "string"
+      ? raw.part_number.trim().slice(0, 100)
+      : "";
+  const sn =
+    typeof raw.serial_number === "string"
+      ? raw.serial_number.trim().slice(0, 100)
+      : "";
+  const initial: Record<string, unknown> = {};
+  if (entity === "part_catalog" && pn)
+    Object.assign(initial, {
+      part_number: pn,
+      name: "Peça " + pn,
+      unit: "un",
+      minimum_stock: 0,
+    });
+  if (entity === "part_instances" && (pn || sn)) {
+    Object.assign(initial, {
+      serial_number: sn,
+      condition: "pending",
+      documentation: "pending",
+    });
+    const query = db()
+      .from("part_catalog")
+      .select("id,part_number")
+      .is("archived_at", null);
+    const suppliedId =
+      typeof raw.catalog_id === "string" &&
+      z.uuid().safeParse(raw.catalog_id).success
+        ? raw.catalog_id
+        : "";
+    const { data: matches, error } = await (
+      suppliedId
+        ? query.eq("id", suppliedId)
+        : query.ilike("part_number", pn.replace(/[\\%_]/g, "\\$&"))
+    ).limit(2);
+    if (error) throw error;
+    if (
+      matches?.length === 1 &&
+      (!pn ||
+        matches[0].part_number.toLocaleUpperCase() === pn.toLocaleUpperCase())
+    )
+      initial.catalog_id = matches[0].id;
+  }
   const search = {
       q: typeof raw.q === "string" ? raw.q : "",
       status: typeof raw.status === "string" ? raw.status : "",
@@ -79,15 +132,43 @@ export default async function Records({
           <p>{meta.description}</p>
         </div>
         {meta.fields.length > 0 && (
-          <OperationForm
-            title={"Cadastrar · " + meta.title}
+          <RecordCreate
+            key={entity + pn + sn + String(initial.catalog_id || "")}
+            entity={entity}
+            title={meta.title}
             fields={meta.fields}
-            command={{ action: "create", entity }}
-          >
-            <Plus size={18} /> Novo cadastro
-          </OperationForm>
+            initial={initial}
+            serialNumber={sn}
+            partNumber={pn}
+          />
         )}
       </div>
+      {(entity === "part_catalog" || entity === "part_instances") &&
+        (pn || sn) && (
+          <section className="card stack">
+            <p>
+              Dados da leitura: P/N <strong>{pn || "não identificado"}</strong>{" "}
+              · S/N <strong>{sn || "não identificado"}</strong>. Abra Novo
+              cadastro e confira os campos antes de salvar.
+            </p>
+            {entity === "part_instances" && !initial.catalog_id && (
+              <p>
+                Selecione o item do catálogo. Se este P/N ainda não está
+                cadastrado,{" "}
+                <Link
+                  className="record-link"
+                  href={
+                    "/records/part_catalog?" +
+                    new URLSearchParams({ part_number: pn, serial_number: sn })
+                  }
+                >
+                  cadastre primeiro o Part Number
+                </Link>
+                .
+              </p>
+            )}
+          </section>
+        )}
 
       {entity === "locations" && (
         <div className="subnav">

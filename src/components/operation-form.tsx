@@ -22,6 +22,7 @@ function RefSelect({
 }) {
   const [options, setOptions] = useState<Option[]>([]),
     [error, setError] = useState(false);
+  const [selected, setSelected] = useState(String(value ?? ""));
   useEffect(() => {
     let alive = true;
     fetch("/api/options/" + field.type.slice(4))
@@ -43,11 +44,12 @@ function RefSelect({
         id={inputId}
         name={field.key}
         required={field.required}
-        defaultValue={String(value ?? "")}
+        value={selected}
+        onChange={(event) => setSelected(event.target.value)}
       >
         <option value="">Selecione…</option>
-        {value && !options.some((o) => o.id === value) ? (
-          <option value={String(value)}>{String(value)}</option>
+        {selected && !options.some((o) => o.id === selected) ? (
+          <option value={selected}>{selected}</option>
         ) : null}
         {options.map((o) => (
           <option key={o.id} value={o.id}>
@@ -177,7 +179,7 @@ export function OperationForm({
   buildData?: (data: Record<string, unknown>) => Record<string, unknown>;
   children?: React.ReactNode;
   variant?: "default" | "outline" | "destructive";
-  onSuccess?: () => void;
+  onSuccess?: (result?: unknown) => void;
   refreshOnSuccess?: boolean;
   execute?: (payload: {
     command: Command;
@@ -188,6 +190,7 @@ export function OperationForm({
   const router = useRouter();
   const formId = useId();
   const [draft, setDraft] = useState<Record<string, unknown>>(initial);
+  const [openedCommand, setOpenedCommand] = useState(command);
   const [draftReason, setDraftReason] = useState("");
   const [open, setOpen] = useState(false),
     [pending, setPending] = useState<{
@@ -212,6 +215,7 @@ export function OperationForm({
     setError("");
     const f = new FormData(form);
     try {
+      let saved: unknown;
       const r = await fetch("/api/confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -236,10 +240,11 @@ export function OperationForm({
         });
         const response = await result.json();
         if (!result.ok) throw Error(response.error);
+        saved = response.data;
       }
       setOpen(false);
       setPending(undefined);
-      onSuccess?.();
+      onSuccess?.(saved);
       if (refreshOnSuccess) router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falha na operação");
@@ -253,6 +258,7 @@ export function OperationForm({
         variant={variant}
         onClick={() => {
           setDraft(initial);
+          setOpenedCommand(command);
           setDraftReason("");
           setOpen(true);
           setPending(undefined);
@@ -358,9 +364,9 @@ export function OperationForm({
                 setPending({
                   operation_id: crypto.randomUUID(),
                   command: {
-                    ...command,
+                    ...openedCommand,
                     data: {
-                      ...command.data,
+                      ...openedCommand.data,
                       ...(buildData ? buildData(values) : values),
                     },
                     reason: String(f.get("reason")),

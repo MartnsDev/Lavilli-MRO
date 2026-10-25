@@ -11,6 +11,7 @@ export default defineConfig([
     ".demo-local/**",
     ".local-secrets/**",
     "node_modules/**",
+    "public/ocr/**",
     "test-results/**",
     "playwright-report/**",
     "next-env.d.ts",

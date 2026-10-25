@@ -7,7 +7,9 @@ import { get, referenceLabels } from "@/lib/server/queries";
 import { db, securityBoundaryReady } from "@/lib/server/db";
 import { dateBR } from "@/lib/utils";
 import { RecordActions } from "@/components/record-actions";
+import { PartDocumentCapture } from "@/components/part-document-capture";
 import { DocumentUpload } from "@/components/document-upload";
+import { PrivatePhoto } from "@/components/private-photo";
 import { KitActions } from "@/components/kit-actions";
 export default async function Detail({
   params,
@@ -56,6 +58,16 @@ export default async function Detail({
     created_at: string;
     scan_status?: string;
   }>;
+  let partNumber = "";
+  if (entity === "part_instances" && row.catalog_id) {
+    const { data, error } = await db()
+      .from("part_catalog")
+      .select("part_number")
+      .eq("id", row.catalog_id)
+      .maybeSingle();
+    if (error) throw error;
+    partNumber = data?.part_number || "";
+  }
   return (
     <>
       <div className="breadcrumb">
@@ -80,6 +92,15 @@ export default async function Detail({
         </p>
       </div>
       <RecordActions entity={entity} row={row} />
+      {entity === "part_instances" && (
+        <PartDocumentCapture
+          key={id}
+          partId={id}
+          partNumber={partNumber}
+          serialNumber={String(row.serial_number || "")}
+          uploadsReady={hardened}
+        />
+      )}
       {entity === "tool_kits" && <KitActions kitId={id} />}
       <div className="detail-grid">
         <section className="card">
@@ -213,6 +234,10 @@ export default async function Detail({
                     </span>
                   </span>
                 )}
+                {v.scan_status === "clean" &&
+                  v.mime_type.startsWith("image/") && (
+                    <PrivatePhoto versionId={v.id} />
+                  )}
               </li>
             ))}
           </ul>

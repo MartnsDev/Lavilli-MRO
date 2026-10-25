@@ -110,6 +110,7 @@ try {
     }
   }
   for (const name of ["operational-documents", "import-originals"]) {
+    if (!(buckets || []).some((existing) => existing.id === name)) continue;
     bucket = name;
     await walk();
   }

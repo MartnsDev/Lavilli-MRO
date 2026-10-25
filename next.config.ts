@@ -8,6 +8,17 @@ const config: NextConfig = {
   async headers() {
     return [
       {
+        source: "/ocr/v7/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self'",
+          },
+          { key: "Cache-Control", value: "public, max-age=86400" },
+        ],
+      },
+      {
         source: "/:path*",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },

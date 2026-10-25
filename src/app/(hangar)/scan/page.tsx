@@ -1,3 +1,4 @@
+import { PartOcr } from "@/components/part-ocr";
 import { QrScanner } from "@/components/qr-scanner";
 export default function Scan() {
   return (
@@ -6,11 +7,12 @@ export default function Scan() {
         <span className="eyebrow">MOBILIDADE NO HANGAR</span>
         <h1>Leitor de etiquetas</h1>
         <p>
-          Abra uma ficha autenticada pela câmera ou informe o código
-          manualmente.
+          Leia QR Code ou código de barras pela câmera, fotografe a etiqueta ou
+          busque pelo Part Number e Serial Number.
         </p>
       </div>
       <QrScanner />
+      <PartOcr />
     </>
   );
 }

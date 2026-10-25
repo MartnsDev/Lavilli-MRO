@@ -1,95 +1,137 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Camera, Keyboard } from "lucide-react";
+import type { IScannerControls } from "@zxing/browser";
 import { Button } from "./ui/button";
-type Detector = {
-  detect: (source: HTMLVideoElement) => Promise<{ rawValue: string }[]>;
-};
-type DetectorConstructor = new (options: { formats: string[] }) => Detector;
+import { scanDestination } from "@/lib/domain/scan";
+import { preparePhoto } from "@/lib/photo";
+import { useHydrated } from "@/lib/use-hydrated";
+
 export function QrScanner() {
   const router = useRouter(),
-    video = useRef<HTMLVideoElement>(null),
+    ready = useHydrated();
+  const video = useRef<HTMLVideoElement>(null),
     stream = useRef<MediaStream | null>(null),
-    timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    controls = useRef<IScannerControls | null>(null),
+    generation = useRef(0);
   const [active, setActive] = useState(false),
+    [busy, setBusy] = useState(false),
     [error, setError] = useState("");
-  function stop() {
-    stream.current?.getTracks().forEach((t) => t.stop());
+  const release = useCallback(() => {
+    generation.current++;
+    controls.current?.stop();
+    controls.current = null;
+    stream.current?.getTracks().forEach((track) => track.stop());
     stream.current = null;
-    if (timer.current) clearTimeout(timer.current);
+    if (video.current) video.current.srcObject = null;
+  }, []);
+  function stop() {
+    release();
     setActive(false);
+    setBusy(false);
   }
-  useEffect(
-    () => () => {
-      stream.current?.getTracks().forEach((t) => t.stop());
-      if (timer.current) clearTimeout(timer.current);
-    },
-    [],
-  );
-  function openCode(code: string) {
-    try {
-      const url = new URL(code, window.location.origin);
-      if (
-        url.origin === window.location.origin &&
-        /^\/records\/(tools|tool_kits|locations|part_instances)\/[a-f0-9-]{36}$/.test(
-          url.pathname,
-        )
-      ) {
-        stop();
-        router.push(url.pathname);
-        return;
+  useEffect(() => {
+    const hide = () => {
+      if (document.hidden) {
+        release();
+        setActive(false);
+        setBusy(false);
       }
-    } catch {}
+    };
+    document.addEventListener("visibilitychange", hide);
+    return () => {
+      document.removeEventListener("visibilitychange", hide);
+      release();
+    };
+  }, [release]);
+  function openCode(code: string) {
+    const destination = scanDestination(code, window.location.origin);
+    if (!destination) {
+      setError("Informe um código para continuar.");
+      return;
+    }
     stop();
-    router.push("/search?q=" + encodeURIComponent(code.slice(0, 100)));
+    router.push(destination);
   }
   async function start() {
+    stop();
     setError("");
-    const DetectorClass = (
-      window as unknown as { BarcodeDetector?: DetectorConstructor }
-    ).BarcodeDetector;
-    if (!DetectorClass || !navigator.mediaDevices?.getUserMedia) {
+    setBusy(true);
+    const current = generation.current;
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setBusy(false);
       setError(
-        "Leitura pela câmera indisponível neste navegador. Use a busca por código abaixo.",
+        "A câmera precisa de HTTPS e permissão do navegador. Você também pode ler uma foto abaixo.",
       );
       return;
     }
     try {
+      const { BrowserMultiFormatReader } = await import("@zxing/browser");
+      if (current !== generation.current) return;
       const media = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 } },
         audio: false,
       });
-      stream.current = media;
-      if (!video.current) {
-        media.getTracks().forEach((t) => t.stop());
+      if (current !== generation.current || !video.current) {
+        media.getTracks().forEach((track) => track.stop());
         return;
       }
-      video.current.srcObject = media;
-      await video.current.play();
-      const detector = new DetectorClass({ formats: ["qr_code"] });
+      stream.current = media;
       setActive(true);
-      async function scan() {
-        if (!stream.current || !video.current) return;
-        try {
-          const codes = await detector.detect(video.current);
-          if (codes[0]) {
-            openCode(codes[0].rawValue);
+      const reader = new BrowserMultiFormatReader();
+      const scanner = await reader.decodeFromStream(
+        media,
+        video.current,
+        (result, _error, controller) => {
+          if (current !== generation.current) {
+            controller.stop();
             return;
           }
-        } catch {
-          setError(
-            "Não foi possível ler a imagem. Ajuste a câmera ou digite o código.",
-          );
-        }
-        timer.current = setTimeout(() => void scan(), 250);
+          if (result) {
+            controller.stop();
+            openCode(result.getText());
+          }
+        },
+      );
+      if (current !== generation.current) scanner.stop();
+      else {
+        controls.current = scanner;
+        setBusy(false);
       }
-      void scan();
     } catch {
+      if (current !== generation.current) return;
       stop();
       setError(
-        "A câmera não foi autorizada ou não está disponível. Use a busca manual.",
+        "Não foi possível abrir a câmera. Permita o acesso nas configurações do navegador ou leia uma foto abaixo.",
       );
+    }
+  }
+  async function readPhoto(file?: File) {
+    if (!file) return;
+    stop();
+    setError("");
+    setBusy(true);
+    const current = generation.current;
+    let url: string | undefined;
+    try {
+      const normalized = await preparePhoto(file);
+      if (current !== generation.current) return;
+      url = URL.createObjectURL(normalized);
+      const { BrowserMultiFormatReader } = await import("@zxing/browser");
+      if (current !== generation.current) return;
+      const result = await new BrowserMultiFormatReader().decodeFromImageUrl(
+        url,
+      );
+      if (current === generation.current) openCode(result.getText());
+    } catch {
+      if (current === generation.current)
+        setError(
+          "Não encontrei um QR Code ou código de barras legível. Aproxime a etiqueta, evite reflexos ou informe P/N e S/N na busca.",
+        );
+    } finally {
+      if (url) URL.revokeObjectURL(url);
+      if (current === generation.current) setBusy(false);
     }
   }
   return (
@@ -98,8 +140,8 @@ export function QrScanner() {
         <Camera size={20} /> Ler etiqueta do hangar
       </h2>
       <p className="fine-print">
-        A câmera é utilizada somente para ler o QR Code. Nenhuma imagem é
-        armazenada ou enviada.
+        Leia QR Code ou código de barras pela câmera ou por uma foto. A leitura
+        acontece neste aparelho; a imagem não é enviada nem armazenada.
       </p>
       <video
         ref={video}
@@ -114,15 +156,43 @@ export function QrScanner() {
           display: active ? "block" : "none",
         }}
       />
-      {active ? (
+      {active || busy ? (
         <Button variant="outline" onClick={stop}>
           Encerrar câmera
         </Button>
       ) : (
-        <Button onClick={() => void start()}>
+        <Button disabled={!ready} onClick={() => void start()}>
           <Camera size={18} /> Iniciar câmera
         </Button>
       )}
+      {busy && <p role="status">Preparando leitura…</p>}
+      <label>
+        Fotografar etiqueta
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          disabled={!ready || busy}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            e.currentTarget.value = "";
+            void readPhoto(file);
+          }}
+        />
+      </label>
+      <label>
+        Ler foto da galeria
+        <input
+          type="file"
+          accept="image/*"
+          disabled={!ready || busy}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            e.currentTarget.value = "";
+            void readPhoto(file);
+          }}
+        />
+      </label>
       {error && (
         <p role="alert" className="notice">
           {error}
@@ -132,8 +202,7 @@ export function QrScanner() {
         className="stack"
         onSubmit={(e) => {
           e.preventDefault();
-          const f = new FormData(e.currentTarget);
-          openCode(String(f.get("code")).trim());
+          openCode(String(new FormData(e.currentTarget).get("code") || ""));
         }}
       >
         <label>

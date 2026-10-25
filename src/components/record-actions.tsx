@@ -43,6 +43,19 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
           command={{ action: "aircraft_registration", data: base }}
         />
       )}
+      {entity === "part_instances" && (
+        <OperationForm
+          title="Vincular documento à peça"
+          description="Escolha o documento desta unidade. O vínculo usa a ficha e mantém o número de série."
+          variant="outline"
+          fields={[f("document_id", "Documento", "ref:documents")]}
+          command={{
+            action: "create",
+            entity: "document_links",
+            data: { entity: "part_instances", entity_id: row.id },
+          }}
+        />
+      )}
       {entity === "stock_lots" && (
         <>
           <OperationForm

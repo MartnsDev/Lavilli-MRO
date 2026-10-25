@@ -30,3 +30,5 @@ backups/
 /.codex
 /.agents
 /.vercel
+
+/public/ocr/

@@ -14,7 +14,7 @@ export function proxy(request: NextRequest) {
     expected && ["localhost", "127.0.0.1", "[::1]"].includes(expected.hostname);
   if (!dev && expected?.protocol !== "https:" && !loopback)
     return new NextResponse("Serviço indisponível", { status: 503 });
-  const csp = `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`;
+  const csp = `default-src 'self'; script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' blob:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`;
   const h = new Headers(request.headers);
   h.set("x-nonce", nonce);
   h.set("x-request-id", crypto.randomUUID());
@@ -28,5 +28,5 @@ export function proxy(request: NextRequest) {
   return response;
 }
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|brand/|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|brand/|ocr/v7/|favicon.ico).*)"],
 };

@@ -44,15 +44,20 @@ export async function rpc<T>(
 }
 
 let boundaryProbe: Promise<boolean> | undefined;
+let boundaryExpiresAt = 0;
 // Capability check reads zero rows; legacy compatibility never runs on a partial/network failure.
 export function securityBoundaryReady() {
-  if (!boundaryProbe)
+  if (!boundaryProbe || Date.now() >= boundaryExpiresAt) {
+    boundaryExpiresAt = Date.now() + 5000;
     boundaryProbe = (async () => {
       const { error } = await db()
         .from("access_sessions")
         .select("credential_version")
         .limit(0);
-      if (!error) return true;
+      if (!error) {
+        boundaryExpiresAt = Date.now() + 60000;
+        return true;
+      }
       if (
         error.code === "42703" ||
         (error.code === "PGRST204" &&
@@ -62,7 +67,9 @@ export function securityBoundaryReady() {
       throw Error("SETUP_REQUIRED");
     })().catch((error) => {
       boundaryProbe = undefined;
+      boundaryExpiresAt = 0;
       throw error;
     });
+  }
   return boundaryProbe;
 }

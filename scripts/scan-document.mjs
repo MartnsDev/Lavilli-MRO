@@ -1,10 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import WebSocket from "ws";
 import { createHash } from "node:crypto";
-import { mkdtemp, writeFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { execFileSync } from "node:child_process";
+import { scanLocalBytes } from "./lib/document-scanner.mjs";
 const id = process.argv[2];
 if (!/^[a-f0-9-]{36}$/.test(id || "")) throw Error("Informe UUID da versão");
 const client = createClient(
@@ -14,66 +11,34 @@ const client = createClient(
 );
 const { data: v, error } = await client
   .from("document_versions")
-  .select("object_path,sha256")
+  .select("object_path,sha256,size_bytes,scan_status")
   .eq("id", id)
   .single();
-if (error) throw Error("Versão indisponível");
+if (error || !v) throw Error("Versão indisponível");
+if (v.scan_status !== "pending") throw Error("Versão não está pendente");
+if (
+  !/^[a-f0-9-]{36}\/[a-f0-9]{64}\/[A-Za-z0-9_-]{43}$/.test(v.object_path) ||
+  v.size_bytes < 1 ||
+  v.size_bytes > 4194304
+)
+  throw Error("Metadados de arquivo inválidos");
 const { data: file, error: e } = await client.storage
   .from("operational-documents")
   .download(v.object_path);
 if (e || !file) throw Error("Objeto indisponível");
 const bytes = Buffer.from(await file.arrayBuffer());
 const sha = createHash("sha256").update(bytes).digest("hex");
-if (sha !== v.sha256) throw Error("Integridade inválida");
-const folder = await mkdtemp(join(tmpdir(), "lavilli-scan-"));
-let clean = false;
-try {
-  const path = join(folder, "document");
-  await writeFile(path, bytes, { mode: 0o600 });
-  try {
-    const scanner = process.env.CLAM_SCAN_BIN || "clamscan";
-    if (!["clamscan", "clamdscan"].includes(scanner))
-      throw Error("Scanner inválido");
-    const version = execFileSync(scanner, ["--version"], {
-      encoding: "utf8",
-      timeout: 10000,
-    });
-    const signatureDate = Date.parse(
-      version.trim().split("/").slice(2).join("/"),
-    );
-    if (
-      !Number.isFinite(signatureDate) ||
-      Date.now() - signatureDate > 3 * 86400000
-    )
-      throw Error("Assinaturas do scanner precisam ser atualizadas");
-    execFileSync(
-      scanner,
-      [
-        "--no-summary",
-        ...(scanner === "clamscan" ? ["--fail-if-cvd-older-than=3"] : []),
-        path,
-      ],
-      {
-        stdio: "ignore",
-        timeout: 30000,
-      },
-    );
-    clean = true;
-  } catch (e) {
-    if (e.status !== 1)
-      throw Error("Scanner indisponível: documento continua pendente");
-  }
-  const { error: scanError } = await client.rpc("record_document_scan", {
-    p_version: id,
-    p_sha: sha,
-    p_clean: clean,
-  });
-  if (scanError) throw Error("Não foi possível registrar verificação");
-  console.log(
-    clean
-      ? "Documento verificado pelo scanner."
-      : "Documento bloqueado pelo scanner.",
-  );
-} finally {
-  await rm(folder, { recursive: true, force: true });
-}
+if (sha !== v.sha256 || bytes.length !== v.size_bytes)
+  throw Error("Integridade inválida");
+const clean = await scanLocalBytes(bytes);
+const { error: scanError } = await client.rpc("record_document_scan", {
+  p_version: id,
+  p_sha: sha,
+  p_clean: clean,
+});
+if (scanError) throw Error("Não foi possível registrar verificação");
+console.log(
+  clean
+    ? "Documento verificado pelo scanner."
+    : "Documento bloqueado pelo scanner.",
+);

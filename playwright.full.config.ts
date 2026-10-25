@@ -26,7 +26,7 @@ export default defineConfig({
     },
     {
       name: "firefox",
-      testMatch: "**/dashboard.spec.ts",
+      testMatch: ["**/dashboard.spec.ts", "**/camera.spec.ts"],
       use: {
         browserName: "firefox",
         channel: undefined,
@@ -39,7 +39,7 @@ export default defineConfig({
     },
     {
       name: "desktop",
-      testMatch: "**/dashboard.spec.ts",
+      testMatch: ["**/dashboard.spec.ts", "**/camera.spec.ts"],
       use: {
         channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
         viewport: { width: 1440, height: 1000 },
@@ -47,7 +47,7 @@ export default defineConfig({
     },
     {
       name: "mobile",
-      testMatch: "**/dashboard.spec.ts",
+      testMatch: ["**/dashboard.spec.ts", "**/camera.spec.ts"],
       use: {
         ...devices["Pixel 7"],
         channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
