@@ -1,3 +1,5 @@
+> Atualização posterior de 25/10/2026: câmera/OCR publicados, migration 009 aplicada e upload privado habilitado. Testes e limites atuais em [CAMERA_OCR_REPORT](CAMERA_OCR_REPORT.md) e [camera-verification.json](camera-verification.json). O texto abaixo é histórico.
+
 > Estado atual da publicação: [relatório de deploy](DEPLOYMENT_REPORT.md). Publicado com autorização em 24/10/2026; verificações abaixo de auditorias anteriores são históricas e não comprovam aplicação da migration 009 em produção.
 
 > Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.

@@ -1,3 +1,5 @@
+> Estado atual: o proprietário cancelou a criação do ambiente online separado. Não há URL de testes online publicada nem banco remoto de testes configurado. CI e testes locais usam bancos isolados. As instruções abaixo são preparativos históricos e não uma pendência de autorização.
+
 # Ambiente online isolado para testes
 
 O proprietário solicitou uma URL de testes com dados fictícios e testes automatizados do deploy. **A URL de testes ainda não foi publicada.** A automação está disponível; o backend separado depende da decisão de infraestrutura pendente.

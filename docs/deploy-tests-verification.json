@@ -105,7 +105,8 @@
     "vercelProjectPrepared": true,
     "backendAvailable": false,
     "deployed": false,
-    "blocker": "Two active Free Supabase project slots are occupied; awaiting separate backend decision"
+    "blocker": "Owner cancelled the separate online test backend; no test URL is claimed",
+    "cancelledByOwner": true
   },
   "vercelRepositoryDispatchEnabled": true,
   "vercelCliEventDeliveryProved": false,
@@ -166,5 +167,96 @@
     "commit": "4167526c3ca0237aaad71d6b77525817985968ba",
     "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40151725985",
     "lastObservedStatus": "in_progress"
+  },
+  "cameraRelease": {
+    "runtimeCommit": "c53290943a2dd95053b7b06f13afe46328d371dc",
+    "ci": {
+      "id": 40235110852,
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "c53290943a2dd95053b7b06f13afe46328d371dc",
+      "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40235110852",
+      "jobs": [
+        {
+          "name": "application",
+          "conclusion": "success"
+        },
+        {
+          "name": "database",
+          "conclusion": "success"
+        },
+        {
+          "name": "functional",
+          "conclusion": "success"
+        }
+      ],
+      "integratedPassed": 207,
+      "unitPassed": 97
+    },
+    "localIntegratedBaselineCommit": "49effd37010851a67ed6b6940596196c9df0c09a",
+    "finalFocusedCameraPassed": 30,
+    "baselineLocalIntegratedPassed": 204,
+    "ciIntegratedPassed": 207,
+    "unitPassed": 97,
+    "deployment": {
+      "checkedAt": "2026-10-25T21:23:36.100Z",
+      "checks": [
+        {
+          "name": "César:login-page-and-headers",
+          "passed": true
+        },
+        {
+          "name": "César:login-and-dashboard",
+          "passed": true
+        },
+        {
+          "name": "document-upload-capability",
+          "passed": true,
+          "status": 400
+        },
+        {
+          "name": "César:logout-and-anonymous-denial",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:login-page-and-headers",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:login-and-dashboard",
+          "passed": true
+        },
+        {
+          "name": "mobile-menu",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:logout-and-anonymous-denial",
+          "passed": true
+        }
+      ],
+      "operationalWritesAttempted": false,
+      "filesUploaded": false,
+      "documentBytesRead": false,
+      "fullFunctionalValidation": false,
+      "url": "https://lavilli-control.vercel.app",
+      "requireDocuments": true,
+      "documentUploadCapability": true,
+      "passed": true
+    },
+    "ocr": {
+      "checkedAt": "2026-10-25T21:25:22.826Z",
+      "url": "https://lavilli-control.vercel.app",
+      "operationalWritesAttempted": false,
+      "realDocumentBytesRead": false,
+      "photoUploaded": false,
+      "qrPhoto": true,
+      "knownQRRegressionPattern": true,
+      "realLocalOCR": true,
+      "privatePhotoPostRequests": 0,
+      "externalResourceRequests": 0,
+      "pageErrors": 0,
+      "passed": true
+    }
   }
 }

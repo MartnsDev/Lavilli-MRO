@@ -1,3 +1,5 @@
+> Estado atual em 25/10/2026: câmera/OCR publicados, migration 009 aplicada com preservação conferida, upload habilitado e scanner local ativo. Ver [CAMERA_OCR_REPORT.md](CAMERA_OCR_REPORT.md) e [camera-verification.json](camera-verification.json). Os dados abaixo registram a primeira publicação e suas pendências históricas.
+
 > Atualização posterior: a correção de disponibilidade de documentos foi publicada e verificada. Veja [PART_DOCUMENT_VERIFICATION.md](PART_DOCUMENT_VERIFICATION.md) para a versão atual e seus limites. O registro abaixo descreve a primeira publicação.
 
 # Publicação e verificação — Lavilli Control

@@ -1,45 +1,28 @@
-> Estado atual da publicação: [relatório de deploy](docs/DEPLOYMENT_REPORT.md). Publicado com autorização em 24/10/2026; verificações abaixo de auditorias anteriores são históricas e não comprovam aplicação da migration 009 em produção.
+# Checklist de segurança — estado de 25/10/2026
 
-> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](docs/ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+Evidências: [CAMERA_OCR_REPORT](docs/CAMERA_OCR_REPORT.md), [camera-verification.json](docs/camera-verification.json) e [política de acesso](docs/ACCESS_POLICY.md). Não representa certificação de segurança.
 
-# Checklist de segurança
+- [x] Autorização expressa de publicação e de backup local/atualização do banco.
+- [x] Backup real cifrado, chave separada, ambos fora do Git/deploy.
+- [x] Restauração PostgreSQL 17 sem rede/portas e aplicação de 009 na cópia; preservação dos valores originais das 42 tabelas. Zero objetos privados na origem naquele instante.
+- [x] Migration 009 aplicada no projeto existente; oito anteriores preservadas e comparação remota de valores aprovada.
+- [x] RLS nas 42 tabelas, permissões de schema/tabelas/RPC e buckets privados rechecados.
+- [x] Sessões/cookies, Argon2id, revogação, limites persistentes e confirmação auditada de operações preservados.
+- [x] CSRF, payloads, idempotência, versões, concorrência e negação de acessos cobertos pela regressão isolada.
+- [x] Upload com hash/MIME/tamanho, quarentena, proxy privado e visualização somente depois de clean.
+- [x] Scanner real com assinaturas atuais, limites e falha fechada; foto local de ensaio liberada e EICAR bloqueado.
+- [x] Worker local ativo e status sanitizado; depende do computador ligado e da sessão deste usuário.
+- [x] QR/código de barras e OCR no navegador, sem enviar fotos a terceiros; PN/serial exigem revisão.
+- [x] Transição de atualização impede iniciar a próxima operação com a ficha antiga; teste com resposta RSC retida.
+- [x] 97 testes unitários, 207 integrados no CI final, baseline local de 204 e 30 cenários focados finais, build, TypeScript, lint e formatação aprovados.
+- [x] Verificação de dependências sem vulnerabilidades conhecidas e busca de padrões de credenciais no código.
+- [x] Verificação HTTPS de login dos dois mecânicos, cookies, dashboard, menu, logout, upload disponível e QR/OCR sintético, sem fixtures no banco real.
+- [ ] Validar câmera, foco, iluminação, leitura e download nos celulares físicos da equipe.
+- [ ] Garantir infraestrutura independente deste computador, com disponibilidade 24 horas, se a rotina exigir.
+- [ ] Configurar backup externo automático, retenção e custódia; comprovar RPO 24h/RTO 4h com um acervo real de documentos.
+- [ ] Configurar proteção de borda, monitoramento, incidentes e retenção dos eventos de acesso negado.
+- [ ] Validar serviços de e-mail/alertas externos; permanecem desativados.
+- [ ] Regularizar plano de hospedagem para uso comercial conforme política da Vercel. Nenhum upgrade foi contratado.
+- [ ] Obter aceite dos procedimentos técnicos, certificados, privacidade e módulos parciais descritos em KNOWN_LIMITATIONS.
 
-24/10/2026 — implementação local; produção não certificada.
-
-- [x] Documentos de requisitos lidos integralmente; projeto e repositório identificados.
-- [x] Banco remoto inspecionado apenas em leitura: 42 tabelas, oito migrations preservadas.
-- [x] Aparelhos legados não herdam confiança; registros preservados, nova autorização obrigatória.
-- [x] Autorização independente de dispositivo, uso único e expiração.
-- [x] PIN Argon2id; limite persistente e confirmação de operações.
-- [x] Aba visível sem interação solicita logout em 30 minutos; teste com relógio acelerado, cookie removido e API negada.
-- [x] Sessões vinculadas a dispositivo/credencial, inatividade, máximo e revogação.
-- [x] Elevação administrativa com código independente.
-- [x] RLS/grants/schema/defaults/RPC endurecidos na migration 009 local.
-- [x] Negação de CRUD/UPSERT nas 42 tabelas para anon/authenticated em banco descartável.
-- [x] 42 consultas anônimas remotas limit=0 negadas, sem ler dados.
-- [x] CSRF, payload efetivo, limites, erros e cookies malformados.
-- [x] CSP com nonce, cache privado e cabeçalhos.
-- [x] Proxy privado de documentos e quarentena obrigatória.
-- [x] Importação original preservada, ZIP limitado, CSV seguro e exportação auditada.
-- [x] Transações, versões, idempotência e três testes concorrentes SQL.
-- [x] Auditoria imutável no papel do app, responsabilidade declarada preservada.
-- [x] Cron com lease e segredo, e-mails desativados nos testes.
-- [x] Backup criptografado, teste de autenticação/tampering e dump/restore PostgreSQL.
-- [x] 176 testes integrados + seis regressões complementares aprovados; 177 casos distintos.
-- [x] 1.104 medições responsivas, dois temas, zero overflow da página/erros coletados.
-- [x] 43 testes unitários aprovados; npm audit sem vulnerabilidades conhecidas.
-- [x] Busca de quatro segredos reais em fontes/histórico/bundle sem exposição encontrada.
-- [x] Dry-run remoto: apenas 009 pendente, nenhuma migration aplicada.
-- [ ] Aprovar/aplicar migration 009 no projeto remoto após plano de backup e revisão.
-- [ ] Configurar scanner operacional/atualização de assinaturas e testar malware inofensivo de ensaio em homologação.
-- [ ] Configurar backup externo automatizado e retenção; guardar chave separada.
-- [ ] Comprovar recuperação integral banco + Storage + aplicação dentro de RPO 24h/RTO 4h.
-- [ ] Autorizar backend isolado de Preview; configurar proteção Vercel e variáveis por ambiente.
-- [ ] Validar envio real, domínio de e-mail, reexecução de jobs e alertas externos em homologação.
-- [ ] Substituir credencial compartilhada anteriormente exposta, sem publicá-la em relatórios.
-- [ ] Validar retenção, incidentes, responsáveis, monitoramento e obrigações de privacidade com a Lavilli.
-- [ ] Autorização explícita do proprietário para produção.
-
-Resultados de navegador e decisão de release: [RELEASE_READINESS](docs/RELEASE_READINESS.md) e [RESPONSIVE_TEST_REPORT](RESPONSIVE_TEST_REPORT.md). Itens pendentes impedem declarar produção segura.
-
-- [ ] Validar os recursos parciais de produto e os procedimentos técnicos, inclusive conferência de certificados de calibração, antes do aceite de produção.
+A senha compartilhada e os nomes declarados foram mantidos por determinação do proprietário. Não dão atribuição individual forte nem segundo fator. O ambiente online separado de testes foi cancelado pelo proprietário; CI e testes locais continuam isolados do backend real.

@@ -1,3 +1,15 @@
+# Estado verificado em 25/10/2026
+
+A migration 009 foi aplicada com autorização explícita, após backup AES-256-GCM e restauração PostgreSQL 17 isolada. As oito migrations anteriores e os valores das colunas originais das 42 tabelas foram preservados. RLS/permissões remotas rechecados; upload privado habilitado, quarentena e proxy mantidos. Evidências atuais: [relatório de câmera](docs/CAMERA_OCR_REPORT.md) e [resultados sanitizados](docs/camera-verification.json).
+
+97 testes unitários e 207 integrados no CI final aprovados; baseline local de 204 e 30 cenários focados finais de câmera/leitura também passaram. Teste remoto final passou para ambos os mecânicos e comprovou QR/OCR com imagem sintética no navegador, sem upload nem escrita operacional de ensaio. O ClamAV real aceitou foto de teste, conferiu hash e registrou o parecer no banco local; EICAR foi bloqueado. O worker está ativo neste computador, com definições atualizadas, mas não oferece disponibilidade 24 horas quando este computador ou a sessão do usuário estiverem desligados.
+
+O acesso continua por nome e senha compartilhada, por determinação do proprietário, conforme [ACCESS_POLICY](docs/ACCESS_POLICY.md). Não existe segundo fator humano ou código administrativo independente. A autorização interna de sessão/dispositivo não deve ser apresentada como autenticação de dois fatores. Identidade individual forte, senha compartilhada de baixa entropia, proteção de borda, monitoramento, backup offsite/retention e recuperação de acervo real continuam riscos/pendências. Não foi declarada certificação ou ausência de vulnerabilidades.
+
+## Registro histórico de 24/10/2026
+
+As conclusões e pendências abaixo são históricas. Em caso de divergência, prevalecem o estado atual acima e as evidências datadas.
+
 > Estado atual da publicação: [relatório de deploy](docs/DEPLOYMENT_REPORT.md). Publicado com autorização em 24/10/2026; verificações abaixo de auditorias anteriores são históricas e não comprovam aplicação da migration 009 em produção.
 
 > Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](docs/ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.

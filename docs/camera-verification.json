@@ -1,0 +1,205 @@
+{
+  "runtimeCommit": "c53290943a2dd95053b7b06f13afe46328d371dc",
+  "ci": {
+    "id": 40235110852,
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "c53290943a2dd95053b7b06f13afe46328d371dc",
+    "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40235110852",
+    "jobs": [
+      {
+        "name": "application",
+        "conclusion": "success"
+      },
+      {
+        "name": "database",
+        "conclusion": "success"
+      },
+      {
+        "name": "functional",
+        "conclusion": "success"
+      }
+    ],
+    "integratedPassed": 207,
+    "unitPassed": 97
+  },
+  "localIntegratedBaselineCommit": "49effd37010851a67ed6b6940596196c9df0c09a",
+  "finalFocusedCameraPassed": 30,
+  "secretExposureCheck": {
+    "actual_secret_values_checked": 4,
+    "history": "checked",
+    "findings": []
+  },
+  "localUnitPassed": 97,
+  "localIntegratedPassed": 204,
+  "focusedCriticalPassed": 9,
+  "backupRestore": {
+    "checkedAt": "2026-10-25T19:27:36.637Z",
+    "encryptedBackupValidated": true,
+    "isolatedRestore": true,
+    "network": "none",
+    "publishedPorts": false,
+    "publicTables": 42,
+    "originalRowsAndValuesPreserved": true,
+    "migration009DryRunPassed": true,
+    "rlsVerified": true,
+    "privateObjects": 0,
+    "sourceDatabaseModified": false
+  },
+  "migrationProduction": {
+    "originalColumnsAndValuesPreserved": true,
+    "checkedTables": 42,
+    "security": [
+      {
+        "public_tables": 42,
+        "rls_tables": 42,
+        "anon_usage": false,
+        "authenticated_usage": false,
+        "anon_private_usage": false,
+        "authenticated_private_usage": false,
+        "client_table_grants": 0,
+        "reserve_upload_available": true,
+        "document_scan_available": true,
+        "legacy_operation_executable": false,
+        "app_buckets": 2,
+        "public_app_buckets": 0
+      }
+    ],
+    "migrationVersions": [
+      "202610230001",
+      "202610230002",
+      "202610230003",
+      "202610230004",
+      "202610230005",
+      "202610230006",
+      "202610240007",
+      "202610240008",
+      "202610240009"
+    ]
+  },
+  "deployment": {
+    "checkedAt": "2026-10-25T21:23:36.100Z",
+    "checks": [
+      {
+        "name": "César:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "César:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "document-upload-capability",
+        "passed": true,
+        "status": 400
+      },
+      {
+        "name": "César:logout-and-anonymous-denial",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-page-and-headers",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:login-and-dashboard",
+        "passed": true
+      },
+      {
+        "name": "mobile-menu",
+        "passed": true
+      },
+      {
+        "name": "Maranhão:logout-and-anonymous-denial",
+        "passed": true
+      }
+    ],
+    "operationalWritesAttempted": false,
+    "filesUploaded": false,
+    "documentBytesRead": false,
+    "fullFunctionalValidation": false,
+    "url": "https://lavilli-control.vercel.app",
+    "requireDocuments": true,
+    "documentUploadCapability": true,
+    "passed": true
+  },
+  "productionOCR": {
+    "checkedAt": "2026-10-25T21:25:22.826Z",
+    "url": "https://lavilli-control.vercel.app",
+    "operationalWritesAttempted": false,
+    "realDocumentBytesRead": false,
+    "photoUploaded": false,
+    "qrPhoto": true,
+    "knownQRRegressionPattern": true,
+    "realLocalOCR": true,
+    "privatePhotoPostRequests": 0,
+    "externalResourceRequests": 0,
+    "pageErrors": 0,
+    "passed": true
+  },
+  "vercel": {
+    "id": "dpl_AD9TGwEkTcF4o4vV9tf5rMFNskCh",
+    "projectId": "prj_spaV203Tb9YLtHAfz9a8cL4t0VZK",
+    "readyState": "READY",
+    "target": "production",
+    "productionUrl": "https://lavilli-control.vercel.app",
+    "sourceGitCommit": "c53290943a2dd95053b7b06f13afe46328d371dc",
+    "checkedAt": "2026-10-25T21:27:55.759Z"
+  },
+  "storageTechnicalProbe": {
+    "checkedAt": "2026-10-25T20:56:31.379Z",
+    "temporaryTechnicalObjectOnly": true,
+    "applicationBusinessRowsCreated": false,
+    "existingObjectsOverwritten": false,
+    "privateCustomerBytesRead": false,
+    "uploadDownloadIntegrity": true,
+    "anonymousDenied": true,
+    "passed": true,
+    "ownProbeRemoved": true
+  },
+  "localRealScannerPipeline": {
+    "checkedAt": "2026-10-25T21:39:34.195Z",
+    "isolatedLocalBackend": true,
+    "realPhotoFromIsolatedUpload": true,
+    "storageDownloadAndHashCheck": true,
+    "realClamAVScan": true,
+    "scanVerdictRecorded": true,
+    "productionWrites": false,
+    "passed": true
+  },
+  "workerObserved": {
+    "checkedAt": "2026-10-25T21:43:11.715Z",
+    "ready": true,
+    "pendingInBatch": 0,
+    "completed": 0,
+    "failed": 0
+  },
+  "workerService": {
+    "NoNewPrivileges": "yes",
+    "ActiveState": "active",
+    "SubState": "running",
+    "UnitFileState": "enabled",
+    "runtimePathMatched": true
+  },
+  "deploymentCI": {
+    "id": 40235422736,
+    "conclusion": "success",
+    "head_sha": "c53290943a2dd95053b7b06f13afe46328d371dc",
+    "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40235422736"
+  },
+  "physicalPhoneCameraValidated": false,
+  "fullProductionBusinessWriteValidation": false,
+  "workerRuntime": {
+    "version": "v22.23.4",
+    "source": "https://nodejs.org/dist/latest-v22.x/",
+    "sha256Verified": true,
+    "defaultNodeChanged": false
+  },
+  "realAntivirusNegativeTest": {
+    "checkedAt": "2026-10-25T21:41:42.316Z",
+    "runtime": "v22.23.4",
+    "eicarBlocked": true,
+    "definitionsDate": "2026-10-25T06:24:12.000Z",
+    "productionFilesUsed": false
+  }
+}

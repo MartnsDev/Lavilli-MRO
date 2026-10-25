@@ -1,3 +1,5 @@
+> Ensaio real em 25/10/2026: backup local cifrado criado com autorização, restauração PostgreSQL 17 isolada aprovada e valores originais das 42 tabelas preservados após 009. Existiam zero objetos privados no instante do backup. Isso não comprova recuperação de um acervo real, backup externo ou SLA. Ver [CAMERA_OCR_REPORT](CAMERA_OCR_REPORT.md).
+
 # Backup e teste de restauração
 
 O backup do banco **não contém os bytes dos arquivos do Supabase Storage**. Mantenha cópias independentes do esquema/dados operacionais e dos objetos, em armazenamento separado, cifrado e com acesso restrito. Defina RPO/RTO, retenção e responsável pela restauração com a organização. Não presuma PITR ou retenção do plano contratado.

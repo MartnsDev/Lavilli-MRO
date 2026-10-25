@@ -28,3 +28,17 @@ PDF recém-enviado permanece bloqueado até scanner operacional. Não clicar com
 ## Plano de contingência
 
 Executar localmente com banco e build já preparados; internet não é necessária depois das dependências e imagens locais instaladas. Manter capturas de `test-results/visual/after` para explicar telas se equipamento falhar, deixando claro que captura não comprova operação ao vivo. Não apontar fallback para produção nem exibir credenciais durante projeção.
+
+## Câmera e documentos — percurso adicional
+
+No celular, abrir `https://lavilli-control.vercel.app/scan` em HTTPS e entrar escolhendo César ou Maranhão, com a senha já combinada. A permissão da câmera é a solicitação normal do navegador; não há código de autorização de aparelho.
+
+1. Ler uma etiqueta do sistema ou um código de barras. Se a câmera for negada, mostrar a leitura por foto e a busca manual.
+2. Fotografar a identificação ou documento de uma peça e aguardar a leitura de PN e serial. Conferir os dois campos com o original, especialmente 0/O e 1/I; corrigir antes de continuar.
+3. Usar os campos no cadastro. Um PN existente vem selecionado; para PN novo, cadastrar primeiro o catálogo e continuar com o serial preservado. Informar a localização real e manter condição/documentação pendentes até a conferência técnica.
+4. Na ficha da unidade, usar **Foto e documento desta peça**: cadastrar o documento, confirmar o vínculo e selecionar **Usar foto da leitura** ou tirar outra foto. Confirmar o envio privado.
+5. Abrir o documento e suas versões. Enquanto aguarda o antivírus, o arquivo permanece bloqueado. Depois de liberado, mostrar a foto verificada ou baixar pelo acesso autenticado.
+
+Para apenas demonstrar, é possível parar após a leitura/revisão, sem confirmar cadastros no banco real. Usar o ambiente local isolado dos cenários anteriores para exemplos fictícios completos; o ambiente online separado de testes foi cancelado. Na produção, salvar somente peças/documentos reais autorizados.
+
+Antes da apresentação, o responsável pela configuração deve confirmar que o computador do worker está ligado e `lavilli-document-scanner.service` está ativo. O serviço inicia automaticamente com a sessão deste usuário; ele depende deste computador ligado e da sessão ativa. O primeiro OCR pode demorar pelo carregamento dos modelos; ensaiar a câmera e a conexão no celular físico da equipe. Não prometer precisão total nem disponibilidade do scanner quando esse computador estiver desligado.

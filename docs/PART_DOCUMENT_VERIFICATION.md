@@ -1,3 +1,5 @@
+> Atualização posterior de 25/10/2026: câmera/OCR publicados, migration 009 aplicada e upload privado habilitado. Testes e limites atuais em [CAMERA_OCR_REPORT](CAMERA_OCR_REPORT.md) e [camera-verification.json](camera-verification.json). O texto abaixo é histórico.
+
 # Verificação de peça, serial e documento
 
 24/10/2026, America/Sao_Paulo. Escopo: cadastro por Part Number (PN), unidade por Serial Number (SN), vínculo do documento, envio, quarentena e download privado.

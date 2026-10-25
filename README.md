@@ -73,3 +73,9 @@ A build e os testes locais são a referência de validação; integração real 
 Documentação: [arquitetura](docs/architecture.md), [banco](docs/database.md), [segurança](docs/security.md), [operação](docs/operations.md), [decisões](docs/decisions.md), [backup e restauração](docs/backup-restore.md), [manual](docs/manual-usuario.md), [cenários de teste](docs/test-matrix.md), [versões instaladas](docs/versions.md).
 
 Configuração do projeto Supabase e verificações remotas: [status da infraestrutura](docs/infrastructure-setup.md).
+
+## Fotos e leitura no celular
+
+Em `/scan`, leia QR/código de barras ou fotografe o documento para sugerir PN e serial. Confira os campos, cadastre a unidade e use **Foto e documento desta peça** para criar/vincular o documento e confirmar o envio privado. A foto da leitura pode ser reaproveitada sem copiar identificadores.
+
+O arquivo fica em quarentena até o ClamAV liberar. O worker atual roda neste computador e exige que ele permaneça ligado; depois de reboot, o serviço inicia na sessão deste usuário. Detalhes, testes, backup e limites: [CAMERA_OCR_REPORT](docs/CAMERA_OCR_REPORT.md).
