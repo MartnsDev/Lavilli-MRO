@@ -108,5 +108,63 @@
     "blocker": "Two active Free Supabase project slots are occupied; awaiting separate backend decision"
   },
   "vercelRepositoryDispatchEnabled": true,
-  "vercelCliEventDeliveryProved": false
+  "vercelCliEventDeliveryProved": false,
+  "publishedCheckedExecution": {
+    "commit": "4167526c3ca0237aaad71d6b77525817985968ba",
+    "deployment": "dpl_B5WpwAwX41rBhzAYRLuuvEkKutty",
+    "state": "READY",
+    "commandExitCode": 1,
+    "automaticVerification": {
+      "checkedAt": "2026-10-25T01:45:36.647Z",
+      "checks": [
+        {
+          "name": "César:login-page-and-headers",
+          "passed": true
+        },
+        {
+          "name": "César:login-and-dashboard",
+          "passed": true
+        },
+        {
+          "name": "document-upload-capability",
+          "passed": false,
+          "status": 503
+        },
+        {
+          "name": "César:logout-and-anonymous-denial",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:login-page-and-headers",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:login-and-dashboard",
+          "passed": true
+        },
+        {
+          "name": "mobile-menu",
+          "passed": true
+        },
+        {
+          "name": "Maranhão:logout-and-anonymous-denial",
+          "passed": true
+        }
+      ],
+      "operationalWritesAttempted": false,
+      "filesUploaded": false,
+      "documentBytesRead": false,
+      "fullFunctionalValidation": false,
+      "url": "https://lavilli-control.vercel.app",
+      "requireDocuments": true,
+      "documentUploadCapability": false,
+      "passed": false,
+      "blocker": "Document upload is unavailable on this deployment"
+    }
+  },
+  "latestCi": {
+    "commit": "4167526c3ca0237aaad71d6b77525817985968ba",
+    "url": "https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40151725985",
+    "lastObservedStatus": "in_progress"
+  }
 }

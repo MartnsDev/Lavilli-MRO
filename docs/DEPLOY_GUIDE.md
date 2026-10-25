@@ -31,7 +31,7 @@ Vercel não substitui worker ClamAV nem backup externo. RPO 24h/RTO 4h são meta
 1. Trabalhar apenas no repositório autorizado e verificar o diff; nunca enviar `.env*`, `.local-secrets`, backups ou chaves.
 2. Executar verificações locais, inclusive `npm run test:full` com Supabase isolado. Confirmar compatibilidade com as migrations realmente aplicadas.
 3. Verificar `.vercel/project.json` local apontando ao projeto/equipe acima. Não versionar esse arquivo.
-4. Com publicação autorizada, executar `VERCEL_TELEMETRY_DISABLED=1 npx --yes vercel@65.2.0 deploy --prod --yes --scope matheus-s-projects-3ebcc424`.
+4. Com publicação autorizada e fonte privada da senha configurada, executar `npm run deploy:checked` no checkout revisado. O comando valida o repositório/binding, publica e roda o teste HTTPS. Uma reprovação do teste não desfaz a publicação; consultar DEPLOY_TESTS.md.
 5. Verificar estado READY e alias principal. Testar nome+senha no domínio principal, dashboard, saúde autenticada, cookies, navegação e logout; não inserir fixtures reais.
 6. Registrar commit, deployment e resultados. Não promover automaticamente um deployment incompatível nem alterar cobrança.
 

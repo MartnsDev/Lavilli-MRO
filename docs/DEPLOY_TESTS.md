@@ -56,3 +56,9 @@ Também foi encontrada uma falha anterior de CI: a instalação do cliente Postg
 - CI completa do commit `0a9a52a` aprovada conforme link acima; a proteção de demo remota adicionada depois foi validada pelos testes locais descritos. Não atribuir os resultados desse commit a código posterior sem nova execução.
 
 O estado da futura URL isolada está em [TEST_ENVIRONMENT.md](TEST_ENVIRONMENT.md). Os relatórios JSON sanitizados desta rodada estão em [deploy-tests-verification.json](deploy-tests-verification.json).
+
+### Comando completo comprovado
+
+`deploy:checked` foi executado com publicação real do commit `4167526c3ca0237aaad71d6b77525817985968ba`: deployment `dpl_B5WpwAwX41rBhzAYRLuuvEkKutty`, READY, domínio principal atribuído. O teste iniciou automaticamente após a CLI; login dos dois mecânicos, dashboard, cookies, menu e logout passaram. O comando terminou com status 1 porque o upload continua retornando 503, sem enviar arquivos ou gravar registros operacionais. A publicação ocorreu; o status 1 representa reprovação da verificação posterior, não rollback ou erro de build.
+
+A CI completa desse commit foi acionada em [40151725985](https://github.com/MartnsDev/Lavilli-MRO/actions/runs/40151725985); estava em andamento ao registrar este resultado. A CI anterior aprovada e os testes locais atuais continuam identificados separadamente acima.
