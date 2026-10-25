@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { session, limit } from "@/lib/server/auth";
-import { db, rpc } from "@/lib/server/db";
+import { db, rpc, securityBoundaryReady } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { createHash } from "node:crypto";
 export async function GET(
@@ -12,6 +12,7 @@ export async function GET(
     const s = await session();
     await limit("download", s.device_id);
     const id = z.uuid().parse((await params).id);
+    if (!(await securityBoundaryReady())) throw Error("DOCUMENTS_UNAVAILABLE");
     const { data: v, error } = await db()
       .from("document_versions")
       .select("object_path,mime_type,size_bytes,sha256,scan_status")

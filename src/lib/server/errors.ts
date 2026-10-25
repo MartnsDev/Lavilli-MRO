@@ -11,6 +11,10 @@ export async function failure(error: unknown) {
       "Confirme o acesso administrativo antes de continuar.",
     ],
     DOCUMENT_PENDING: [403, "Arquivo aguardando verificação de segurança."],
+    DOCUMENTS_UNAVAILABLE: [
+      503,
+      "O envio e o download de arquivos ainda não estão disponíveis neste ambiente.",
+    ],
     PAYLOAD_TOO_LARGE: [413, "O envio excedeu o tamanho permitido."],
     FORBIDDEN: [403, "Operação não autorizada."],
     CSRF: [403, "Origem da requisição inválida."],

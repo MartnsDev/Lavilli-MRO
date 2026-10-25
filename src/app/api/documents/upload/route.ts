@@ -2,7 +2,7 @@ import { formBody } from "@/lib/server/request";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { session, sameOrigin, limit } from "@/lib/server/auth";
-import { db, rpc } from "@/lib/server/db";
+import { db, rpc, securityBoundaryReady } from "@/lib/server/db";
 import { failure } from "@/lib/server/errors";
 import { parseCommand } from "@/lib/domain/commands";
 import { digest, operationHash, token } from "@/lib/domain/security";
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     sameOrigin(request);
     const s = await session();
     await limit("upload", s.device_id);
+    if (!(await securityBoundaryReady())) throw Error("DOCUMENTS_UNAVAILABLE");
     if (Number(request.headers.get("content-length")) > 4500000)
       throw new Error("INVALID_OPERATION");
     const form = await formBody(request, 4500000);

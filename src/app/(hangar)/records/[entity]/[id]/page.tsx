@@ -170,7 +170,14 @@ export default async function Detail({
       {entity === "documents" && (
         <section className="card">
           <h2>Arquivos e versões privadas</h2>
-          <DocumentUpload documentId={id} />
+          {hardened ? (
+            <DocumentUpload documentId={id} />
+          ) : (
+            <p className="notice" role="status">
+              O envio de arquivos ainda não está disponível neste ambiente. Você
+              pode cadastrar a referência do documento e vinculá-la à peça.
+            </p>
+          )}
           <p className="fine-print">
             Novos arquivos aguardam verificação de segurança. O download fica
             disponível somente após a liberação.

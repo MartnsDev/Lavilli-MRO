@@ -405,6 +405,97 @@ test("document upload and version download work through the UI", async ({
     ).toBe(200);
   }
 });
+test("a part keeps its PN and serial with a private document linked to that specific unit", async ({
+  page,
+}) => {
+  const serial = tag() + "-SN";
+  const part = await create(page.request, "part_instances", {
+    catalog_id: f.catalog.id,
+    serial_number: serial,
+    location_id: f.location.id,
+    condition: "pending",
+    documentation: "pending",
+  });
+  const sibling = await create(page.request, "part_instances", {
+    catalog_id: f.catalog.id,
+    serial_number: serial + "-OTHER",
+    location_id: f.location.id,
+    condition: "pending",
+    documentation: "pending",
+  });
+  const document = await create(page.request, "documents", {
+    name: serial + " certificado",
+    category: "internal",
+  });
+  await create(page.request, "document_links", {
+    document_id: document.id,
+    entity: "part_instances",
+    entity_id: part.id,
+  });
+  await page.goto("/records/part_instances/" + part.id);
+  await expect(
+    page.getByRole("heading", { name: serial, exact: true }),
+  ).toBeVisible();
+  const link = page.getByRole("link", { name: document.name, exact: true });
+  await expect(link).toHaveAttribute(
+    "href",
+    "/records/documents/" + document.id,
+  );
+  await link.click();
+  const { PDFDocument } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+  pdf.addPage();
+  const bytes = Buffer.from(await pdf.save());
+  await page
+    .getByLabel("Nova versão (PDF, PNG ou JPEG; até 4 MB)")
+    .setInputFiles({
+      name: "certificado.pdf",
+      mimeType: "application/pdf",
+      buffer: bytes,
+    });
+  await page.getByRole("button", { name: "Adicionar versão privada" }).click();
+  await confirm(page.getByRole("dialog"));
+  await expect(
+    page.getByText("Aguardando verificação de segurança", { exact: true }),
+  ).toBeVisible();
+  const db = admin();
+  const { data: version, error } = await db
+    .from("document_versions")
+    .select("id,sha256")
+    .eq("document_id", document.id)
+    .single();
+  expect(error).toBeNull();
+  expect(
+    (await page.request.get("/api/documents/" + version!.id)).status(),
+  ).toBe(403);
+  // A simulated trusted verdict validates the flow only in the isolated test database.
+  const verdict = await db.rpc("record_document_scan", {
+    p_version: version!.id,
+    p_sha: version!.sha256,
+    p_clean: true,
+  });
+  expect(verdict.error).toBeNull();
+  await page.reload();
+  await expect(page.getByRole("link", { name: /Versão 1/ })).toBeVisible();
+  const download = await page.request.get("/api/documents/" + version!.id);
+  expect(download.status()).toBe(200);
+  expect(await download.body()).toEqual(bytes);
+  const stored = await db
+    .from("part_instances")
+    .select("catalog_id,serial_number,documentation")
+    .eq("id", part.id)
+    .single();
+  expect(stored.error).toBeNull();
+  expect(stored.data).toEqual({
+    catalog_id: f.catalog.id,
+    serial_number: serial,
+    documentation: "pending",
+  });
+  await page.goto("/records/part_instances/" + sibling.id);
+  await expect(
+    page.getByRole("link", { name: document.name, exact: true }),
+  ).toHaveCount(0);
+});
 test("CSV import can be previewed, mapped and confirmed through the UI", async ({
   page,
 }) => {
