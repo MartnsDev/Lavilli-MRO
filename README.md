@@ -1,8 +1,8 @@
 # Lavilli Control
 
-Implementação em revisão; **não publicado em produção**. Relatórios atuais: [segurança](SECURITY_AUDIT.md), [checklist](SECURITY_CHECKLIST.md), [release](docs/RELEASE_READINESS.md), [visual](VISUAL_AUDIT.md), [responsividade](RESPONSIVE_TEST_REPORT.md), [deploy](docs/DEPLOY_GUIDE.md) e [apresentação](docs/DEMO_LAVILLI_JET.md).
+Publicado com autorização em **https://lavilli-control.vercel.app**. Acesso e navegação verificados em HTTPS; limitações de operação remota documentadas no [relatório de publicação](docs/DEPLOYMENT_REPORT.md). Relatórios atuais: [segurança](SECURITY_AUDIT.md), [checklist](SECURITY_CHECKLIST.md), [release](docs/RELEASE_READINESS.md), [visual](VISUAL_AUDIT.md), [responsividade](RESPONSIVE_TEST_REPORT.md), [deploy](docs/DEPLOY_GUIDE.md) e [apresentação](docs/DEMO_LAVILLI_JET.md).
 
-Demo local: após `npm run test:full`, executar `npm run demo:prepare` e depois `npm run demo:local`. Dados fictícios, e-mail desativado e backend obrigatoriamente local. Credenciais temporárias em arquivo privado, nunca no README. Auto deploy Git Vercel desativado em vercel.json; publicação exige autorização explícita.
+Demo local: após `npm run test:full`, executar `npm run demo:prepare` e depois `npm run demo:local`. Dados fictícios, e-mail desativado e backend obrigatoriamente local. Senha da demo em arquivo privado, persistida entre reinícios, nunca no README. Auto deploy Git Vercel desativado em vercel.json; publicação exige autorização explícita.
 
 ## Aplicação
 
@@ -37,7 +37,7 @@ npm run test:ui
 RUN_DATABASE_TESTS=1 PGHOST=localhost PGPORT=55439 npm run test:db
 ```
 
-O teste de banco cria e remove apenas bancos com prefixo `lavilli_test_`. O teste de Storage real, de OTP e de e-mail exige um projeto Supabase de homologação e configuração Resend. Nenhum e-mail foi enviado nesta implementação.
+O teste de banco cria e remove apenas bancos com prefixo `lavilli_test_`. Os testes automatizados de Storage usam o Supabase local isolado. Entrega real de e-mail exige provedor e domínio de homologação; nenhum e-mail foi enviado nesta implementação. O fluxo vigente de acesso não usa OTP.
 
 ## Verificação funcional completa
 

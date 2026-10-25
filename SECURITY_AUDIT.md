@@ -1,3 +1,5 @@
+> Estado atual da publicação: [relatório de deploy](docs/DEPLOYMENT_REPORT.md). Publicado com autorização em 24/10/2026; verificações abaixo de auditorias anteriores são históricas e não comprovam aplicação da migration 009 em produção.
+
 > Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](docs/ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
 
 # Auditoria de segurança — Lavilli Control

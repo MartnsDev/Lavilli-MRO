@@ -1,36 +1,40 @@
-> Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
+# Deploy Vercel
 
-# Preparação do deploy Vercel
+Publicação autorizada pelo proprietário e concluída em 24/10/2026 (America/Sao_Paulo). URL: **https://lavilli-control.vercel.app**. Evidências e limites em [DEPLOYMENT_REPORT.md](DEPLOYMENT_REPORT.md).
 
-Sem publicação autorizada. Repositório exclusivo: MartnsDev/Lavilli-MRO. Nunca enviar esta aplicação a outro repositório. Publicar primeiro uma branch de revisão; não atualizar main automaticamente, pois uma integração existente pode disparar produção.
+## Projeto e versão
 
-## Ambientes
+- Repositório exclusivo: `MartnsDev/Lavilli-MRO`.
+- Projeto Vercel: `lavilli-control`, equipe `matheus-s-projects-3ebcc424`.
+- Código publicado: `a3fcb179b05f07231d173f9bddf55a8ebcfd3ae4`.
+- Node `22.x`, Next.js, região `iad1`.
+- Instalação: `npm ci --legacy-peer-deps`; build: `npm run build`.
+- Publicação manual via CLI; auto deploy Git continua desativado em `vercel.json`. Preview desativado e sem credenciais de produção.
+- Plano existente Hobby, sem upgrade ou cobrança ativada. Uso comercial exige Pro/Enterprise segundo as [regras da Vercel](https://vercel.com/docs/limits/fair-use-guidelines); regularizar o plano antes do uso empresarial.
 
-| Ambiente    | Backend                          | Acesso                                                                                    |
-| ----------- | -------------------------------- | ----------------------------------------------------------------------------------------- |
-| Development | Supabase local                   | APP_MODE=demo/test somente loopback                                                       |
-| Preview     | Projeto isolado a ser autorizado | Proteção de deployment Vercel obrigatória; PREVIEW_PROTECTED=true somente após configurar |
-| Production  | Projeto Supabase existente       | Somente após aprovação explícita e testes de homologação                                  |
+## Variáveis de produção
 
-Conta pessoal e uma equipe Vercel consultadas em leitura com sucesso; duas páginas de projetos não retornaram nome Lavilli nem vínculo com Lavilli-MRO. Não criar implantação apontando Preview ao backend real. APP_MODE=demo/test bloqueia URL remota de banco por construção; para uma futura homologação remota, provisionar e revisar um modo/configuração próprios antes de alterar essa proteção.
+Configuradas criptografadas na Vercel: `APP_URL`, `APP_MODE`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `PIN_HASH`, `SESSION_SECRET`, `CRON_SECRET`, `EMAIL_MODE`, `PREVIEW_PROTECTED`. Nenhum valor secreto consta deste relatório ou do Git. `APP_URL` corresponde exatamente ao domínio acima; modo normal, e-mail desativado. Segredos de sessão e cron independentes. Não usar prefixo `NEXT_PUBLIC_` para segredos.
 
-## Configuração a realizar pelo proprietário
+O login é nome (César/Maranhão) e senha geral configurada pelo proprietário. Sem códigos temporários, autorização manual de aparelho ou conta Vercel no domínio principal. Consulte [ACCESS_POLICY.md](ACCESS_POLICY.md).
 
-Framework Next.js, Node 20+, build `npm run build`, instalar com `npm ci --legacy-peer-deps`. Região sugerida iad1 para banco existente us-east-1. Conferir região do backend isolado antes do Preview. Não adicionar cron até testar provedor, lease e cron secret. `vercel.json` já desativa todos os auto deploys Git (`git.deploymentEnabled=false`) e define iad1/build; manter o bloqueio também na integração. não confiar apenas em branch naming.
+## Banco e recursos pendentes
 
-Variáveis exclusivas por ambiente em `.env.example`: APP_URL exata HTTPS, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PIN_HASH portável, SESSION_SECRET >=32 caracteres aleatórios, CRON_SECRET independente, EMAIL_MODE; RESEND_API_KEY/EMAIL_FROM apenas se configurados. Não usar NEXT_PUBLIC_ para segredo. PREVIEW_PROTECTED não ativa proteção Vercel: é confirmação operacional e o servidor recusa preview sem ela. Configurar proteção real no painel.
+O mesmo Supabase existente é usado. Não houve aplicação de migration, reset, seed, exportação de backup real ou alteração de registros operacionais. Login/logout registram sessões e eventos normais de acesso. As oito migrations remotas existentes foram preservadas. A migration 009 continua pendente; a versão publicada possui compatibilidade explícita com o schema anterior para acesso e operações básicas. Não presumir que todos os recursos da migration 009 estão disponíveis remotamente.
 
-1. Dry-run já executado em 24/10/2026: somente 202610240009_security_boundary.sql pendente, nenhuma aplicada. Antes da promoção, revisar novamente diff/migration 009, comparar oito migrations existentes e executar `supabase db push --dry-run --linked` em estação autorizada. Dry-run não autoriza aplicação.
-2. Fazer backup criptografado e verificar restauração em ambiente isolado, com Storage.
-3. Aprovar migration remota e janela. Aplicar antes do código dependente; não fazer reset/seed/delete em produção.
-4. Aparelhos legados precisam de nova autorização independente; registros são preservados e deixam de conceder acesso por padrão. Gerar códigos de aparelho com `npm run security:grant`; entregar arquivo privado por canal administrativo. Códigos expiram em 15 minutos. Para administração: `npm run security:grant -- --admin`.
-5. Criar Preview protegido com backend isolado; executar SMOKE_TESTS.md e verificar cookies __Host-/Secure, CSP, proxy, scanner e revogação em HTTPS real.
-6. Registrar URL, commit, região e resultados. Somente depois solicitar autorização explícita para promover produção.
+Importações endurecidas, scanner/quarentena e jobs com lease exigem conclusão da infraestrutura/migration; scanner, e-mail e cron não foram ativados. Antes de qualquer migration remota: revisar diff, autorizar backup privado e validar restauração isolada banco+Storage, depois aprovar a aplicação. Não executar testes destrutivos no backend real.
 
-Vercel não executa o scanner ClamAV instalado no sistema nem deve guardar chaves de backup em filesystem efêmero; executar scanner/backup em worker confiável separado. Não ativar cobrança ou upgrade automaticamente.
+Vercel não substitui worker ClamAV nem backup externo. RPO 24h/RTO 4h são metas propostas, sem SLA comprovado. Veja [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md).
 
-Referência de configuração: [Vercel Git Configuration](https://vercel.com/docs/project-configuration/git-configuration).
+## Publicar uma atualização
 
-## Rotação de credenciais
+1. Trabalhar apenas no repositório autorizado e verificar o diff; nunca enviar `.env*`, `.local-secrets`, backups ou chaves.
+2. Executar verificações locais, inclusive `npm run test:full` com Supabase isolado. Confirmar compatibilidade com as migrations realmente aplicadas.
+3. Verificar `.vercel/project.json` local apontando ao projeto/equipe acima. Não versionar esse arquivo.
+4. Com publicação autorizada, executar `VERCEL_TELEMETRY_DISABLED=1 npx --yes vercel@65.2.0 deploy --prod --yes --scope matheus-s-projects-3ebcc424`.
+5. Verificar estado READY e alias principal. Testar nome+senha no domínio principal, dashboard, saúde autenticada, cookies, navegação e logout; não inserir fixtures reais.
+6. Registrar commit, deployment e resultados. Não promover automaticamente um deployment incompatível nem alterar cobrança.
 
-Antes de alterar PIN_HASH/SESSION_SECRET, elevar administração e revogar todas as sessões persistidas em Segurança. Promover a configuração de forma atômica, retirar acesso a deployments antigos e verificar rejeição dos cookies antigos. A versão da credencial é comparada com o runtime; alterar variáveis em uma única instância não substitui revogação persistente e atualização de todos os runtimes. Revogar dispositivos e emitir novos códigos quando houver suspeita de comprometimento. Não registrar hashes, PIN ou segredos em relatórios.
+## Rotação e recuperação
+
+Alterar senha pelo processo privado de configuração; não salvar PIN em documentação. Atualizar hash e segredos de forma coordenada, revogar sessões conforme [ACCESS_POLICY.md](ACCESS_POLICY.md) e verificar rejeição de sessões antigas. Nunca reativar uma implantação com credenciais antigas como atalho de rollback. Veja [ROLLBACK.md](ROLLBACK.md).

@@ -1,0 +1,52 @@
+{
+  "url": "https://lavilli-control.vercel.app",
+  "checkedAt": "2026-10-25T00:34:26.173Z",
+  "businessWrites": false,
+  "actors": [
+    {
+      "name": "César",
+      "login": true,
+      "dashboard": true,
+      "databaseHealth": true,
+      "secureCookies": true,
+      "logout": true,
+      "mobileMenu": false,
+      "routes": [
+        "/dashboard",
+        "/scan",
+        "/records/part_catalog",
+        "/records/stock_lots",
+        "/records/locations",
+        "/records/tools",
+        "/records/aircraft",
+        "/records/maintenance_tasks"
+      ]
+    },
+    {
+      "name": "Maranhão",
+      "login": true,
+      "dashboard": true,
+      "databaseHealth": true,
+      "secureCookies": true,
+      "logout": true,
+      "mobileMenu": true,
+      "routes": []
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "localValidation": {
+    "integrated": {
+      "passed": 177,
+      "failed": 0,
+      "durationMinutes": 12.2,
+      "backend": "isolated local Supabase"
+    },
+    "unitPassed": 45,
+    "lintPassed": true,
+    "typecheckPassed": true,
+    "credentialPatternCheckPassed": true,
+    "productionSecretSourceMatches": 0,
+    "vercelBuild": "READY"
+  }
+}

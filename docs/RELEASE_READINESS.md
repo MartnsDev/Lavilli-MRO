@@ -1,8 +1,10 @@
+> Estado atual da publicação: [relatório de deploy](DEPLOYMENT_REPORT.md). Publicado com autorização em 24/10/2026; verificações abaixo de auditorias anteriores são históricas e não comprovam aplicação da migration 009 em produção.
+
 > Atualização posterior: o proprietário determinou acesso somente por nome e senha, sem códigos. Veja [a política atual](ACCESS_POLICY.md). As referências anteriores a fatores independentes abaixo são históricas; não representam o fluxo atual.
 
 # Prontidão para apresentação e deploy
 
-24/10/2026. **PRONTO PARA DEMONSTRAÇÃO**, exclusivamente local e com as limitações declaradas. **Produção: NÃO PRONTO.** Não houve deploy ou alteração do banco remoto.
+24/10/2026 — registro da auditoria anterior à publicação. A demonstração isolada foi validada. Posteriormente, o proprietário autorizou o deploy e o login/navegação foram verificados no domínio HTTPS; veja DEPLOYMENT_REPORT.md para o estado vigente. A homologação integral de produção continua pendente, especialmente recursos da migration 009 e infraestrutura operacional. A tabela abaixo preserva a avaliação local e os bloqueios encontrados naquela auditoria.
 
 | Módulo                                    | Estado          | Evidência / limite                                                                                                                  |
 | ----------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------- |

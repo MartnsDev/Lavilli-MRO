@@ -1,11 +1,11 @@
 # Limitações conhecidas
 
-- Produção não recebeu migration 009 nem novo código; não publicar app dependente antes da migration revisada/autorizada.
-- Preview Vercel não provisionado: falta backend isolado autorizado e proteção/configuração do projeto. Consulta Vercel em leitura não encontrou projeto Lavilli.
+- Código publicado na Vercel com compatibilidade para as oito migrations existentes; migration 009 continua pendente. Fluxos básicos de acesso/navegação foram verificados em HTTPS; funcionalidades dependentes de 009 não estão homologadas no backend remoto. Veja DEPLOYMENT_REPORT.md.
+- Preview Vercel permanece desativado e sem backend remoto isolado. Projeto de produção lavilli-control criado e publicado com autorização. Plano atual Hobby; regularizar plano para uso comercial conforme regras da Vercel, sem upgrade automático.
 - Scanner operacional não configurado; assinaturas locais com 27 dias são recusadas; uploads permanecem pending e downloads são bloqueados. Teste de parecer clean simulado não equivale a antivírus.
 - E-mail real/provedor/domínio/agendamento e entrega não comprovados; demonstração mantém EMAIL_MODE=disabled.
 - Backup externo, retenção, chaves de recuperação e restauração integral banco+Storage ainda pendentes; metas RPO 24h/RTO 4h não são SLA comprovado.
-- PIN de quatro dígitos e nomes declarados não dão atribuição individual forte; a autorização independente reduz exposição, não transforma isso em assinatura.
+- PIN de quatro dígitos compartilhado e nomes declarados não dão atribuição individual forte. Conforme decisão expressa do proprietário, não há autorização independente por código. Não equivale a assinatura técnica.
 - Limites de aplicação dependem do banco; proteção de borda/alertas externos e limites de custo precisam de configuração operacional.
 - Eventos de acessos negados podem crescer sob ataque; definir retenção/monitoramento sem apagar trilha operacional indiscriminadamente.
 - CSP ainda permite style inline por compatibilidade de componentes; scripts recebem nonce e não permitem unsafe-eval em produção.
