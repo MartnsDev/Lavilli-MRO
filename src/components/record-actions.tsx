@@ -156,6 +156,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
           {row.status === "in_use" ? (
             <OperationForm
               title="Devolver ferramenta"
+              key="tool-return"
               fields={[
                 f("location_id", "Local de guarda", "ref:locations"),
                 f(
@@ -169,6 +170,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
           ) : row.status === "available" ? (
             <OperationForm
               title="Retirar ferramenta"
+              key="tool-checkout"
               fields={[
                 f("destination", "Destino / finalidade", "text"),
                 f(
@@ -191,6 +193,7 @@ export function RecordActions({ entity, row }: { entity: string; row: Row }) {
           ) : null}
           <OperationForm
             title="Registrar condição"
+            key="tool-condition"
             variant="outline"
             fields={[
               f(

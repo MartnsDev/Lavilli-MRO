@@ -1,5 +1,12 @@
 import { expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
+// This server-render test exercises legacy availability, not client camera widgets.
+vi.mock("../src/components/part-document-capture", () => ({
+  PartDocumentCapture: () => null,
+}));
+vi.mock("../src/components/private-photo", () => ({
+  PrivatePhoto: () => null,
+}));
 
 vi.mock("../src/lib/server/queries", () => ({
   get: async () => ({

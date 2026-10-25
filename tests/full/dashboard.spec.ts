@@ -248,7 +248,29 @@ test("tool withdrawal and return operate through confirmation dialogs", async ({
   await page.getByRole("button", { name: "Devolver ferramenta" }).click();
   dialog = page.getByRole("dialog");
   await dialog.getByLabel("Local de guarda").selectOption(f.location.id);
-  await confirm(dialog);
+  // Hold the RSC refresh: a second operation must wait for the updated record,
+  // instead of opening a dialog that disappears when the return finishes rendering.
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let held = false;
+  await page.route(`**/records/tools/${toolId}*`, async (route) => {
+    if (route.request().headers().rsc === "1") {
+      held = true;
+      await gate;
+    }
+    await route.continue();
+  });
+  try {
+    await confirm(dialog);
+    await expect.poll(() => held).toBe(true);
+    await expect(
+      page.getByRole("button", { name: "Registrar condição", exact: true }),
+    ).toBeDisabled();
+  } finally {
+    release();
+  }
   await expect(
     page.getByRole("button", { name: "Retirar ferramenta" }),
   ).toHaveCount(0);

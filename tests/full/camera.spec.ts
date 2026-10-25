@@ -402,6 +402,9 @@ test("a new PN can be created before its serialized unit without losing the revi
   await page
     .getByRole("link", { name: "cadastre primeiro o Part Number", exact: true })
     .click();
+  await expect(
+    page.getByRole("heading", { name: "Peças e componentes", exact: true }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: "Novo cadastro", exact: true })
     .click();
@@ -414,6 +417,9 @@ test("a new PN can be created before its serialized unit without losing the revi
     .fill("Componente de ensaio isolado");
   const catalog = await confirm(page);
   await expect(page).toHaveURL(/\/records\/part_instances\?/);
+  await expect(
+    page.getByRole("heading", { name: "Peças serializadas", exact: true }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: "Novo cadastro", exact: true })
     .click();

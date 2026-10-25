@@ -10,6 +10,7 @@ import {
 import { Button } from "./ui/button";
 import { label, type Field } from "@/lib/domain/resources";
 import type { Command } from "@/lib/domain/commands";
+import { useOperationRefresh } from "./operation-refresh";
 type Option = { id: string; label: string };
 function RefSelect({
   field,
@@ -188,6 +189,7 @@ export function OperationForm({
   }) => Promise<void>;
 }) {
   const router = useRouter();
+  const operationRefresh = useOperationRefresh();
   const formId = useId();
   const [draft, setDraft] = useState<Record<string, unknown>>(initial);
   const [openedCommand, setOpenedCommand] = useState(command);
@@ -245,7 +247,10 @@ export function OperationForm({
       setOpen(false);
       setPending(undefined);
       onSuccess?.(saved);
-      if (refreshOnSuccess) router.refresh();
+      if (refreshOnSuccess) {
+        if (operationRefresh) operationRefresh.refresh();
+        else router.refresh();
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falha na operação");
     } finally {
@@ -256,6 +261,8 @@ export function OperationForm({
     <>
       <Button
         variant={variant}
+        disabled={busy || operationRefresh?.refreshing}
+        aria-busy={operationRefresh?.refreshing || undefined}
         onClick={() => {
           setDraft(initial);
           setOpenedCommand(command);

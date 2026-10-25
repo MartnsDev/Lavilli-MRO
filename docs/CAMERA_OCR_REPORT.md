@@ -17,6 +17,7 @@ A foto em trânsito entre leitura e cadastro fica somente na memória do navegad
 
 - Seleção inicial de catálogo se perdia quando opções assíncronas terminavam de carregar; o seletor agora mantém seu valor.
 - Formulários de alteração conservam a versão de abertura, impedindo aceitar silenciosamente uma versão mais nova com campos antigos.
+- A devolução de ferramenta podia disputar a atualização da ficha com a próxima operação. Novos formulários aguardam a atualização por transição, e retirada/devolução têm identidades separadas. Um teste atrasa deliberadamente a resposta RSC e confirma esse bloqueio antes de continuar.
 - Leituras de câmera encerram tracks ao navegar, cancelar, ocultar a aba e quando uma permissão tardia é resolvida depois do cancelamento.
 - QR externo nunca navega para outro domínio; destinos internos têm entidade/UUID validados. Outros valores viram busca textual limitada.
 - Detecção de PN e SN na mesma linha, números com zero inicial e rótulos em português/inglês cobertos por testes.
