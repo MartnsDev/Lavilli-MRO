@@ -2,8 +2,9 @@
 import { createClient } from "@supabase/supabase-js";
 import WebSocket from "ws";
 import { execFileSync } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
-import { userInfo } from "node:os";
+import { mkdir, writeFile, mkdtemp, rm, lstat } from "node:fs/promises";
+import { userInfo, tmpdir } from "node:os";
+import { join } from "node:path";
 import { scannerSignatureDate } from "./lib/document-scanner.mjs";
 const endpoint = new URL(process.env.SUPABASE_URL || "invalid");
 if (
@@ -21,6 +22,17 @@ const database = process.env.CLAM_DATABASE_DIR || "/tmp/lavilli-clamav-camera";
 if (!/^\/[\w/.-]+$/.test(database))
   throw Error("Configure an absolute scanner database path without spaces");
 process.env.CLAM_DATABASE_DIR = database;
+await mkdir(database, { recursive: true, mode: 0o700 });
+const databaseInfo = await lstat(database);
+if (
+  !databaseInfo.isDirectory() ||
+  databaseInfo.isSymbolicLink() ||
+  databaseInfo.uid !== userInfo().uid ||
+  databaseInfo.mode & 0o022
+)
+  throw Error(
+    "Scanner database must be owned by the operator and protected from other writers",
+  );
 await mkdir(".local-secrets", { recursive: true, mode: 0o700 });
 const client = createClient(
   process.env.SUPABASE_URL,
@@ -43,17 +55,21 @@ async function cycle() {
       fresh = Date.now() - scannerSignatureDate() < 86400000;
     } catch {}
     if (!fresh) {
-      await mkdir(database, { recursive: true, mode: 0o700 });
-      const config = "/tmp/lavilli-freshclam-worker.conf";
-      await writeFile(
-        config,
-        `DatabaseDirectory ${database}\nDatabaseMirror database.clamav.net\nDatabaseOwner ${userInfo().username}\nMaxAttempts 1\nConnectTimeout 15\nReceiveTimeout 60\n`,
-        { mode: 0o600 },
-      );
-      execFileSync("freshclam", ["--config-file=" + config], {
-        stdio: "ignore",
-        timeout: 300000,
-      });
+      const configFolder = await mkdtemp(join(tmpdir(), "lavilli-freshclam-"));
+      const config = join(configFolder, "freshclam.conf");
+      try {
+        await writeFile(
+          config,
+          `DatabaseDirectory ${database}\nDatabaseMirror database.clamav.net\nDatabaseOwner ${userInfo().username}\nMaxAttempts 1\nConnectTimeout 15\nReceiveTimeout 60\n`,
+          { mode: 0o600, flag: "wx" },
+        );
+        execFileSync("freshclam", ["--config-file=" + config], {
+          stdio: "ignore",
+          timeout: 300000,
+        });
+      } finally {
+        await rm(configFolder, { recursive: true, force: true });
+      }
     }
   }
   scannerSignatureDate();
